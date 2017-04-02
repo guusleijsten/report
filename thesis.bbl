@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{simd}
+Y.~He, Y.~Pu, Z.~Ye, S.~Londono, R.~Kleihorst, A.~Abbo, and H.~Corporaal,
+  ``{Xetal-Pro: An Ultra Low Energy and High Throughput SIMD Processor},'' {\em
+  in Design Automation Conference (DAC), 47th ACM/IEEE}, pp.~543--548, 2010.
+
+\bibitem{dongrio1}
+L.~Waeijen, D.~She, H.~Corporaal, and Y.~He, ``{SIMD Made Explicit},'' {\em in
+  Proceedings of the 13th International Conference on Embedded Computer Systems
+  (SAMOS- XIII)}, pp.~330--337, 2013.
+
+\bibitem{tta}
+J.~Janssen, ``{Compiler Strategies for Transport Triggered Architectures},''
+  Master's thesis, {Delft University of Technology}, 2001.
+
+\bibitem{dongrio2}
+D.~She, Y.~He, L.~Waeijen, and H.~Corporaal, ``{OpenCL Code Generation for Low
+  Energy Wide SIMD Architectures With Explicit Datapath},'' {\em in Proceedings
+  of the 13th International Conference on Embedded Computer Systems (SAMOS-
+  XIII)}, pp.~322--329, 2013.
+
+\bibitem{liu_zhenyuan}
+L.~Zhenyuan, ``{Code Generation of SIMD Architecture With Automatic
+  Bypassing},'' 2016.
+
+\bibitem{llvm_strategy}
+C.~Lattner and V.~Adve, ``{The LLVM Instruction Set and Compilation
+  Strategy},'' 2002.
+
+\bibitem{dragon_book}
+A.~Aho, M.~Lam, R.~Sethi, and J.~Ullman, {\em {Compilers: Principles,
+  Techniques, \& Tools}}.
+\newblock Pearson Education, 2~ed., 2006.
+
+\bibitem{ra}
+S.~Hack, D.~Grund, and G.~Goos, ``{Register allocation for programs in
+  SSA-form},'' 2006.
+
+\end{thebibliography}

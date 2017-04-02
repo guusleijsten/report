@@ -1,0 +1,154 @@
+%
+% TU/e Style Master Thesis template for LaTeX
+%
+% Public version 1.0
+% 2010 - 2013 Thijs Nugteren and Joos Buijs
+%
+% THIS IS THE MAIN FILE (i.e. compile this file, compiling the others directly won't work)
+%
+\documentclass[a4paper,10pt,twoside]{report}
+
+%all the other includes etc. are done in the thesis.sty file.
+\usepackage{thesis}
+
+\newcommand{\abbr}[2]{\noindent{\bf #1} \enspace #2\\}
+\newcommand{\X}{\text{\sffamily X}}
+
+%
+% These commands need to be defined in order to produce a correct and personalized document
+%
+\newcommand{\shortdoctitle}{Master's Thesis}
+\newcommand{\doctitle}{SIMD Compiler Made Explicit in LLVM}
+%\newcommand{\docsubtitle}{Master Thesis}
+\newcommand{\docsubtitle}{Preparation Report}
+
+\newcommand{\me}{Guus Hendrikus Peter Leijsten}
+\newcommand{\keywords}{Compilers, SIMD, LLVM, Embedded Systems, Power Efficiency, Explicit Bypassing}
+\newcommand{\version}{Draft version}
+\newcommand{\monthYear}{March 2017}
+
+%Be sure to use all the titles for your committee members!!! (their names show up on the very first page!)
+\newcommand{\firstCommitteeMember}{Prof. dr. ir. Henk Corporaal}
+\newcommand{\secondCommitteeMember}{Dr. ir. Roel Jordans}
+\newcommand{\thirdCommitteeMember}{Ir. Luc Waeijen}
+\newcommand{\fourthCommitteeMember}{Dr. ir. Lech Jozwiak}
+%\newcommand{\fifthCommitteeMember}{Prof. dr. ir. Kees van Berkel}
+\newcommand{\fifthCommitteeMember}{Dr. ir. Pieter Cuijpers}
+
+\author{\me}
+
+%
+% PDF settings
+%
+\hypersetup
+{
+    pdfauthor={\me},
+    pdftitle={\shortdoctitle},
+    pdfsubject={\doctitle},
+    pdfkeywords={\keywords}
+}
+
+\begin{document}
+
+%use this include for PDF and distribution versions
+\pagenumbering{roman}
+\include{titlepage}
+
+\normalsize
+
+\clearemptydoublepage
+
+%Sometimes line numbers are nice, uncomment the next line to enable:
+%\linenumbers
+
+\chapter*{Abstract}\label{chapter:abstract}
+\input{chapters/abstract}
+
+%\clearemptydoublepage
+
+%\chapter*{Preface}\label{chapter:preface}
+%\input{chapters/preface}
+
+%\clearemptydoublepage
+
+\tableofcontents
+
+%\clearemptydoublepage
+
+\listoffigures
+
+%\clearemptydoublepage
+
+\listoftables
+
+%\clearemptydoublepage
+
+\lstlistoflistings
+
+%\clearemptydoublepage
+
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+\input{chapters/abbreviations}
+
+\chapter{Introduction}\label{chapter:introduction}
+\setcounter{page}{0}
+\pagenumbering{arabic}
+%from here on, start the 'real' page numbering, from 1, with normal digits
+\input{chapters/introduction}
+
+%\clearemptydoublepage
+
+%\chapter{Preliminaries}\label{chapter:preliminaries}
+%\input{chapters/preliminaries}
+
+%\clearemptydoublepage
+
+%\chapter{The SIMD Processor Architecture}\label{chapter:simd}
+%\input{chapters/simd}
+
+%\clearemptydoublepage
+
+%\chapter{The LLVM Infrastructure}\label{chapter:llvm}
+%\input{chapters/llvm}
+
+%\clearemptydoublepage
+
+\chapter{Related Work}\label{chapter:related_work}
+\input{chapters/related_work}
+
+%\clearemptydoublepage
+
+\chapter{Explicit Bypassing}\label{chapter:explicit_bypassing}
+\input{chapters/bypassing}
+
+%\clearemptydoublepage
+
+\chapter{Proposed Solutions}\label{chapter:solutions}
+\input{chapters/solutions}
+
+%\clearemptydoublepage
+
+\chapter{Planning}\label{chapter:planning}
+\input{chapters/planning}
+
+%\clearemptydoublepage
+
+\chapter{Conclusions}\label{chapter:conclusions}
+\input{chapters/conclusions}
+
+%\clearemptydoublepage
+
+%Choose a good bibliography style, plain would do often, but these might be nice too
+\bibliographystyle{ieeetr}
+%\bibliographystyle{plain}
+\bibliography{references}
+
+%\clearemptydoublepage
+
+\appendix
+\addcontentsline{toc}{chapter}{Appendix}
+
+\input{appendices/isa}
+
+\end{document}

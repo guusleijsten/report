@@ -1,0 +1,104 @@
+\chapter{Supported Operations}\label{chapter:supported_operations}
+This appendix contains descriptions for each of the instructions that are available on the proposed architecture.
+
+\begin{table}[h]
+\caption{List of R-type instructions shared by the CP and PEs.}
+\begin{center}
+\begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.15\textwidth-2\tabcolsep}p{0.1\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
+%\begin{tabular}{| c | c | c | l |}
+\toprule
+\textbf{Opcode} & \textbf{Operation} & \textbf{FU} & \textbf{Description}\\ \hline
+0 & N/A & N/A		& Not used. \\ 
+1 & N/A & N/A		& Not used. \\ 
+2 & ADD & ALU		& Signed addition. \\ 
+3 & SUB & ALU		& Signed subtraction. \\ 
+4 & MUL & MUL	& Signed multiplication. \\ 
+5 & MULU & MUL	& Unsigned multiplication. \\ 
+6 & OR & ALU		& Zero extended bitwise or. \\ 
+7 & AND & ALU		& Zero extended bitwise and. \\ 
+8 & XOR & ALU	& Zero extended bitwise xor. \\ 
+9 & CMOV & ALU	& Conditional move. \\ 
+10 & SFEQ & ALU	& Set flag if equal. \\ 
+11 & SFNE & ALU	& Set flag if not equal. \\ 
+12 & SFLES & ALU	& Set flag if less or equal, signed. \\ 
+13 & SFLTS & ALU	& Set flag if less, signed. \\ 
+14 & SFGES & ALU	& Set flag if greater or equal, signed. \\ 
+15 & SFGTS & ALU	& Set flag if greater, signed. \\ 
+16 & SFLEU & ALU	& Set flag if less or equal, unsigned. \\ 
+17 & SFLTU & ALU	& Set flag if less, unsigned. \\ 
+18 & SFGEU & ALU	& Set flag if greater or equal, unsigned. \\ 
+19 & SFGTU & ALU	& Set flag if greater, unsigned. \\ 
+20 & SLL & MUL	& Shift left logical. \\ 
+21 & SRA & MUL	& Shift right arithmetic. \\ 
+22 & SRL & MUL	& Shift right logical. \\ 
+23 & ROR & MUL	& Rotate right register. \\ 
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:r_ops}
+\end{table}%
+
+%I-type
+\begin{table}[h]
+\caption{List of I-type instructions, shared by the CP and PEs.}
+\begin{center}
+\begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.15\textwidth-2\tabcolsep}p{0.1\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
+%\begin{tabular}{| c | c | c | l |}
+\toprule
+\textbf{Opcode} & \textbf{Operation} & \textbf{FU} & \textbf{Description}\\ \hline
+0 & SIMM & ALU	& Signed upper 18-bit for next immediate instruction. \\ 
+1 & ZIMM & ALU	& zero extended upper 18-bit for next immediate instruction. \\ 
+2 & ADDI & ALU	& Signed addition. \\ 
+3 & N/A & N/A		& Not used. \\ 
+4 & MULI & MUL	& Signed multiplication. \\ 
+5 & MULUI & MUL	& Unsigned multiplication. \\ 
+6 & ORI & ALU		& Zero extended bitwise or. \\ 
+7 & ANDI & ALU	& Zero extended bitwise and. \\ 
+8 & XORI & ALU	& Zero extended bitwise xor. \\ 
+9 & CMOV & ALU	& Conditional move. \\ 
+10 & SFEQ & ALU	& Set flag if equal. \\ 
+11 & SFNE & ALU	& Set flag if not equal. \\ 
+12 & SFLES & ALU	& Set flag if less or equal, signed. \\ 
+13 & SFLTS & ALU	& Set flag if less, signed. \\ 
+14 & SFGES & ALU	& Set flag if greater or equal, signed. \\ 
+15 & SFGTS & ALU	& Set flag if greater, signed. \\ 
+16 & SFLEU & ALU	& Set flag if less or equal, unsigned. \\ 
+17 & SFLTU & ALU	& Set flag if less, unsigned. \\ 
+18 & SFGEU & ALU	& Set flag if greater or equal, unsigned. \\ 
+19 & SFGTU & ALU	& Set flag if greater, unsigned. \\ 
+20 & SLLI & MUL	& Shift left logical. \\ 
+21 & SRAI & MUL	& Shift right arithmetic. \\ 
+22 & SRLI & MUL	& Shift right logical. \\ 
+23 & RORI & MUL	& Rotate right register. \\ 
+26 & LB & LSU		& Load byte. \\ 
+27 & SB & LSU		& Store byte. \\ 
+28 & LH & LSU		& Load half word. \\ 
+29 & SH & LSU		& Store half word. \\ 
+30 & LW & LSU		& Load word. \\ 
+31 & SW & LSU	& Store word. \\ 
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:i_ops}
+\end{table}%
+
+%J-type instructions table
+\begin{table}[h]
+\caption{List of J-type instruction that can only the CP can execute.}
+\begin{center}
+\begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.25\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
+\toprule
+\textbf{Opcode} & \textbf{Operation} & \textbf{Description}\\ \hline
+0 & NOP & Do nothing \\ 
+1 & SysCall & System call \\ 
+2 & BF & Branch if flag is set \\ 
+3 & BNF & Branch if flag is not set \\ 
+4 & J & Jump \\ 
+5 & JAL & Jump and link \\ 
+6 & Jr & Jump register \\ 
+7 & JALr & Jump and link register \\ 
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:j_ops}
+\end{table}%

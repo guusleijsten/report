@@ -1,0 +1,55 @@
+Nowadays, mobile phones have dedicated processors to support video processing. This embedded streaming processor consumes tens of pJ per operation (pJ/op) and the battery capacity is only sufficient for playing video applications for a few hours \cite{simd}.
+Furthermore, embedded systems like mobile devices have to run high performance applications like video encoding/decoding, wireless signal processing and 3D processing \cite{dongrio1}. These kind of devices often have a limited energy source, and because it is a handheld device, heat produced by power dissipation is another concern. For these reasons, energy efficiency is becoming the bottleneck in the design of such embedded systems.
+
+In general, it is important to improve both performance and energy efficiency. The Very Long Instruction Word (VLIW) architecture is one example architecture designed to improve performance by executing multiple instructions in parallel, exploiting a program's Instruction Level Parallelism (ILP). By exploiting parallelism, the processor requires less cycles to do the same amount of work, thereby improving performance. 
+
+The Transport Triggered Architecture (TTA) is similar to the VLIW architecture. However, instead of packing the operations in a single instruction, TTAs pack multiple transports in a single instruction \cite{tta}. For traditional VLIWs, each Register File (RF) is connected to every Function Unit (FU). Unlike VLIW, TTAs do not require that each FU has their own private connections to the RFs. Instead, an FU is connected to the RF by means of an interconnect. Another advantage that TTA has over VLIW is that it has explicit datapaths. With explicit datapaths, software bypassing is possible. The compiler can eliminate some RF accesses, which improves energy efficiency.
+
+%TODO: Make link between explicit bp and compiler support.
+
+Image and video processing applications typically have a high amount of Data Level Parallelism (DLP). The advantage of the Single Instruction Multiple Data (SIMD) architecture is that it naturally exploits DLP by processing multiple operations in parallel instead of processing them sequentially. Therefore, the same performance can be achieved at a much lower clock frequency, thereby reducing energy consumption \cite{dongrio1}. Also the instruction fetch and decode energy is shared amongst the processing units. This gives a higher energy efficiency with respect to an architecture where each processing unit has its own instruction fetch and decode, e.g. VLIW or TTAs. A common bottleneck to achieve even higher energy efficiency with SIMD are the register files which consume a large amount of energy every time they are accessed. This work focusses on improving the energy efficiency by reducing accesses to the register files.
+
+ The SIMD architecture also many processing units that each have their own register file. This sums up to many register files that consume around 34.6\% of the total energy consumption \cite{dongrio1}. To further reduce energy consumption, we add explicit bypassing on top of the SIMD in order to eliminate some RF accesses. Adding explicit bypassing on top of the SIMD architecture resembles the TTA. Namely SIMD with explicit bypassing has an explicit datapath, like TTA also has an explicit datapath.
+
+In the past, a compiler for the proposed architecture has already been implemented. This compiler exploits explicit bypassing \cite{dongrio1} and can compile a subset of OpenCL and C code \cite{dongrio2}. However, this compiler has a custom backend, and in order to standardize and improve maintainability, we want to use a compiler framework that supports our needs. To this end we use the LLVM framework to design and build a compiler for the proposed SIMD architecture.
+
+This master project is part of a bigger project in which we work on the architecture and its compiler. There is another master's project going on about writing a compiler for the proposed SIMD architecture using the LLVM framework \cite{liu_zhenyuan}. However, this compiler focusses on vector instructions and does not support explicit bypassing. Therefore, we will focus on adding explicit bypassing on top of the new compiler. Furthermore, the proposed SIMD architecture is designed to be configurable. Another master's project will investigate in how to generate hardware code for different combinations of parameters.% \cite{boyan_liang}.
+
+\section{The SIMD Processor Architecture}\label{sec:simd}
+\input{chapters/simd}
+
+\section{The LLVM Compiler Infrastructure}\label{sec:llvm}
+\input{chapters/llvm}
+
+%Problem statement -> incorporate Roel's Feedback..!!!
+\section{Problem statement}
+An SIMD architecture has been designed and the compiler that has already been build in the past is too custom and difficult to maintain. Many optimizations still have to be implemented. One of the advantages of LLVM is that a large community works on it. Many optimizations are already in place and can immediately be used for our compiler. Standardizing and having proper tool support improves maintainability of the compiler. %Namely, anyone familiar with LLVM can now understand and improve the compiler.
+For this reason, a new compiler is being implemented in LLVM.
+
+The compiler that is being implemented in LLVM supports vector operations and can compile any IR code into SIMD specific assembly. However, the old compiler applies implicit bypassing, that we have explained in Chapter \ref{chapter:explicit_bypassing}.
+
+The goal of this project is therefore to generate efficient code to support explicit bypassing.
+
+\subsection{Main Questions}
+
+\begin{enumerate}
+\item How do we implement explicit bypassing in LLVM.
+\item Which steps are necessary to do said implementation.
+\item What alternative approaches are there to implement it.
+\item How do we know which approach is better.
+\item How is this implementation of explicit bypassing relevant for other architectures. 
+\end{enumerate}
+
+
+
+%Deelvragen:
+% - Hoe impl. ik expl. in LLVM
+% - Wat zijn de stappen
+% - Alternatieven aanpakken
+% - Hoe weet ik welke beter is
+% - Hoe is dat nuttig voor andere architecture
+
+
+%Overview
+\section{Overview}
+In the remainder of this report we will discuss related works in Chapter \ref{chapter:related_work}. We will discuss bypassing, and show the difference between implicit and explicit bypassing in Chapter \ref{chapter:explicit_bypassing}. Proposed solutions for how to achieve our goal will be discussed in Chapter \ref{chapter:solutions}. We will provide a planning for this master thesis in Chapter \ref{chapter:planning} and early conclusions are given in Section \ref{chapter:conclusions}.

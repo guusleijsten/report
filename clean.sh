@@ -1,0 +1,8 @@
+rm "thesis.aux"
+rm "thesis.log"
+rm "thesis.out"
+rm "thesis.pdf"
+rm "thesis.synctex.gz"
+rm "thesis.synctex.gz(busy)"
+rm "thesis.toc"
+rm "titlepage.aux"
