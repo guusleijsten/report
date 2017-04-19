@@ -1,54 +1,40 @@
-
-
+Our approach to implement explicit bypassing to fit it in our compiler within LLVM is to allocate the available bypasses sources during one of the compiler stages. The major compilation phases in LLVM are illustrated in Figure \ref{fig:phase_ordering}.  The first block represents instruction legalization, instruction lowering and instruction selection, In general, we have that first the instructions are scheduled, then register allocation (RA) is performed, and finally the instructions are printed in assembly language. Although one can use a post-RA scheduler to change the order in which to do scheduling and register allocation. At some point, we have to allocate our bypasses, which we can do only after we have backend specific instruction, i.e. after instruction selection. However, we could do this during any of compilation stages that follow, i.e. before scheduling and register allocation, during scheduling and register allocation and at the end of compilation. Moreover, scheduling and register allocation is already a phase problem on its own, as we have mentioned in Chapter \ref{sec:scheduling_and_ra}. Altogether, this leads to many possible approaches and we will discuss some of them below.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=.15\textwidth]{figures/phase_ordering}
-\caption{General code generation phases.}
+\caption{Generalized code generation sequence.}
 \label{fig:phase_ordering}
 \end{figure}
 
+\section{Last-minute Allocation}\label{sec:last_minute_alloc}
 %Approach 1
-Post RA pass to allocate bypass sources by demoting operands to bypass registers where possible.
-When a bypass is allocated, it replaces the register that it used to take as operand, therefore effectively freeing a register. However in the post-RA stage, spill code has already been inserted, this will not benefit in terms of freeing registers, unless we move spill code explicitly. This will be be the easiest approach, because even without moving the spill code, this method will still work, but with too early inserted spill code as a result.
+One approach would be to allocate bypasses during the last stage of the compiler, just before printing the instructions. At this point, instructions are in order of execution and register allocation has already been performed and spill code has already been inserted in case we ran out of registers during RA. Because the order of instructions does not change at this point, the advantage of this approach is its simplicity. Namely, we could implement a pass that works on basic blocks, a basic block is a sequence of instructions with no branches, except for entering and leaving the basic block.
 
+We could implement a pass to our backend that keeps track of the state of our pipeline in order to allocate our bypasses. Then we can determine for a cycle, which values currently reside in our bypass registers. Using this information we can then allocate bypasses andprocess the instructions in a top-down approach, demoting physical registers into bypass registers.
+
+However, when we ran out of registers during register allocation, we had inserted spill code. When we allocate bypasses, we effectively free up registers. Since the spill code had already been inserted, it might have become unnecessary. Therefore, one improvement to this approach would be to move spill code after bypasses have been allocated to where they are needed, in order to avoid unnecessary spills.
+
+\section{Bypass-aware Register Allocation}\label{sec:ra_approach}
 %Approach 2
-Bypass-aware register allocator that allocates bypass sources as much as possible, and then allocates any virtual registers not bypass as any normal register allocator. In this approach the freed registers can be utilized which should give overall better results.
+Another approach would be to implement a bypass-aware register allocator. Assuming that we have performed scheduling before register allocation, the instructions are in order of execution, allowing us to model the pipeline state as we did for the first approach. Our bypass-aware register allocator could start by allocating bypass registers. Then the remaining virtual registers could be allocated as usual. With this approach, we reduce register pressure by allocating bypasses before register allocation, effectively freeing registers. Therefore we may need less spill code, which is now inserted after bypasses have been allocated. So in contrary to the first approach, we do not have to take special care of spilling.
 
+This approach would require us to implement a custom register allocator that consists of two phases. First, we allocate a bypass registers for each virtual register that can be bypassed. Subsequently, we have to allocate physical registers for the remaining virtual register. For the second phase we may reuse any of the existing register allocators. 
+%Introduce example code where we could have better bypass utilizzation, i.e. less stores by scheduling differently
+
+\section{Bypass-aware Scheduling}\label{sec:scheduling_approach}
 %Approach 3
-If we allocate bypasses after scheduling, but before register allocation, we can change a virtual register into a bypass register when possible. However, during register allocation or any other passes that follow, code might be inserted that break a previously allocated bypass. For this reason, we will need another pass that will identify these broken bypasses, and change them back into virtual registers so that they are dealt with by the register allocator.
+For this approach we need to implement a custom scheduler for our backend. This scheduler would prioritize to schedule instructions that may be bypassed close to each other, such that we may increase the possible number of bypasses. If we were to allocate bypasses during scheduling, code might be inserted during register allocation or any other passes that follow, that may break a previously allocated bypass. Therefore, it may be wise to allocate the bypasses as late as possible, and let the scheduler be responsible for improving utilization of the bypass network. 
 
+
+\section{Pre Scheduling Allocation}\label{sec:pre_scheduling}
 %Approach 4
-Before scheduling, we can identify instruction pairs that we can bypass. Then we change the virtual register that is bypassed into physical (bypass) registers and glue the two instructions together. This way the scheduler will try to keep them together, and if it fails to do so, we might need to undo this bypass allocation in order to ensure that the program still works correctly.
+Before scheduling, we can identify instruction pairs that we can bypass. Then we change the virtual register that is bypassed into bypass registers and glue the two instructions together. This however makes restrictions on the resulting schedule. Since we group instruction together before scheduling, we may improve utilization of the bypass network. Namely, we may have grouped instruction together that otherwise would be scheduled far apart. This approach requires some new heuristics to determine whether it is profitable to group instruction together or when this may decrease efficiency, i.e. when grouping instructions decreases available ILP. 
 
+When we allocate bypasses before scheduling and register allocation, it is possible that the scheduler or register allocator reorder instruction, or insert instruction, e.g. spill code, which breaks a previously allocated bypass. Therefore, a better approach would be to group instructions together as explained above, but allocate the bypasses as late as possible, similar to the previous approach.
 
-%Approach 5
-Implement a bypass-aware combined scheduler and register allocator.
+With this approach, we would need to find a tradeoff to not restrict the schedule too much, but still utilizing the bypass network as much as possible.   
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-In Chapter \ref{sec:processor} we have briefly discussed the bypassing sources of the proposed architecture. For convenience we have given them again in Table \ref{table:bypass_alias}.
-
-\begin{table}[H]
-\caption{Alias for each bypassing source, $BP\_src$ in Figure \ref{fig:4_stage} and Figure \ref{fig:5_stage}.}
-\begin{center}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\multirow{2}{*}{\textbf{Register:}} & \multirow{2}{*}{\textbf{Bypass source:}} & \multicolumn{2}{c}{\textbf{Alias}:} \\ \cline{3-4}
- & & \textbf{4 stages} & \textbf{5 stages} \\
-\hline
-\emph{r27} & $BP\_src27$ & N/A & ALU1 \\ 
-\emph{r28} & $BP\_src28$ & LSU & LSU \\
-\emph{r29} & $BP\_src29$ & MUL & MUL \\ 
-\emph{r30} & $BP\_src30$ & ALU & ALU2 \\
-\emph{r31} & $BP\_src31$ & WB & WB \\
-\bottomrule
-\end{tabular}
-\end{center}
-\label{table:bypass_alias}
-\end{table}%
-
-
-
-Proposed solutions: phase ordering problem, discuss each possible implementation here, ordered by difficulty. Indicate that in the available timespan, we can not implement all of these solutions.
+\section{Combined Scheduling and Register Allocation}\label{sec:combined_sched_ra}
+%Approach 5 & 6
+We can also choose to solve scheduling and RA in one go. This way, problems that can arise of doing one before the other may be avoided. There are two approaches to solve this problem. One is to solve it optimally, using constraint programming. Unison, a separate project that solves scheduling and register allocation optimally in one go can be used with LLVM and can be extended to allocate our bypasses. However, solving this problem optimally, may increase compilation time significantly, which we would like to avoid. Therefore, another approach would be to use heuristics to solve scheduling and register allocation in one go. There are no implementations of this thus far, which makes this approach the most difficult one. However, when we can efficiently deal with these problems in one go, we might extend this for other architectures as well. 

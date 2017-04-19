@@ -1,4 +1,20 @@
+The related work is introduced in this part, including the legacy compiler, building the LLVM back-end for SIMD architecture, explicit datapaths in other architecture and some scheduling and register allocation algorithms applied in other compilers.
 
-%Dongrio's simd work
+\section{Legacy compiler}
+The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that project \cite{simd}. The legacy compiler has a custom backend for the SIMD architecture, that can generate code for explicit datapaths \cite{dongrio1} and it can compile a subset of C code and hand-touched OpenCL code, which requires custom pragmas to compile efficiently \cite{dongrio2}. The new compiler will be evaluated relative to the legacy compiler, to access efficiency of the new compiler.
+%Dongrio's simd work 
 %Johan janssen & ... TTA work
 %Other exposed datapaths
+
+\section{Building an LLVM back-end}
+Our backend is partially based on the works of creating a new backend in the LLVM compiler infrastructure \cite{tricore}. Furthermore, based on that work, an LLVM backend for SIMD architecture has been developed \cite{liu_zhenyuan}. However, this work is for code generation with implicit bypassing. We therefore need to extend this work to efficiently generate code for explicit bypassing as well. Therefore, our work will be an extension to previously noted work.
+
+\section{Other Exposed/Explicit Datapath Architectures}
+The main works that we investigated is the TTA architecture, where instructions consist of data transports. However, this work can not be used, because with our SIMD architecture, the data transports are given, and we want to compile in order to efficiently use explicit datapaths that are provided \cite{tta, tta_codegen}.
+
+Another architecture that exploits explicit datapath architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit datapaths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
+
+\subsection{Scheduling and Register Allocation}
+First of all, from the existing scheduling algorithms, Swing Modulo Scheduling (SMS) seems to be a suitable scheduling approach. It is a heuristic approach that is able to deal efficiently with software pipelining.Furthermore it is known for its outstanding performance and low computational cost. The generated schedules are near optimal in terms of initiation interval and register requirements \cite{swingmodulo_paper, swingmodulo_thesis}.
+
+Furthermore, the following literature discusses register allocation for SSA-based programs that solves coloring problem optimally in quadratic-time optimal by decoupling coloring, spilling and coalescing \cite{ra}.
