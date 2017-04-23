@@ -1,42 +1,25 @@
-We have implemented last-minute bypass allocation and tested in on some benchmarks. However, we do not yet have all the benchmarks that we want to use. For this reason, we have chosen which benchmarks to use in order to evaluate the different approaches. These benchmarks will be developed and compiled, which is then compared to a handwritten assembly variant and to compiled code of the legacy compiler. 
+We have implemented last-minute bypass allocation and tested it on some benchmarks. However, we do not yet have all the benchmarks that we intend to use. Therefore we do not yet have reliable results that could indicate how efficient our first approach is. Furthermore, we have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.
 
-What metric would be suitable to evaluate the different approaches with each other and with the legacy compiler?
+The overall results are good, however there are some limitations. Our approach processes basic blocks with only the available information of the current basic block. We notice that bypassing opportunities may be missed for small basic blocks, having only a few instructions. %This could be resolved however, by splitting the current pass in an analysis pass and a transformation pass. We then run the analysis part first, so that we have the state of 
 
-First of all, we could compare the number of cycles of the compiled code to that of the handwritten assembly and to resulting code of the legacy compiler, to assess efficiency in terms of execution speed. Furthermore, the ratio of bypass register accesses and normal register accesses may be used to determine efficiency of our bypass allocation approaches. Again, this ratio can be compared to that of the legacy compiler.
 
-We have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.
+%BEGIN PROS & CONS
+We have evaluated each of the proposed solutions on their tradeoffs in table \ref{table:tradeoffs} on estimated implementation effort, compilation times if the approach were used, and gain in code quality that we may expect for each of the solutions. 
 
-\section{Benchmarks}\label{sec:benchmarks}
-\begin{itemize}
-    \item Signal processing kernels:
-        \begin{itemize}
-            \item Fast Fourier Transformation (FFT) algorithm:
-            \item Finite Impulse Response (FIR) filter:
-        \end{itemize}
-    \item Linear algebra kernels:
-        \begin{itemize}
-            \item Vector addition,
-            \item Vector dot product,
-            \item Matrix transpose,
-            \item Matrix multiplication.
-        \end{itemize}
-        \item Image processing kernels:
-    \begin{itemize}
-        \item Blurring algorithm:
-        \begin{itemize}
-            \item Gaussian blur,
-            \item Median blur.
-        \end{itemize}
-        \item Histogram
-        \item Fast Focus On Structures (FFOS) on  Organic Light Emitting Diode (OLED), which consists of the following kernels \cite{ffos}:
-        \begin{itemize}
-            \item Otsu's method: 
-            \item Binarization: 
-            \item Erosion: 
-            \item Projection: 
-        \end{itemize}
-    \end{itemize}
-    
-\end{itemize}
-
-We have yet to implement the benchmarks, and access efficiency of our approaches on these benchmarks. From that will follow how much accesses to the RF can be avoided. We will simulate the processor and compare the resulting assembly with automatic and with explicit bypasses. Then we can determine how much energy each of the kernels requires, and therefore determine how much energy we can save by adding explicit bypassing on top of the compiler targeting the SIMD architecture. 
+\begin{table}[h]
+\caption{Table with tradeoffs for each approach from Chapter \ref{chapter:solutions}.}
+\begin{center}
+\begin{tabular}{@{}p{0.4\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}@{}}
+\toprule
+\textbf{Aprroach} 		& \textbf{Implementation simplicity} & \textbf{Compilation speed} & \textbf{Quality of the compiled code} \\ \hline
+Last-minute Allocation  	& $++$ & $+$ & $+$ \\
+Bypass-aware Register Allocation & $+$ & $+$ & $+$ \\
+Bypass-aware Scheduling & $+$ & $+$ & $+$ \\
+Pre Scheduling Allocation & $-$ & $+$ & $+$ \\
+Combining Scheduling and Register Allocation Heuristic & $--$ & $+$ & $++$ \\
+Combined Scheduling and Register Allocation with Unison & $-$ & $--$ & $++$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:tradeoffs}
+\end{table}%
