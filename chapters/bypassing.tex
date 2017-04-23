@@ -1,6 +1,6 @@
-Suppose that we have a four stage pipeline where each instruction takes only one cycle. Let $a$ and $b$ be two instructions with a R/W dependency, i.e. instruction $b$ uses a value that is defined by instruction $a$. During the first cycle, instruction $a$ is fetched from Instruction Memory (IMEM). In the second cycle, instruction $a$ selects the operands from the RF, and instruction $b$ is fetched from IMEM. During the third cycle, instruction $a$ is in the execution stage, while instruction $b$ selects the operands that it needs. During the fourth cycle, instruction $a$ is in the WB stage, where it writes the result back to the RF, and instruction $b$ is in the execution stage.
+Suppose that we have a four stage pipeline where each instruction takes only one cycle. Let $a$ and $b$ be two instructions with an R/W dependency, i.e. instruction $b$ uses a value that is defined by instruction $a$. During the first cycle, instruction $a$ is fetched from Instruction Memory (IMEM). In the second cycle, instruction $a$ selects the operands from the RF, and instruction $b$ is fetched from IMEM. During the third cycle, instruction $a$ is in the execution stage, while instruction $b$ selects the operands that it needs. During the fourth cycle, instruction $a$ is in the WB stage, where it writes the result back to the RF, and instruction $b$ is in the execution stage.
 
-Without bypassing, the result of instruction $a$ will be available only after it is written back. On the other hand, when we do have a bypass network, we may forward the result of an instruction to another instruction. In our example, we have forwarded the result of instruction $a$ directly to the operand of instruction $b$, as indicated by the vertical arrow that goes from the first to the second instruction in Figure \ref{fig:bypass_principle}. A result of an instruction may be accessed a cycle earlier when we compare with and without bypassing, however the target architecture has either explicit or implicit bypassing, which are both access a result a cycle early. So, in terms of cycles it makes no differences whether to use explicit or implicit bypassing. However, as you will see later, explicit bypassing has an advantage over implicit bypassing.
+Without bypassing, the result of instruction $a$ will be available only after it is written back. On the other hand, when we do have a bypass network, we may forward the result of an instruction to another instruction. In our example, we have forwarded the result of instruction $a$ directly to the operand of instruction $b$, as indicated by the vertical arrow that goes from the first to the second instruction in Figure \ref{fig:bypass_principle}. A result of an instruction may be accessed a cycle earlier when we compare with and without bypassing, however, the target architecture has either explicit or implicit bypassing, which both access a result of an instruction a cycle early. So, in terms of cycles, it makes no differences whether to use explicit or implicit bypassing. However, as you will see later, explicit bypassing has an advantage over implicit bypassing.
 
 \begin{figure}[H]
 \centering
@@ -12,7 +12,7 @@ Without bypassing, the result of instruction $a$ will be available only after it
 With bypassing, we have wires that connect outputs of EX stage to the ID stage and we have this for each bypass source. 
 
 \section{Implicit Bypassing}
-With implicit bypassing we have wires that connect the outputs from EX stage to the ID stage, as illustrated in Figure \ref{fig:impl_bypass_principle}. Furthermore, we also have wires that go from the WB stage to the ID stage, however this is not shown in this example. To detect bypasses, the HW matches whether the operands of the currently issued instruction to the destination address of previously issued instructions. If we have a match, and the result is still available in the pipeline, we can then bypass it. We have a mux that controls which inputs are used, i.e. a value from a register, or a value from a bypass. The bypass detection hardware is in control which of these values is selected.
+With implicit bypassing, we have wires that connect the outputs from EX stage to the ID stage, as illustrated in Figure \ref{fig:impl_bypass_principle}. Furthermore, we also have wires that go from the WB stage to the ID stage, however, this is not shown in this example. To detect bypasses, the HW matches whether the operands of the currently issued instruction to the destination address of previously issued instructions. If we have a match, and the result is still available in the pipeline, we can then bypass it. We have a mux that controls which inputs are used, i.e. a value from a register, or a value from a bypass. The bypass detection hardware is in control which of these values is selected.
 
 \begin{figure}[t]
 \centering
@@ -22,7 +22,7 @@ With implicit bypassing we have wires that connect the outputs from EX stage to 
 \end{figure}
 
 \section{Explicit Bypassing}
-For explicit bypassing, we have similar wires that connect outputs of EX stage to the ID stage as we have in implicit bypassing. However, with explicit bypassing the compiler is responsible for detecting when we can bypass the result of a instruction. In Figure \ref{fig:exp_bypass_principle_r} we show that the control signal to the mux, that selects the input from a register or from a bypass, is now controlled by the compiler. The compiler encodes this information in an instruction. This way, during instruction decoding, the control signal is immediately available. Furthermore, we have a read-enable flag on the register file. If we then want to take the data from a bypass, we can set this value to zero. This way, we can avoid speculative reads accesses from the RF. We use the same signal from the ID stage, to control the read-enable on the register file and the signal that controls the mux. 
+For explicit bypassing, we have similar wires that connect outputs of EX stage to the ID stage as we have in implicit bypassing. However, with explicit bypassing the compiler is responsible for detecting when we can bypass the result of an instruction. In Figure \ref{fig:exp_bypass_principle_r} we show that the control signal to the mux, that selects the input from a register or from a bypass, is now controlled by the compiler. The compiler encodes this information in an instruction. This way, during instruction decoding, the control signal is immediately available. Furthermore, we have a read-enable flag on the register file. If we then want to take the data from a bypass, we can set this value to zero. This way, we can avoid speculative reads accesses from the RF. We use the same signal from the ID stage, to control the read-enable on the register file and the signal that controls the mux. 
 
 \begin{figure}[H]
 \centering
@@ -40,14 +40,14 @@ We can use the liveliness information during compilation to determine whether a 
 \label{fig:exp_bypass_principle_rw}
 \end{figure}
 
-A significant difference between explicit and implicit bypassing is that some writes accesses to the register file may be avoided for explicit bypassing, while this is can not be done with implicit bypassing.
+A significant difference between explicit and implicit bypassing is that some write accesses to the register file may be avoided for explicit bypassing, while this is can not be done with implicit bypassing.
 
 In general, the result of an instruction will remain in the pipeline  scheduled in the future, in order to see whether the result of an operation will be used later on, which is not possible at runtime.
 
 %%%%%%%%%%
 %\section{Bypass Sources}
 
-The target architecture has operand isolation, which we mentioned in Chapter \ref{sec:processor}. Because of this, the output of the function units do not toggle, i.e. are only calculated when the operand registers change. This has as a side effect that when a function unit is not used, the output register remains the same. This means that a instruction can be bypassed, as long as we do not use the function unit on which it was executed. We have given the bypass sources for our architecture below, in Table \ref{table:bypass_alias}. Here we have provided all bypass sources for the four stage and five stage pipeline
+The target architecture has operand isolation, which we mentioned in Chapter \ref{sec:processor}. Because of this, the output of the function units do not toggle, i.e. are only calculated when the operand registers change. This has as a side effect that when a function unit is not used, the output register remains the same. This means that an instruction can be bypassed, as long as we do not use the function unit on which it was executed. We have given the bypass sources for our architecture below, in Table \ref{table:bypass_alias}. Here we have provided all bypass sources for the four stage and five stage pipeline
 
 \begin{table}[H]
 \caption{Alias for each bypassing source, $BP\_src$ in Figure \ref{fig:4_stage} and Figure \ref{fig:5_stage}.}
@@ -108,14 +108,14 @@ mul <@\textcolor{red}{--}@>, r2, r3
 add r4, <@\textcolor{red}{MUL}@>, r5
 \end{lstlisting}
 
-When the result of $r1$ is not needed anymore, for example, the live range of $r1$ spans no further than this addition, the write access can be avoided. By specifying $--$ as destination, the result will not be written back, as illustrated in Listing \ref{lst:fullbypass}. Register $r1$ is now completely removed from the example, effectively freeing that register. We have now reduced RP by one, since we require one less register. The freed register can be used for other calculations, which may lead to a higher performance.
+When the result of $r1$ is not needed anymore, for example, the live range of $r1$ spans no further than this addition, the write access can be avoided. By specifying $--$ as the destination, the result will not be written back, as illustrated in Listing \ref{lst:fullbypass}. Register $r1$ is now completely removed from the example, effectively freeing that register. We have now reduced RP by one since we require one less register. The freed register can be used for other calculations, which may lead to a higher performance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %HERE WE SHOW ALL DIFFICULT CASES, i.e. First instruction of loop body is bypassed from last instruction of loop body.
 \section{Joint Point Issue}
-In the following example we will illustrate a special case that may be taken into consideration.
+In the following example, we will illustrate a special case that may be taken into consideration.
 
 \begin{lstlisting}[caption=Example code fragment where bypassing over backedge of a loop iteration is not possible., label=lst:bypassloop1]
       lw <@\textcolor{red}{r6}@>, r10, 5

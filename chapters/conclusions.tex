@@ -1,6 +1,6 @@
 We have implemented last-minute bypass allocation and tested it on some benchmarks. However, we do not yet have all the benchmarks that we intend to use. Therefore we do not yet have reliable results that could indicate how efficient our first approach is. Furthermore, we have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.
 
-The overall results are good, however there are some limitations. Our approach processes basic blocks with only the available information of the current basic block. We notice that bypassing opportunities may be missed for small basic blocks, having only a few instructions. %This could be resolved however, by splitting the current pass in an analysis pass and a transformation pass. We then run the analysis part first, so that we have the state of 
+The overall results are good, however, there are some limitations. Our approach processes basic blocks with only the available information of the current basic block. We notice that bypassing opportunities may be missed for small basic blocks, having only a few instructions. %This could be resolved however, by splitting the current pass in an analysis pass and a transformation pass. We then run the analysis part first, so that we have the state of 
 
 
 %BEGIN PROS & CONS
