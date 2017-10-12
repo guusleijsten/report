@@ -1,0 +1,148 @@
+\section{Overview}
+Welcome to the installation guide. In order to get started, you first need to know some basic information. First, this project comes in four pieces. The first piece is the LLVM suite. This contains tools, libraries and the implementation of our compiler. It also contains a suite of programs with a testing harness that can be used to further test LLVM's functionality and performance as well as testing our own compilers functionality.
+
+The second piece is the Clang frontend, which compiles C, C++, objective C and objective C++ to LLVM bitcode. Once compiled into LLVM bitcode it can be manipulated with the tools from the LLVM suite.
+
+There is a third, optional piece called LLD, which is a linker from the LLVM project. That is a drop-in replacement for system linkers. More information about LLD can be found on the LLD section of the LLVM website, https://lld.llvm.org.
+
+The fourth piece is called the Solver Toolchain, which contains a Verilog implementation of the target SIMD architecture, as well as tools for debugging and simulation. This Verilog implementation will at some point be replaced by a new templated Verilog implementation. Furthermore, RTL sources and its installation instructions can be found on ES-group's Gitlab under the project called `Hardware'.
+
+\section{Prerequisites}
+\begin{itemize}
+	\item Have Git installed.
+	\item CMake version 3.4.3 or above.
+	\item GNU Make 3.79 or above.
+	\item GCC version 4.8.0 or above.
+	\item Python version 2.7 or above (if you want to run the test suite).
+\end{itemize}
+
+\section{Installation Guide}
+For Windows, you may need to connect to one of the TU/e servers over SSH. For Linux and Mac OS X, this guide can be followed by executing the commands (followed by \$) in the terminal. 
+
+\lstset{style=customasm}
+\begin{enumerate}
+\item \textbf{Check out the git repository:}
+\begin{lstlisting}
+$ cd where-you-want-this-project-to-live
+$ git clone git@git.ics.ele.tue.nl:SIMD/LLVM.git -b explicit llvm
+\end{lstlisting}
+\item \textbf{Checkout Clang:}
+\begin{lstlisting}
+$ cd where-you-want-this-project-to-live
+$ cd llvm/tools
+$ git clone https://github.com/llvm-mirror/clang.git -b release_40
+\end{lstlisting}
+Then, follow steps for adding the SIMD target to clang, which is described in Section \ref{sec:installing_clang}.
+
+\item (optional) \textbf{Check out LLD linker:}
+\begin{lstlisting}
+$ cd where-you-want-this-project-to-live
+$ cd llvm/tools
+$ git clone git@git.ics.ele.tue.nl:SIMD/lld.git
+\end{lstlisting}
+
+\item \textbf{Configure and build LLVM and Clang:}
+\begin{lstlisting}
+$ cd where-this-project-lives
+$ mkdir build
+$ cd build
+$ cmake ../ -DLLVM_TARGETS_TO_BUILD="Simd" 
+    -DLLVM_DEFAULT_TARGET_TRIPLE="simd-unknown-unknown"
+$ make -j4
+\end{lstlisting}
+
+\end{enumerate}
+	
+Optionally, a generator can be provided with cmake by adding `\texttt{-G generator}' to cmake command, for example:
+\begin{lstlisting}
+     $ cmake -G Ninja ../ -DLLVM_TARGETS_TO_BUILD="Simd"
+         -DLLVM_DEFAULT_TARGET_TRIPLE="simd-unknown-unknown"
+\end{lstlisting}
+
+Some common generators are:
+\begin{itemize}
+	\item \textbf{Ninja:} for generating Ninja build files. Most llvm developers use Ninja for its focus on speed.
+	\item \textbf{Visual Studio:} for generating Visual Studio projects and solutions.
+	\item \textbf{Xcode:} for generating Xcode projects.
+\end{itemize}
+
+\section{Configuring Clang}\label{sec:installing_clang}
+To register our target to Clang, we need to modify \texttt{Targets.cpp} which can be found in the clang libraries, \texttt{path\_to\_where\_llvm\_lives/tools/clang/lib/Basic/Targets.cpp}.
+
+\lstset{style=customcpp}
+\begin{enumerate}
+\item Each target has one or more classes describing it. Add the following class declaration to describe the SIMD target in \texttt{Targets.cpp} before the function \texttt{AllocateTarget}, e.g. line 6321:
+\begin{lstlisting}
+class SimdTargetInfo : public TargetInfo {
+public:
+    SimdTargetInfo(const llvm::Triple &Triple, 
+                   const TargetOptions &Opts)
+    : TargetInfo(Triple) {
+        BigEndian = false;
+        NoAsmVariants = true;
+        IntWidth = 32;
+        IntAlign = 32;
+        LongWidth = 32;
+        LongLongWidth = 64;
+        LongLongAlign = 64;
+        SuitableAlign = 32;
+        SizeType = UnsignedInt;
+        IntMaxType = SignedLongLong;
+        IntPtrType = SignedInt;
+        PtrDiffType = SignedInt;
+        SigAtomicType = SignedLong;
+        WCharType = UnsignedChar;
+        WIntType = UnsignedInt;
+        resetDataLayout("e-p:32:32-i8:8:32-i16:16:32-i32:32-"\
+                        "i64:64-v64:64-v128:128-v256:256-v512"\
+                        ":512-v1024:1024-v2048:2048-n32-S64");
+    }
+    void getTargetDefines(const LangOptions &Opts,
+                       MacroBuilder &Builder) const override {
+        Builder.defineMacro("__SIMD__");
+    }
+    ArrayRef<Builtin::Info> getTargetBuiltins() const override{
+        return None;
+    }
+    BuiltinVaListKind getBuiltinVaListKind() const override {
+        return TargetInfo::VoidPtrBuiltinVaList;
+    }
+    const char *getClobbers() const override {
+        return "";
+    }
+    ArrayRef<const char *> getGCCRegNames() const override {
+        static const char * const GCCRegNames[] = {
+            "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", 
+            "r8", "r9", "r10", "r11", "r12", "r13", "r14", 
+            "r15", "r16", "r17", "r18", "r19", "r20", "r21",
+            "r22", "r23", "r24", "r25", "r26", "r27", "r28",
+            "r29", "r30", "r31"
+        };
+        return llvm::makeArrayRef(GCCRegNames);
+    }
+    ArrayRef<TargetInfo::GCCRegAlias> 
+            getGCCRegAliases() const override {
+        return None;
+    }
+    bool validateAsmConstraint(const char *&Name,
+                               TargetInfo::ConstraintInfo &Info)
+                               const override {
+        return false;
+    }
+    int getEHDataRegisterNumber(unsigned RegNo) const override {
+        // R5=ExceptionPointerRegister R6=ExceptionSelectorRegister
+        if(RegNo == 0) return 5;
+        if(RegNo == 1) return 6;
+        return -1;
+    }
+};
+\end{lstlisting}
+
+\item Each target triple is covered in a switch statement in \texttt{AllocateTarget} function. Add the following case to that switch:
+\begin{lstlisting}
+case llvm::Triple::simd:
+      return new SimdTargetInfo(Triple, Opts);
+\end{lstlisting}
+\end{enumerate}
+
+Now that we have added our target to Clang, you can proceed with the installation guide or start using the compiler.

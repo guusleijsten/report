@@ -1,25 +1,36 @@
-We have implemented last-minute bypass allocation and tested it on some benchmarks. However, we do not yet have all the benchmarks that we intend to use. Therefore we do not yet have reliable results that could indicate how efficient our first approach is. Furthermore, we have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.
+The implementation of an SIMD compiler based on LLVM infrastructure has been described in the previous chapters. This chapters summarizes the results, shows the limitations of the compiler, and presents future work.
 
-The overall results are good, however, there are some limitations. Our approach processes basic blocks with only the available information of the current basic block. We notice that bypassing opportunities may be missed for small basic blocks, having only a few instructions. %This could be resolved however, by splitting the current pass in an analysis pass and a transformation pass. We then run the analysis part first, so that we have the state of 
+\section{Summary}
+\input{chapters/conclusion/summary}
+
+\section{Future Work}\label{sec:future_work}
+\input{chapters/conclusion/future_work}
+
+%In general a short summarizing paragraph will do, and under no circumstances should the paragraph simply repeat material from the Abstract or Introduction. In some cases it's possible to now make the original claims more concrete, e.g., by referring to quantitative performance results.
+
+%Old text
+%We have implemented last-minute bypass allocation and tested it on some benchmarks. However, we do not yet have all the benchmarks that we intend to use. Therefore we do not yet have reliable results that could indicate how efficient our first approach is. Furthermore, we have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.
+
+%The overall results are good, however, there are some limitations. Our approach processes basic blocks with only the available information of the current basic block. We notice that bypassing opportunities may be missed for small basic blocks, having only a few instructions. %This could be resolved however, by splitting the current pass in an analysis pass and a transformation pass. We then run the analysis part first, so that we have the state of 
 
 
 %BEGIN PROS & CONS
-We have evaluated each of the proposed solutions on their tradeoffs in table \ref{table:tradeoffs} on estimated implementation effort, compilation times if the approach were used, and gain in code quality that we may expect for each of the solutions. 
+%We have evaluated each of the proposed solutions on their tradeoffs in table \ref{table:tradeoffs} on estimated implementation effort, compilation times if the approach were used, and gain in code quality that we may expect for each of the solutions. 
 
-\begin{table}[h]
-\caption{Table with tradeoffs for each approach from Chapter \ref{chapter:solutions}.}
-\begin{center}
-\begin{tabular}{@{}p{0.4\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}@{}}
-\toprule
-\textbf{Aprroach} 		& \textbf{Implementation simplicity} & \textbf{Compilation speed} & \textbf{Quality of the compiled code} \\ \hline
-Last-minute Allocation  	& $++$ & $+$ & $+$ \\
-Bypass-aware Register Allocation & $+$ & $+$ & $+$ \\
-Bypass-aware Scheduling & $+$ & $+$ & $+$ \\
-Pre Scheduling Allocation & $-$ & $+$ & $+$ \\
-Combining Scheduling and Register Allocation Heuristic & $--$ & $+$ & $++$ \\
-Combined Scheduling and Register Allocation with Unison & $-$ & $--$ & $++$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-\label{table:tradeoffs}
-\end{table}%
+%\begin{table}[h]
+%\caption{Table with tradeoffs for each approach from Chapter \ref{chapter:solutions}.}
+%\begin{center}
+%\begin{tabular}{@{}p{0.4\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}p{0.2\textwidth-2\tabcolsep}@{}}
+%\toprule
+%\textbf{Aprroach} 		& \textbf{Implementation simplicity} & \textbf{Compilation speed} & \textbf{Quality of the compiled code} \\ \hline
+%Last-minute Allocation  	& $++$ & $+$ & $+$ \\
+%Bypass-aware Register Allocation & $+$ & $+$ & $+$ \\
+%Bypass-aware Scheduling & $+$ & $+$ & $+$ \\
+%Pre Scheduling Allocation & $-$ & $+$ & $+$ \\
+%Combining Scheduling and Register Allocation Heuristic & $--$ & $+$ & $++$ \\
+%Combined Scheduling and Register Allocation with Unison & $-$ & $--$ & $++$ \\
+%\bottomrule
+%\end{tabular}
+%\end{center}
+%\label{table:tradeoffs}
+%\end{table}%

@@ -6,6 +6,8 @@
 %
 % Packages
 %
+\usepackage{lipsum}
+\usepackage{blindtext}
 \usepackage{booktabs}
 \usepackage{calc}
 \usepackage{a4wide}                     % Tell latex to use the room there is on the page
@@ -27,9 +29,11 @@
 \usepackage{float}
 \usepackage{mathdots}
 \usepackage{multirow}
+\usepackage{dirtree}
+\usepackage[toc,page]{appendix}
 
 %\usepackage[colorlinks]{hyperref}
-\usepackage{color}
+\usepackage{xcolor}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -58,6 +62,7 @@
 \captionsetup[subfloat]{position=bottom}   %captions below
 \usepackage{booktabs}                 % nicer tables, nice!
 \usepackage{rotating}                 % rotated tables and such
+\usepackage{algorithm2e}
 
 % For the TUe style...
 % Use the package 'textpos' with the option 'absolute' to place
@@ -65,28 +70,39 @@
 \usepackage[absolute]{textpos}
 
 \usepackage{listings}                   % For code formatting
+
 \lstdefinestyle{customc}{
   belowcaptionskip=1\baselineskip,
   breaklines=true,
-  frame=L,
+%  frame=L,
   xleftmargin=\parindent,
   language=C,
   showstringspaces=false,
   basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
+  keywordstyle=\bfseries\color{blue},
   commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
+  identifierstyle=\color{black},
   stringstyle=\color{orange}
+}
+
+\lstdefinestyle{customcpp}{
+  language=C++,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{red!70!black}\ttfamily,
+  commentstyle=\color{green!40!black}\ttfamily,
+  morecomment=[l][\color{magenta}]{\#}
 }
 
 \lstdefinestyle{customasm}{
   belowcaptionskip=1\baselineskip,
-  frame=L,
+%  frame=L,
   xleftmargin=\parindent,
   language=[x86masm]Assembler,
   basicstyle=\footnotesize\ttfamily,
   comment=[l]{;},
   texcl=true,
+  literate={\$}{{\textcolor{orange}{\$}}}1
 }
 
 \lstset{style=customasm}
@@ -116,6 +132,10 @@
 %commentstyle=\color[rgb]{0.133,0.545,0.133}, %
 %stringstyle=\color[rgb]{0.627,0.126,0.941},  %
 %}
+
+\usepackage{tikz}
+%\usetikzlibrary{graphs, graphdrawing}
+%\usegdlibrary{layered}
 
 %
 % Layout

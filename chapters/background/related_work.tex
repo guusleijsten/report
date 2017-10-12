@@ -1,0 +1,94 @@
+
+% Other exposed or explicit data path architectures and their corresponding compilers.
+
+% Other pure SIMD architectures, GPU and its difference if i know this and can tell it.
+
+% Liu's work on compiler design, and what it lacks, proper support for 5-stage configuration, explicit bypass conf. 
+
+%Old rel. work
+There is related work for compilers that target SIMD architectures, in particular, a compiler has been developed, referred to as legacy compiler. Furthermore, there is related work in building an LLVM backend, and compiling with explicit data paths has been an active research topic for other architectures.
+% scrap
+%The related work is introduced in this part, including the legacy compiler, building the LLVM back-end for SIMD architecture, explicit datapaths in other architecture and some scheduling and register allocation algorithms applied in other compilers.
+
+%\section{Building an LLVM back-end}
+%Our backend is derived from tricore tutorial on creating a new backend for the LLVM compiler framework \cite{tricore}. Furthermore, based on that work, an LLVM backend for SIMD architecture without explicit bypassing has been developed \cite{liu_zhenyuan}. However, the current compiler generates code with implicit bypassing. We, therefore, need to extend this to efficiently generate code for explicit bypassing as well. Therefore, our work will be an extension to previously noted work.
+
+\subsection{Other Exposed/Explicit Data Path Architectures}
+\subsubsection{Transport Triggered Architectures}
+Compiling with explicit data paths have been an active topic of research. We have investigated several architectures that face similar challenges. One of the main works that we investigated is the TTA architecture, where instructions consist of data transports. However, their approach can not be used because with our SIMD architecture, data transports are given and we want to compile in order to efficiently use the explicit data paths that are provided \cite{tta, tta_codegen}.
+
+\subsubsection{ReMove}
+
+Another architecture that exploits explicit datapath architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit data paths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
+
+%\section{Scheduling and Register Allocation}
+%First of all, from the existing scheduling algorithms, Swing Modulo Scheduling (SMS) seems to be a suitable scheduling approach. It is a heuristic approach that is able to deal efficiently with software pipelining. Furthermore, it is known for its outstanding performance and low computational cost. The generated schedules are near optimal in terms of initiation interval and register requirements \cite{swingmodulo_paper, swingmodulo_thesis}. We consider this a candidate scheduler to use.
+
+%Furthermore, the following literature discusses register allocation for SSA-based programs that solves coloring problem optimally in quadratic-time optimal by decoupling coloring, spilling and coalescing \cite{ra}. This technique may allow us to implement a custom register allocator that solves the problem in polynomial time.
+
+%Finally, there is another project, called Unison. They solve scheduling and register allocation and other code generation tasks by translating them into combinatorial problems and solve them together with constraint programming \cite{unison}. We consider this a candidate constraint solver to use because it can be easily integrated with LLVM.
+
+\subsection{Legacy compiler}
+The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that project \cite{simd}. The legacy compiler has a custom backend for the SIMD architecture, that can generate code for explicit data paths \cite{dongrio1} and it can only compile a subset of C code and hand-touched OpenCL code, which requires manual insertion of custom pragmas to compile efficiently \cite{dongrio2}, which we do not desire. Our goal is to overcome these limitations and improve the compilers maintainability. Furthermore, the new compiler will be evaluated relative to the legacy compiler in order to access efficiency of the generated code.
+%Dongrio's simd work 
+%Johan janssen & ... TTA work
+%Other exposed datapaths
+
+\subsection{Basic Compiler Design}\label{sec:basic_compiler_design}
+We now show a simd back-end design in LLVM by L. Zhenyuan \cite{liu_zhenyuan}. He started to build a back-end in LLVM for the same purpose, but with a different goal, namely to efficiently generate vectorized code within LLVM. We will discuss his work briefly in this section, and elaborate on some aspects. In order to support vector instructions, LLVM's auto-vectorizer has been used and intermediate code optimization passes have been implemented to generate SIMD specific intrinsics, that are, in turn, transformed to vector instructions and shuffle operations. 
+
+His work gives a basic design of this back-end. We took this as a starting point and maintained his work, and made some improvements which are discussed in later sections. When building a back-end in LLVM, first the instructions and registers have to be defined. Then illegal operations and types can be converted to legal ones. Then during instruction selection, LLVM knows how to match DAG nodes to known instructions. The supported instructions and registers for this architecture are defined first. To support some special features of this architecture, custom passes are added to this back-end, which will be described in detail, see Chapter \ref{sec:code_generation}, where we discuss our contributions to this work. Furthermore, an assembler and a linker have been implemented as separate projects, which will briefly be discussed here as well.
+
+\subsubsection{Supported Instructions}
+All the instructions which have been defined in this compiler are listed in this part, with the corresponding brief explanations. The details of ISA can be found in Appendix \ref{appendix:A}.
+\begin{itemize}
+	\item \textbf{Arithmetic and Logic Instructions:} \texttt{add}, \texttt{addi}, \texttt{sub}, \texttt{muli}, \texttt{mulu}, \texttt{mului}, \texttt{or}, \texttt{ori}, \texttt{and}, \texttt{andi}, \texttt{xor}, \texttt{xori}, \texttt{sll}, \texttt{slli}, \texttt{sra}, \texttt{srai}, \texttt{srl} and \texttt{srli}.\\
+The instruction with suffix "I" is used to handle immediate value operand, which we will refer to as I-type instructions. The suffix "U" means it is used for unsigned values. For others, the two input operands are both registers, which are commonly referred to as R-type instructions.
+	\item \textbf{Flag Set Instructions:} \texttt{sfeq}, \texttt{sfne}, \texttt{sfles}, \texttt{sflts}, \texttt{sfges}, \texttt{sfgts}, \texttt{sfleu}, \texttt{sfltu}, \texttt{sfgeu} and \texttt{sfgtu}.\\
+The flag set instructions are used for comparison. If it is true, the flag register is set. The suffix "S" represents a signed value, while the suffix "U" represents an unsigned value.
+	\item \textbf{Conditional Move:} \texttt{cmov}.\\ This is usually used with flag set instructions. If the flag is set, the value in the input operand is moved to the output operand.
+	\item \textbf{Immediate Extension:} \texttt{simm} and \texttt{zimm}.\\ These two instructions are used to extend the immediate value from 8 bits to 26 bits. The maximum immediate value could be $2^{26}-1$, instead of $2^8-1$. The details of these two instructions will be discussed in Section \ref{sec:immediate_ext}. In addition, a larger immediate value requires a sequence of instructions to be executed.
+	\item \textbf{Conditional Branch:} \texttt{bf} and \texttt{bnf}.\\ These two instructions also work with flag set instructions. By using the branch in- structions, the program can branch to the target address if the flag is set (with BF) or not set (with BNF).
+	\item \textbf{Jump Instructions:} \texttt{j}, \texttt{jr}, \texttt{jal} and \texttt{jalr}.\\ The difference with the conditional branch instructions is that the jump does not need to check the flag register, which is normally used during function call and return.
+\end{itemize}
+
+\subsubsection{Register Configuration}
+There are two main register classes. Although each PE has its own register file in our architecture, it is not necessary to define a specific register class for every PE register file. One reason is the size of the PE array is configurable and the number of the vector register classes cannot be dynamic. Another reason is, the vector array actually is a single issue slot, which executes the same instruction for all PEs. It is sufficient to define one register class for the entire PE array. Each vector register defined in the back-end represents a line of registers in the PE array.
+
+\begin{table}[H]
+\caption{Registers configuration.}
+\begin{center}
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\textbf{Scalar Register} & \textbf{Vector Register} & \textbf{Purpose} \\ \hline
+\texttt{r0} & \texttt{v0} & Constant value zero \\
+N/A & \texttt{v1} & Constant PE index \\
+\texttt{r3}$\sim$\texttt{r4}  & \texttt{v3}$\sim$\texttt{v4} & Return registers \\
+\texttt{r5}$\sim$\emph{r8} & \texttt{v5}$\sim$\texttt{v8} & Argument passing registers \\
+\texttt{r9} & N/A & Link register \\ 
+\texttt{r10} & N/A & Frame pointer \\
+\texttt{r11} & \texttt{v11} & Stack pointer \\
+\texttt{r1}, \texttt{r2} and \texttt{r12}$\sim$\texttt{r31} & \texttt{v2}, \texttt{v9}$\sim$\texttt{v10} and \texttt{v12}$\sim$\texttt{v31} & General purpose registers \\
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:register_conf}
+\end{table}%
+%TODO: add text that goes by this, and optionally change lists in tables.
+
+Table \ref{table:register_conf} shows the register configurations of both CP and PE-Array.
+Both \texttt{r0} and \texttt{v0} are connected to ground and contain constant value zero. \texttt{v1} is a special register, which contains the index of local PE. Note that, there are two stack pointers, \texttt{r11} and \texttt{v11}. As mentioned before, considering there are two separated data memory, we need double frame stacks for the CP and the PE-Array to access their memory directly and reduce the expensive data communication. Therefore, two stack pointers are defined to point to the top of scalar and vector frame stacks respectively. The details of separate frame stacks is not described here, but can be found in another thesis \cite[Chapter~4]{liu_zhenyuan}.
+
+\subsubsection{Vectorizer}
+ Support for LLVM's Auto-Vectorizer has been developed by L. Zhenyuan. He added support for this to our back-end during his time \cite[Chapter~5]{liu_zhenyuan}. He defined a couple of patterns to match and IR level transformations that transform loops to vector instructions and shuffle operations. Furthermore, he added a cost function to decide whether to vectorize a given loop automatically. However, sometimes we can do better than this by manually inserting pragmas in the C code. Clang uses these pragmas for making such decisions. In the end, this may give better result, as we will show in Chapter \ref{chapter:evaluation}.
+ 
+ Vector types that we support are:
+ \texttt{v1i32}, \texttt{v2i32}, \texttt{v4i32}, \texttt{v8i32}, \texttt{v16i32}, \texttt{v32i32}, \texttt{v64i32}, \texttt{v128i32}, \texttt{v256i32}, \texttt{v512i32}, \texttt{v1024i32} and \texttt{v2048i32}.\\
+	The actual legal vector type should be equal to or smaller than the \texttt{PENum}. \texttt{PENum} is a variable defined in the back-end, which can be configured using \texttt{pe-num} flag. The default value is 8, in which case the legal vector type can only be \texttt{v1i32}, \texttt{v2i32}, \texttt{v4i32} and \texttt{v8i32}.
+
+\subsubsection{Linker and Assembler}
+An assembler has been implemented that can parse assembly code and translate it into binary code. Furthermore, a linker has been developed which takes one or more binary files and combines them into a single executable file. These have been developed as separate projects and within the LLVM framework. Unfortunately, the linker still has some problems that need to be resolved before it can be used. %TODO go deeper into limitations of the lld linker
+Therefore, we have chosen to use a custom linker instead of the standard linker supplied with LLVM. We would benefit from using LLVM's linker because the custom linker can work only on a single file. Unfortunately, we can not use this linker yet because some adjustments and improvements are required, however, this is outside the scope of this assignment and will, therefore, be added to future work.
+
+%TODO: add bypassing, auto and expl, (from slides)
+

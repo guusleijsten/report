@@ -1,0 +1,23 @@
+%Appendix C.
+
+%TODO: mention that I left out CMakeFiles and LLVMBuildInfo for simplicity of the directory tree.
+%\section{File Structure}
+We give and discuss pseudo code of our implementation that has been discussed in Chapter \ref{sec:expl_bp_impl}.
+
+%TODO: add more introducing text, and explain pseudo code with text.
+\begin{algorithm}[H]
+ \KwData{allocateBypasses}
+ \KwResult{Lele}
+ bool hasBBs = false\;
+ \While{hasBBs}{
+ ready = hasReadyBBs()\;
+  read current\;
+  \eIf{understand}{
+   go to next section\;
+   current section becomes this one\;
+   }{
+   go back to the beginning of current section\;
+  }
+ }
+ \caption{How to write algorithms}
+\end{algorithm}

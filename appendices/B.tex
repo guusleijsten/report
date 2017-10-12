@@ -1,8 +1,9 @@
-\chapter{Supported Operations}\label{chapter:supported_operations}
-This appendix contains descriptions for each of the instructions that are available on the proposed architecture.
+%TODO: verify descriptions with Liu's thesis
 
+This appendix contains descriptions of the instructions that are supported on the proposed SIMD architecture. We have split the instructions into three classes, Register-type instructions that take only registers as operand. Immediate-type instructions have an immediate value as last operand. Finally, Jump-type instructions are instructions that modify the program counter.
+
+\section{Register-type Instructions}
 \begin{table}[h]
-\caption{List of R-type instructions shared by the CP and PEs.}
 \begin{center}
 \begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.15\textwidth-2\tabcolsep}p{0.1\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
 %\begin{tabular}{| c | c | c | l |}
@@ -28,19 +29,20 @@ This appendix contains descriptions for each of the instructions that are availa
 17 & sfltu & ALU	& Set flag if less, unsigned. \\ 
 18 & sfgeu & ALU	& Set flag if greater or equal, unsigned. \\ 
 19 & sfgtu & ALU	& Set flag if greater, unsigned. \\ 
-20 & sll & MUL	& Shift left logical. \\ 
-21 & sra & MUL	& Shift right arithmetic. \\ 
-22 & srl & MUL	& Shift right logical. \\ 
-23 & ror & MUL	& Rotate right register. \\ 
+20 & sll & ALU	& Shift left logical. \\ 
+21 & sra & ALU	& Shift right arithmetic. \\ 
+22 & srl & ALU	& Shift right logical. \\ 
+23 & ror & ALU 	& Rotate right register (not used). \\ 
 \bottomrule
 \end{tabular}
 \end{center}
+\caption{List of R-type instructions, both for CP and PEs.}
 \label{table:r_ops}
 \end{table}%
 
 %I-type
+\section{Immediate-type Instructions}\label{appendix:i_type_instrs}
 \begin{table}[h]
-\caption{List of I-type instructions, shared by the CP and PEs.}
 \begin{center}
 \begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.15\textwidth-2\tabcolsep}p{0.1\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
 %\begin{tabular}{| c | c | c | l |}
@@ -69,7 +71,7 @@ This appendix contains descriptions for each of the instructions that are availa
 20 & slli & MUL	& Shift left logical. \\ 
 21 & srai & MUL	& Shift right arithmetic. \\ 
 22 & srli & MUL	& Shift right logical. \\ 
-23 & rori & MUL	& Rotate right register. \\ 
+23 & rori & MUL	& Rotate right register (not used). \\ 
 26 & lb & LSU		& Load byte. \\ 
 27 & sb & LSU		& Store byte. \\ 
 28 & lh & LSU		& Load half word. \\ 
@@ -79,18 +81,21 @@ This appendix contains descriptions for each of the instructions that are availa
 \bottomrule
 \end{tabular}
 \end{center}
+\caption{List of I-type instructions, both for CP and PEs.}
 \label{table:i_ops}
 \end{table}%
 
+\clearpage
+
 %J-type instructions table
+\section{Jump-type Instructions}
 \begin{table}[h]
-\caption{List of J-type instruction that can only the CP can execute.}
 \begin{center}
 \begin{tabular}{@{}p{0.1\textwidth-2\tabcolsep}p{0.25\textwidth-2\tabcolsep}p{0.65\textwidth-2\tabcolsep}@{}}
 \toprule
 \textbf{Opcode} & \textbf{Operation} & \textbf{Description}\\ \hline
 0 & nop & Do nothing \\ 
-1 & SysCall & System call \\ 
+1 & SysCall & System call (not used) \\ 
 2 & bf & Branch if flag is set \\ 
 3 & bnf & Branch if flag is not set \\ 
 4 & j & Jump \\ 
@@ -100,5 +105,6 @@ This appendix contains descriptions for each of the instructions that are availa
 \bottomrule
 \end{tabular}
 \end{center}
+\caption{List of J-type instruction that only the CP can execute.}
 \label{table:j_ops}
 \end{table}%

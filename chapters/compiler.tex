@@ -1,0 +1,53 @@
+\input{chapters/compiler/design}
+
+%Hier komt de uitleg v/d compiler implementatie en design. Bespreek hier eventuele tradeoffs die ik ben tegengekomen en design decisions die ik of anderen gemaakt hebben. Aangezien dit grotendeels een software project is, zou ik hier ook wat aandacht willen besteden aan software details, als in, bachelor software engineering skills erop los laten.  
+
+%\Blindtext
+
+\section{Exploiting Explicit Data Paths}\label{sec:expl_bp_impl}
+%TODO: (OPTIONAL) move this to 3.3, and vice versa.
+We exploit explicit data paths by going through the code and allocate these special bypass registers as a post processing step, in the sense that we do this after scheduling, register allocation, packetizing, etc. 
+Doing this as a post processing step has advantages compared to doing this early on. 
+\begin{enumerate}
+\item When this is done before the packetizer, we would need to model the behaviour of the packetizer in this pass. Because this further complicates our implementation, we moved it to after the packetizer.
+\item Another reason to do bypass allocation as a post processing step is because doing it at an earlier stage, where the code is not certain yet, gives more problems. Each of the custom passes may reorder or insert instructions, that would invalidate any bypass that were already allocated before that point.
+\end{enumerate}
+
+That being said, we have developed a class, called \texttt{BypassState}, which should be inherited by a class for each pipeline that we support, e.g. four and five stage pipeline. It models the values of busses that are in a pipeline, which we exploit for explicit data paths. %It keeps track of values that reside in those busses which keeps track of the . We have This that can be 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/class_diag_bpstate}
+\caption{Class diagram for BypassState, and the inherited classes for the four and five state pipelines.}
+\label{fig:class_diagram_bpstate}
+\end{figure}
+
+We give a class diagram for \texttt{BypassState} in Figure \ref{fig:class_diagram_bpstate}. Here we have the classes  \texttt{Bypass4State} and \texttt{Bypass5State} that represent the derived classes for the four stage and five stage pipeline respectively. Here we pass the operations as tokens to \texttt{BypassState} one at a time and propagate the tokens each cycle. There is a variable in the derived classes, called \texttt{pipe} which represents the instructions that are currently in our pipeline. The pipeline state can be queried at any giving moment using function \texttt{getState}. This function can be used to acquire the state just before a jump or at the end of a basic block.
+
+Furthermore, functions \texttt{getDefReg} and \texttt{definesReg} can be used to determine what is written to the register file by an operation, and \texttt{getStartOperand} may be used to see where in an operation we need to start with bypassing RaW dependencies. Function \texttt{matchOperandInPipeline} from the derived classes can be used to see if we can exploit one of the busses in a pipeline. We model these busses with a structure, called \texttt{PipeState}. Table \ref{table:pipe_state} shows which variables it represents.
+
+\begin{table}[H]
+\caption{Representation of struct PipeState.}
+\begin{center}
+\begin{tabular}{@{}l l@{}}
+\toprule
+\textbf{Type} & \textbf{Variable} \\
+MachineInstr* 	& Pipeline[N\_FUNCTION\_UNITS][N\_PACKET\_COUNT][EX\_STAGES]\\
+MachineInstr* 	& WB[N\_PACKET\_COUNT]\\
+SimdFUEnum	& issues[N\_PACKET\_COUNT][EX\_STAGES]\\
+{\small *: pointer}\\
+\bottomrule%%\\
+%{\small * pointer}
+\end{tabular}
+\end{center}
+\label{table:pipe_state}
+\end{table}%
+
+%This is where I will cover the software details and throw in some UML diagrams.
+%\blindtext
+
+\subsection{Approaches}\label{sec:approaches}
+\input{chapters/compiler/approaches}
+
+\subsection{Software Design}\label{sec:explicit_impl}
+\input{chapters/compiler/software}
