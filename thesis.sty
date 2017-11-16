@@ -58,7 +58,7 @@
 \usepackage{url}                      % Make it possible to define clickable urls
 \usepackage{makeidx}                  % Needed for the index
 \usepackage{hyperref}                 % For inserting PDF options (author etc.)
-\usepackage{subfig}                   % sub-figures!!! hooray...
+\usepackage{subfig}                   % sub-figures aka sub float
 \captionsetup[subfloat]{position=bottom}   %captions below
 \usepackage{booktabs}                 % nicer tables, nice!
 \usepackage{rotating}                 % rotated tables and such
@@ -70,6 +70,7 @@
 \usepackage[absolute]{textpos}
 
 \usepackage{listings}                   % For code formatting
+%\usepackage{filecontents}            % For lstlisting in a subfigure
 
 \lstdefinestyle{customc}{
   belowcaptionskip=1\baselineskip,
@@ -100,7 +101,8 @@
   xleftmargin=\parindent,
   language=[x86masm]Assembler,
   basicstyle=\footnotesize\ttfamily,
-  comment=[l]{;},
+  keywordstyle=\color{black}\ttfamily,
+  comment=[l]{\#},
   texcl=true,
   literate={\$}{{\textcolor{orange}{\$}}}1
 }

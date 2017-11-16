@@ -7,81 +7,81 @@ The file structure of the Simd compiler project consists of the following:
 .1 llvm\DTcomment{LLVM root directory}.
 .2 lib\DTcomment{Library files}.
 .3 Target\DTcomment{Target specific files}.
-.4 Simd\DTcomment{SIMD specific files}.
+.4 Simd\DTcomment{SIMD target files}.
 .5 AsmParser.
-.4 SimdAsmParser.cpp\DTcomment{Parse SIMD assembly to MCInst instructions}.
+.6 SimdAsmParser.cpp\DTcomment{Parse SIMD assembly to MCInst instructions}.
 .5 Disassembler.
 .6 SimdDisassembler.cpp\DTcomment{Disassembler for SIMD}.
 .5 InstPrinter.
 .6 SimdInstPrinter.cpp\DTcomment{Prints MCInst to assembly file}.
-.6 SimdInstPrinter.h\DTcomment{MCInst Printer header file}.
+.6 SimdInstPrinter.h\DTcomment{MCInst printer header file}.
 .5 MCTargetDesc.
-.6 SimdABIInfo.cpp\DTcomment{SIMD ...}.
-.6 SimdABIInfo.h\DTcomment{SIMD ...}.
-.6 SimdAsmBackend.cpp\DTcomment{SIMD ...}.
-.6 SimdAsmBackend.h\DTcomment{SIMD ...}.
-.6 SimdBaseInfo.h\DTcomment{SIMD ...}.
-.6 SimdELFObjectWriter.cpp\DTcomment{Prints Object ELF}.
+.6 SimdABIInfo.cpp\DTcomment{Information about SIMD ABI's}.
+.6 SimdABIInfo.h\DTcomment{ABI information header file}.
+.6 SimdAsmBackend.cpp\DTcomment{Generic interface to SIMD specific assembler}.
+.6 SimdAsmBackend.h\DTcomment{Header file for assembler interface}.
+.6 SimdBaseInfo.h\DTcomment{Helper functions and enum defs for MC and SIMD}.
+.6 SimdELFObjectWriter.cpp\DTcomment{Prints object in ELF format}.
 .6 SimdELFStreamer.h\DTcomment{Empty file, should be removed}.
-.6 SimdFixupKinds.h\DTcomment{Types of Fixup that we can encounter}.
-.6 SimdMCAsmInfo.cpp\DTcomment{SIMD ...}.
-.6 SimdMCAsmInfo.h\DTcomment{SIMD ...}.
-.6 SimdMCCodeEmitter.cpp\DTcomment{Encode SIMD Machine Instructions}.
-.6 SimdMCCodeEmitter.h\DTcomment{SIMD ...}.
-.6 SimdMCExpr.cpp\DTcomment{SIMD ...}.
-.6 SimdMCExpr.h\DTcomment{SIMD ...}.
-.6 SimdMCInstrInfo.cpp\DTcomment{SIMD ...}.
-.6 SimdMCInstrInfo.h\DTcomment{SIMD ...}.
-.6 SimdMCTargetDesc.cpp\DTcomment{SIMD ...}.
-.6 SimdMCTargetDesc.h\DTcomment{SIMD ...}.
-.5 SimdAsmPrinter.cpp\DTcomment{Prints Machine Instrs to assembly file}.
-.5 SimdAsmPrinter.h\DTcomment{Machine Instr Printer header file}.
-.5 SimdBranchSimplify.cpp\DTcomment{Custom Pass to remove obsolete jump instructions}.
-.5 SimdCallingConv.td\DTcomment{Describes SIMD Calling Conventions}.
-.5 SimdDelaySlotFiller.cpp\DTcomment{Custom Pass to utilize Delay Slots}.
-.5 SimdExplicitBypassRegs.cpp\DTcomment{Custom Pass to utilize Bypass Regs}.
-.5 SimdExplicitBypassRegs.h\DTcomment{Bypass Regs Pass header file}.
-.5 SimdFavorNonGenericAddrSpaces.cpp\DTcomment{Optimization Pass for Memory Instrs}.
-.5 SimdFrameLowering.cpp\DTcomment{Lowering Stack and Frame Information}.
-.5 SimdFrameLowering.h\DTcomment{Frame Lowering header file}.
+.6 SimdFixupKinds.h\DTcomment{Type of fixups that may be encountered}.
+.6 SimdMCAsmInfo.cpp\DTcomment{Contains some basic section info for SIMD}.
+.6 SimdMCAsmInfo.h\DTcomment{Section directive header file}.
+.6 SimdMCCodeEmitter.cpp\DTcomment{Encode SIMD machine instructions}.
+.6 SimdMCCodeEmitter.h\DTcomment{Generic instruction encoding interface header file}.
+.6 SimdMCExpr.cpp\DTcomment{Assembler expressions which are needed for parsing}.
+.6 SimdMCExpr.h\DTcomment{Assembler expressions header file}.
+.6 SimdMCInstrInfo.cpp\DTcomment{Utility functions for SIMD specific MCInst queries}.
+.6 SimdMCInstrInfo.h\DTcomment{MCInst header file}.
+.6 SimdMCTargetDesc.cpp\DTcomment{SIMD specific target descriptions}.
+.6 SimdMCTargetDesc.h\DTcomment{SIMD specific target descriptions header file}.
+.5 SimdAsmPrinter.cpp\DTcomment{Prints machine instrs to assembly file}.
+.5 SimdAsmPrinter.h\DTcomment{Machine Instr printer header file}.
+.5 SimdBranchSimplify.cpp\DTcomment{Removes obsolete jump instructions}.
+.5 SimdCallingConv.td\DTcomment{Describes SIMD calling conventions}.
+.5 SimdDelaySlotFiller.cpp\DTcomment{Custom pass to utilize delay slots}.
+.5 SimdExplicitBypassRegs.cpp\DTcomment{Custom pass for explicit data paths}.
+.5 SimdExplicitBypassRegs.h\DTcomment{Explicit data path pass header file}.
+.5 SimdFavorNonGenericAddrSpaces.cpp\DTcomment{Optimization pass for memory instrs}.
+.5 SimdFrameLowering.cpp\DTcomment{Lowering stack and frame Information}.
+.5 SimdFrameLowering.h\DTcomment{Frame lowering header file}.
 .5 SimdGlobalArrayToVector.cpp\DTcomment{Changes global arrays to vector addr space}.
-.5 SimdHazardRecognizer.cpp\DTcomment{Hazard Detection for 5-stage pipeline}.
-.5 SimdHazardRecognizer.h\DTcomment{Hazard Detection header file}.
+.5 SimdHazardRecognizer.cpp\DTcomment{Hazard detection for 5-stage pipeline}.
+.5 SimdHazardRecognizer.h\DTcomment{Hazard detection header file}.
 .5 SimdInsertImmExtend.cpp\DTcomment{Pass to insert \texttt{zimm} and \texttt{simm} instrs}.
-.5 SimdInstrFormats.td\DTcomment{Defines types of instructions}.
+.5 SimdInstrFormats.td\DTcomment{Defines type of instructions}.
 .5 SimdInstrInfo.cpp\DTcomment{Contains helper functions for manipulating instrs}.
-.5 SimdInstrInfo.h\DTcomment{Instr Info header file}.
+.5 SimdInstrInfo.h\DTcomment{Instruction info header file}.
 .5 SimdInstrInfo.td\DTcomment{Defines scalar Instructions}.
 .5 SimdInstrInfoVec.td\DTcomment{Defines vector Instructions}.
 .5 SimdInstrInfoVecFlag.td\DTcomment{Defines flagged vector Instructions}.
-.5 SimdISelDAGToDAG.cpp\DTcomment{Instruction Selector for SIMD target}.
+.5 SimdISelDAGToDAG.cpp\DTcomment{Instruction selector for SIMD target}.
 .5 SimdISelLowering.cpp\DTcomment{Lowers LLVM code into a selection DAG}.
 .5 SimdISelLowering.h\DTcomment{Lowering header file}.
 .5 SimdLowerAlloca.cpp\DTcomment{Lowers vector alloca to local addr}.
-.5 SimdMachineFunctionInfo.cpp\DTcomment{Contains Machine Function helper functions}.
-.5 SimdMachineFunctionInfo.h\DTcomment{Machine Function Info header file}.
-.5 SimdMCInstLower.cpp\DTcomment{Lowers Machine Instrs to their MCInst records}.
+.5 SimdMachineFunctionInfo.cpp\DTcomment{Contains machine function helper functions}.
+.5 SimdMachineFunctionInfo.h\DTcomment{Machine function Info header file}.
+.5 SimdMCInstLower.cpp\DTcomment{Lowers machine instrs to their MCInst records}.
 .5 SimdMCInstLower.h\DTcomment{Lower to MCInst header file}.
 .5 SimdPromoteConstant.cpp\DTcomment{Promotes constants to global variables}.
-.5 SimdRegisterInfo.cpp\DTcomment{Implements Register Specific helper functions}.
-.5 SimdRegisterInfo.h\DTcomment{Register Specific header file}.
+.5 SimdRegisterInfo.cpp\DTcomment{Implements register specific helper functions}.
+.5 SimdRegisterInfo.h\DTcomment{Register info header file}.
 .5 SimdRegisterInfo.td\DTcomment{Defines SIMD specific registers and their dwarf index}.
 .5 SimdSched4ST.td\DTcomment{Defines two issue slots and single cycle latencies}.
 .5 SimdSched5ST.td\DTcomment{Defines two issue slot and latencies for every function unit}.
 .5 SimdSchedule.td\DTcomment{Defines InstrItinClass for every function unit}.
-.5 SimdSelectionDAGInfo.cpp\DTcomment{Empty Selection DAG implementation}.
+.5 SimdSelectionDAGInfo.cpp\DTcomment{Empty selection DAG implementation}.
 .5 SimdSelectionDAGInfo.h\DTcomment{Selection DAG header file}.
-.5 SimdShuffleModel.cpp\DTcomment{Contains Function Pass to insert shuffle operations}.
+.5 SimdShuffleModel.cpp\DTcomment{Contains function pass to insert shuffle operations}.
 .5 SimdSubtarget.cpp\DTcomment{Declares the SIMD specific subclass}.
-.5 SimdSubtarget.h\DTcomment{SIMD Subtarget header file}.
+.5 SimdSubtarget.h\DTcomment{SIMD subtarget header file}.
 .5 SimdTargetMachine.cpp\DTcomment{Configures SIMD custom passes}.
-.5 SimdTargetMachine.h\DTcomment{Target Machine header file}.
+.5 SimdTargetMachine.h\DTcomment{Target machine header file}.
 .5 SimdTargetObjectFile.cpp\DTcomment{Contains helper functions for sections}.
-.5 SimdTargetObjectFile.h\DTcomment{SIMD Object Sections header file}.
-.5 SimdTargetTransformInfo.cpp\DTcomment{Cost Estimation of some SIMD Transormations}.
-.5 SimdTargetTransformInfo.h\DTcomment{SIMD Cost Estimation header file}.
-.5 SimdVLIWPacketizer.cpp\DTcomment{SIMD Custom Packetizer Pass}.
-.5 SimdVLIWPacketizer.h\DTcomment{SIMD Packetizer header file}.
+.5 SimdTargetObjectFile.h\DTcomment{SIMD object sections header file}.
+.5 SimdTargetTransformInfo.cpp\DTcomment{Cost estimation of SIMD transformations}.
+.5 SimdTargetTransformInfo.h\DTcomment{SIMD cost estimation header file}.
+.5 SimdVLIWPacketizer.cpp\DTcomment{SIMD custom packetizer Pass}.
+.5 SimdVLIWPacketizer.h\DTcomment{SIMD packetizer header file}.
 .5 TargetInfo.
 .6 SimdTargetInfo.cpp\DTcomment{SIMD target implementation}.
 }

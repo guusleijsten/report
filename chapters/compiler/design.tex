@@ -57,11 +57,11 @@ This section describes the custom passes mentioned in the previous section. Depe
 \begin{tabular}{@{}l l l@{}}
 \toprule
 \textbf{Feature} & \textbf{Code Gen. Pass} \\ \hline
-Software Pipelining 	& Delay Slot Filler 	& The delay slot, which is a product of software\\
-				&				& pipelining is being filled with this pass.\\
+Hardware Pipeline 	& Delay Slot Filler 	& The delay slot, which is a product of the\\
+				&				& pipeline is being filled with this pass.\\
 			 	& Hazard Recognizer & Instructions do not always have single cycle\\
-				&				 & latencies. This pass is necessary for some\\
-				&				& pipeline configurations. \\
+				&				 & latencies. This pass is necessary for a five\\
+				&				& stage pipeline configuration. \\
 Bit-width 			& Immediate Extension & With different data width, constants may be\\
 				&				    & lowered in a different way. \\
 ISA extension		& Instruction Selection & New instructions need to be described in\\
@@ -79,6 +79,7 @@ Operand bypassing 	& Bypass Register Allocation & This optional pass is develope
 When generating code for a four stage pipeline configuration, all instructions have a latency of one cycle. In that case, hazard recognition is not necessary.
 In order to support code generation for a five stage pipeline configuration we have implemented a hazard recognizer. The hazard recognizer is used by the scheduler to determine if two consecutive instructions can be scheduled after each other. 
 
+\lstset{style=customasm}
 \begin{lstlisting}
 addi r13, r0, 14
 addi r12, r0, 10
@@ -284,7 +285,9 @@ addi r11, r11, 4 || v.nop
 The hazard recognizer described in Section \ref{sec:hazard_recogn} implements a function called \emph{ShouldPreferAnother} which we have implemented to recover from hazards more efficiently. If we have a hazard on the vector slot, you would prefer a vector instruction, because then you immediately resolve that hazard and similarly for the scalar slot. However, this function can also be used to do the opposite, namely, prefer a vector instruction if the previous issued instruction was a scalar instruction and vice versa. Alternating instructions may improve the result of the packetizer. 
 
 \subsection{Bypass Registers Allocation}
-This pass exploits explicit registers by allocating them in the generated code. It does this as a post-processing step by modelling the behaviour of the bypass registers that are in a pipeline and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
+This pass exploits explicit registers by allocating them in the generated code. It does this as a post-processing step by modelling the behaviour of the bypass registers that are in a pipeline. % and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
+While the instruction are traversed, we model at compile time, what the values are that the pipeline would hold at runtime.
+
 
 
 %Implementation of explicit data paths using bypass registers.

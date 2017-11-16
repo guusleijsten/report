@@ -6,18 +6,22 @@
 %This thesis describes the development of an LLVM-based compiler for a wide SIMD architecture. In this chapter, the motivation of this thesis is described, together with the generic features of a wide SIMD architecture. Then, the problems of the existing compiler, and the final goal are introduced in the problem statement. The thesis overview shows the structure and basic information of each chapter in this report.
 
 Embedded systems are everywhere, over ninety percent of all microprocessors are manufactured as components of embedded systems. %source
-Never have we had such growth in the use of such embedded devices. Nowadays, most people carry a mobile phone that are more powerful than the computer I played my first game on. As embedded applications are adopting more sophisticated algorithms, a wide consensus in performance and power consumption arises. %This embedded streaming processor consumes tens of pJ per operation (pJ/op) and the battery capacity is only sufficient for playing video applications for a few hours \cite{simd}.
+Never have we had such growth in the use of such embedded devices. Nowadays, most people carry a mobile phone that are more powerful than the computer I played my first game on in `92. As embedded applications are adopting more sophisticated algorithms, a wide consensus in performance and power consumption arises. %This embedded streaming processor consumes tens of pJ per operation (pJ/op) and the battery capacity is only sufficient for playing video applications for a few hours \cite{simd}.
 
 There are dedicated processors for all kinds of embedded applications, like video/image processing, deep learning and other sophisticated algorithms.
 Furthermore, embedded systems like mobile phones have to run high-performance applications like video encoding/decoding, wireless signal processing and 3D processing \cite{dongrio1}. This is made possible by powerful processors (ARM64 / AArch64) that run at high clock speeds. However, these kinds of devices often have a limited energy source, and because it is a handheld device, heat produced by power dissipation is also of concern.
 
+%brugzin Luc
 The advantage of an ultra-wide Single Instruction Multiple Data (SIMD) architecture is its wide vector operations that run in parallel with a control processor. For certain kernels we can exploit parallelism by processing multiple operations in parallel instead of processing them sequentially. Therefore, the same performance can be achieved at low clock frequency and thus low voltage, thereby greatly reducing energy consumption [2] and power dissipation.% (power is proportional to the clock frequency). 
+%een techniek om energie nog verder te optimaliseren, door bypassen van je rf, en dat kan automatisch en explicit, en in dit geval kijken we naar expliciet.
 
+%to program these kind of architectures / bruggetje
 Compilers have an important role in the design of computer architectures. When considering designs for an architecture, one may want to see how efficient such design is or what impact certain consideration have. To analyze how efficient applications can execute on a design, a compiler is needed that compiles an application to machine code, which is then used to simulate the execution for such architecture. Therefore, designing an architecture and compiler development go hand in hand.  
 
 The Electronic Systems group at the Eindhoven University of Technology is doing research in a wide SIMD with low energy features in order to achieve a programmable platform with a high energy efficiency[1]. The current LLVM-based compiler is developed completely in the LLVM framework. However, there is an older version of the compiler, which we will refer to as the legacy compiler, which uses LLVM's front-end and a completely customized implementation of a back-end which inhibits maintainability and does not benefit from developments in the field of compilers.
 
 \newpage \section{Motivation}
+%avoid mentioning the compiler course, just mention that compilers are 'vet handig'.
 This master thesis aims at making a successful transition to LLVM. We would highly benefit from having a fully functional compiler that is implemented in LLVM. The compiler course is a course where students are introduced in compiler technologies and this relatively easy to understand architecture can help student to get introduced to LLVM. There are developers working around the clock on other architectures, e.g. xCORE (multicore microcontrollers), AArch64 (mobile phones) and x86 (modern computers) (link to www.xmos.com/products/silicon). Having knowledge on LLVM may help these students to improve their knowledge on such computer architectures.  
 
 We will measure efficiency of the generated code code for a very low energy ultra wide SIMD architecture. We will do this by comparing a practical LLVM-based compiler to a legacy custom build compiler and assess efficiency using handwritten references. We want to know how low power this architecture can prove to be and see if we can make a successful transition to LLVM. Many companies have standardized to LLVM already and it is very attractive for academic use. %TODO: rewrite this paragraph
@@ -30,9 +34,9 @@ We will analyze the efficiency gain in exploiting explicit data paths. The SIMD 
 
 The architecture at hand has features that have been considered. Each combination results in different hardware configurations:
 \begin{itemize}
-\item Software pipelining is exploited where each stage takes one clock cycle. A four stage and a five stage design have been considered.
+\item Pipelining is exploited where each stage takes one clock cycle. A four stage and a five stage design have been considered.
 \item	The bit-width of the data that it operates on can be configured to 32 or 16 bits. With smaller 16-bit you further improve energy efficiency but requires knowledge of the programmer and consideration during application development. The larger data width may be sufficient for embedded applications but is still smaller than 64-bit architectures.
-\item	Another feature that has been consider is an extension to the Instruction Set Architecture (ISA). It could for example be an improvement to have a function unit (FU) that can do multiply-accumulate instructions which may be beneficial for e.g. signal processing filters, for example Finite Impulse Response (FIR) Filters or linear algebra, for example matrix multiplication and Convolutional Neural Networks (CNN). 
+\item	Another feature that has been consider is an extension to the Instruction Set Architecture (ISA). It could for example be an improvement to have a functional unit (FU) that can do multiply-accumulate instructions which may be beneficial for e.g. signal processing filters, for example Finite Impulse Response (FIR) Filters or linear algebra, for example matrix multiplication and Convolutional Neural Networks (CNN). 
 \item Operand bypassing exploits busses of a bypass network to pass values between software pipeline stages. This feature reduces accesses to register files by bypassing the value rather than putting it in a register. There are two version of bypassing for this SIMD i.e. implicit bypassing and explicit bypassing. With implicit, also called automatic bypassing, dedicate hardware detects and exploits these bypasses. With explicit bypassing, it is the compilers responsibility to exploit them.
 \end{itemize}
 
@@ -47,7 +51,7 @@ The legacy compiler has input language limitations, maintenance problems and pos
 The new compiler has drastically improved maintainability and uses LLVM's auto vectorizer to generate vector instructions. Compared with the old compiler, a LLVM-based compiler is more flexible and a large number of input languages are supported. The optimization passes supplied by LLVM also improve the quality of the generated code. Furthermore, the development in LLVM makes it easy to update the compiler and can therefore benefit from developments in compiler technologies. However, not all features are supported by the new compiler. Namely, it can only generate code for a target machine with four pipeline stages, implicit data paths and a 32 bit data width. We will maintain and add features to the new compiler with a focus on exploration of explicit data paths.
 
 %TODO: vraag : een hoop werk om een zin te zeggen haha moet hier nog iets volgen? moet hier nog iets na komen
-The main problem is "How to generate efficient code for SIMD that exploits explicit data paths?". 
+The main problem is ``How to generate efficient code for SIMD that exploits explicit data paths?". 
 
 %is no support for a five stage pipeline configuration and only implicit data paths have been considered.  
 %TODO: ask : completely avoid hardware generation? or mention? that current implementation does allow many of these features and configurabilities, but consists of multiple implementations and has too much code duplication.

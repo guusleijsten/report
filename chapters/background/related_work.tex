@@ -13,13 +13,89 @@ There is related work for compilers that target SIMD architectures, in particula
 %\section{Building an LLVM back-end}
 %Our backend is derived from tricore tutorial on creating a new backend for the LLVM compiler framework \cite{tricore}. Furthermore, based on that work, an LLVM backend for SIMD architecture without explicit bypassing has been developed \cite{liu_zhenyuan}. However, the current compiler generates code with implicit bypassing. We, therefore, need to extend this to efficiently generate code for explicit bypassing as well. Therefore, our work will be an extension to previously noted work.
 
-\subsection{Other Exposed/Explicit Data Path Architectures}
-\subsubsection{Transport Triggered Architectures}
-Compiling with explicit data paths have been an active topic of research. We have investigated several architectures that face similar challenges. One of the main works that we investigated is the TTA architecture, where instructions consist of data transports. However, their approach can not be used because with our SIMD architecture, data transports are given and we want to compile in order to efficiently use the explicit data paths that are provided \cite{tta, tta_codegen}.
+\subsection{Other Exposed/Explicit Data Path Architectures}\label{sec:other_explicit_datapaths}
+Compiling with explicit data paths have been an active topic of research. We have investigated several architectures that face similar challenges. 
 
-\subsubsection{ReMove}
+%Johan janssen & ... TTA work
+%Other exposed datapaths
 
-Another architecture that exploits explicit datapath architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit data paths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
+\subsubsection{Transport Triggered Architectures}\label{sec:tta}
+One of the main works that we investigated is the  \emph{Transport Triggered Architecture} (TTA) which has been developed in the MOVE project \cite{tta_codegen}. For TTA architectures, instructions consist of transports that specify the data path. The difference between TTAs and traditional operation triggered architectures is that TTA are transport driven, hence its name. 
+
+Figure \ref{fig:tta} illustrates how function units and register files are connected to an interconnect network which are programmed by instructions. Programming a TTA consists of moving operands to the input registers of a FU.
+
+\begin{figure}[b!]
+\centering
+\includegraphics[width=.8\textwidth]{figures/tta_structure}
+\caption{General structure of a TTA with interconnect network driven by data transports.}
+\label{fig:tta}
+\end{figure}
+
+%\lstset{style=customasm}
+\begin{lstlisting}
+add r1, r2, r3  # r1 = r2 + r3
+sub r4, r2, 6   # load from memory at location 0x5
+sw  r4, r1, 0   # store r4 at address r1
+\end{lstlisting}
+
+First step is to translate each $n$-operand $m$-result operation into $n+m$ moves (so called $n$ \emph{operand moves} and $m$ \emph{result moves}). \texttt{O1} and \texttt{O2} are input ports of the FU and \texttt{R} indicates the output (result) of a FU.
+%Insert more text explaining both fragments above and below this paragraph.
+
+\begin{lstlisting}
+r2 -> O1add ; r3 -> O2add ; Radd -> r1
+r2 -> O1sub ; r6 -> O2sub ; Rsub -> r4
+r1 -> O1sw  ; r4 -> O2sw
+\end{lstlisting}
+
+Let us assume we have two FUs named \texttt{alu1} and \texttt{alu2} for ALU operations, and one FU named \texttt{ls} for load-store operations. The suffixes `\texttt{alu1}', `\texttt{alu2}', and `\texttt{ls}' indicate the FU on which the operation is executed.
+If we would schedule the above fragment such that the distance between the final operand and a corresponding result move should be at least the latency of the FU. Then we may obtain the following:
+
+\begin{lstlisting}
+r2 -> O1add.alu1 ; r3 -> O2add.alu1 ; r2 -> O1sub.alu2 ; r6 -> O2sub.alu2
+Radd.alu1 -> r1  ; Rsub.alu2 -> r4
+r1 -> O1sw.ls    ; r4 -> O2sw.ls
+\end{lstlisting}
+
+
+\textbf{Bypassing:} The outputs of the add and subtract operations can be directly moved to the load-store unit. This reduces the schedule by one cycle, however, the number of moves does not change.
+
+\begin{lstlisting}
+r2 -> O1add.alu1; r3 -> O2add.alu1; r2 -> O1sub.alu2    ; r6 -> O2sub.alu2
+Radd.alu1 -> r1 ; Rsub.alu2 -> r4 ; Radd.alu1 -> O1sw.ls; Rsub.alu2 -> O2sw.ls
+\end{lstlisting}
+
+\textbf{Dead result move elimination:} Next it may occur that the values in \texttt{r1} and \texttt{r2} are not live anymore because they are used only once. In that case corresponding moves can be skipped. This gives the following schedule:
+
+\begin{lstlisting}
+r2 -> O1add.alu1 ; r3 -> O2add.alu1 ; r2 -> O1sub.alu2 ; r6 -> O2sub.alu2 
+Radd.alu1 -> O1st.ls ; Rsub.alu2 -> O2st.ls
+\end{lstlisting}
+
+The optimizations that we just discussed for TTA also apply on the wide SIMD architecture, wihch we discussed in Section \ref{sec:datapaths}. However, their approach can not be used because the SIMD architecture is an operation triggered architecture, data transports are a given. For more information on explicit bypassing for TTA you may want to read the work of Hoogerbrugge et. al. \cite{tta, tta_codegen}.
+
+%TODO read chapter 7 and cite to it, add words about TTA compiler. Then can be used yes/no
+
+\begin{figure}[b!]
+\centering
+\includegraphics[width=.65\textwidth]{figures/vliw_forwarding}
+\caption{Block diagram of VLIW architecture with bypassing.}
+\label{fig:vliw}
+\end{figure}
+
+\subsubsection{Very Long Instruction Word Architectures}
+The \emph{Very Long Instruction Word} (VLIW) architecture is designed to optimize \emph{Instruction Level Parallelism} (ILP) by executing multiple instructions in parallel.
+Although RISC architectures take advantage of temporal parallelism by using hardware pipelining (explained in Chapter \ref{sec:datapaths}), VLIW architectures take advantage of spacial parallelism by using multiple functional units to execute several operations concurrently. 
+
+Figure \ref{fig:vliw} shows a generic block diagram of a VLIW machine, where we have multiple instruction issues, three in this example, and each instructions has its own decode stage and functional units. We illustrate how the bypass network connects the outputs of the FUs back to the ID stage, allowing results to be forwarded. For VLIW architectures, the complexity of the bypass network grows linearly with the size of the instruction word. Furthermore, traditionally the register file requires $n$ write and $2n$ read ports, where $n$ is the length of the instruction word. This may require a more hungry register file as the power efficiency degrades when increasing the number of ports on the register file \cite{compiler_driven_power_opt}. However, this requirement can be relaxed by clustering, where each cluster may have a dedicated register file, which is often done in modern VLIW architectures.\\
+
+A reconfigurable VLIW architecture is developed in the $\rho$-VEX project at the University of Technology in Delft \cite{p-vex}. This architecture also considers explicit bypassing and other configurable design options, e.g. configurable issue-width, functional units and bit-width of the data.
+
+However, their implementation can not be used because (i) they are using a gcc based compiler instead of a LLVM based compiler and (ii) not a lot of implementation details have been given in their paper.
+
+
+
+%\subsubsection{ReMove}
+%Another architecture that exploits explicit data path architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit data paths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
 
 %\section{Scheduling and Register Allocation}
 %First of all, from the existing scheduling algorithms, Swing Modulo Scheduling (SMS) seems to be a suitable scheduling approach. It is a heuristic approach that is able to deal efficiently with software pipelining. Furthermore, it is known for its outstanding performance and low computational cost. The generated schedules are near optimal in terms of initiation interval and register requirements \cite{swingmodulo_paper, swingmodulo_thesis}. We consider this a candidate scheduler to use.
@@ -28,11 +104,13 @@ Another architecture that exploits explicit datapath architectures is the ReMove
 
 %Finally, there is another project, called Unison. They solve scheduling and register allocation and other code generation tasks by translating them into combinatorial problems and solve them together with constraint programming \cite{unison}. We consider this a candidate constraint solver to use because it can be easily integrated with LLVM.
 
-\subsection{Legacy compiler}
-The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that project \cite{simd}. The legacy compiler has a custom backend for the SIMD architecture, that can generate code for explicit data paths \cite{dongrio1} and it can only compile a subset of C code and hand-touched OpenCL code, which requires manual insertion of custom pragmas to compile efficiently \cite{dongrio2}, which we do not desire. Our goal is to overcome these limitations and improve the compilers maintainability. Furthermore, the new compiler will be evaluated relative to the legacy compiler in order to access efficiency of the generated code.
+\subsection{Legacy compiler}\label{sec:legacy_comp}
+A compiler has been developed during the design phase of the target wide SIMD architecture. That compiler has an assembler that can translate from assembly to object code and the compiler itself can translate C code to scalar only- and OpenCL to vectorized assembly code or object code. That compiler consists of a LLVM front-end and the back-end is developed in C++, but not within the LLVM framework.
+
+The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that time \cite{simd}. The legacy compiler has a custom backend for the SIMD architecture that can generate code for explicit data paths \cite{dongrio1}, but it can only compile C code to non-vectorized instructions or a small subset of hand-touched OpenCL code that also requires manual insertion of custom pragmas to compile for vectorized code \cite{dongrio2}. Our goal is to overcome certain limitations and improve the compilers maintainability.
+ 
+
 %Dongrio's simd work 
-%Johan janssen & ... TTA work
-%Other exposed datapaths
 
 \subsection{Basic Compiler Design}\label{sec:basic_compiler_design}
 We now show a simd back-end design in LLVM by L. Zhenyuan \cite{liu_zhenyuan}. He started to build a back-end in LLVM for the same purpose, but with a different goal, namely to efficiently generate vectorized code within LLVM. We will discuss his work briefly in this section, and elaborate on some aspects. In order to support vector instructions, LLVM's auto-vectorizer has been used and intermediate code optimization passes have been implemented to generate SIMD specific intrinsics, that are, in turn, transformed to vector instructions and shuffle operations. 
@@ -55,7 +133,7 @@ The flag set instructions are used for comparison. If it is true, the flag regis
 \subsubsection{Register Configuration}
 There are two main register classes. Although each PE has its own register file in our architecture, it is not necessary to define a specific register class for every PE register file. One reason is the size of the PE array is configurable and the number of the vector register classes cannot be dynamic. Another reason is, the vector array actually is a single issue slot, which executes the same instruction for all PEs. It is sufficient to define one register class for the entire PE array. Each vector register defined in the back-end represents a line of registers in the PE array.
 
-\begin{table}[H]
+\begin{table}[t]
 \caption{Registers configuration.}
 \begin{center}
 \begin{tabular}{@{}l l l@{}}
@@ -88,7 +166,7 @@ Both \texttt{r0} and \texttt{v0} are connected to ground and contain constant va
 
 \subsubsection{Linker and Assembler}
 An assembler has been implemented that can parse assembly code and translate it into binary code. Furthermore, a linker has been developed which takes one or more binary files and combines them into a single executable file. These have been developed as separate projects and within the LLVM framework. Unfortunately, the linker still has some problems that need to be resolved before it can be used. %TODO go deeper into limitations of the lld linker
-Therefore, we have chosen to use a custom linker instead of the standard linker supplied with LLVM. We would benefit from using LLVM's linker because the custom linker can work only on a single file. Unfortunately, we can not use this linker yet because some adjustments and improvements are required, however, this is outside the scope of this assignment and will, therefore, be added to future work.
+Therefore, we have chosen to use a custom linker instead of the standard linker supplied with LLVM. We would benefit from using LLVM's linker because the custom linker can work only on a single file. Unfortunately, we can not use this linker yet because some adjustments and improvements are required, however, this is outside the scope of this assignment and will, therefore, be added to future work.%work in progress
 
 %TODO: add bypassing, auto and expl, (from slides)
 

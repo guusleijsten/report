@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="531px"
+   height="259px"
+   version="1.1"
+   id="svg390"
+   sodipodi:docname="bypassing_example.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:export-filename="/Users/guusleijsten/Documents/thesis/figures/bypassing_example.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata394">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1225"
+     inkscape:window-height="703"
+     id="namedview392"
+     showgrid="false"
+     inkscape:zoom="1.3782114"
+     inkscape:cx="277.69"
+     inkscape:cy="132"
+     inkscape:window-x="9"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g388" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="ll1">
+    <g
+       style=""
+       transform="translate(0.5,0.5)"
+       id="g388">
+      <rect
+         x="186"
+         y="63"
+         width="30"
+         height="30"
+         id="rect4"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="184"
+         y="60"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect6"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="241"
+         y="63"
+         width="30"
+         height="30"
+         id="rect14"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="239"
+         y="60"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect16"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="296"
+         y="63"
+         width="30"
+         height="30"
+         id="rect24"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="294"
+         y="60"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect26"
+         style="fill:#e1d5e7;stroke:#000000" />
+      <rect
+         x="351"
+         y="63"
+         width="30"
+         height="30"
+         id="rect34"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="349"
+         y="60"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect36"
+         style="fill:#ffffff;stroke:#000000" />
+      <path
+         d="M 294,10 H 547.63"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path44"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10" />
+      <path
+         d="m 552.88,10 -7,3.5 1.75,-3.5 -1.75,-3.5 z"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path46"
+         inkscape:connector-curvature="0"
+         style="fill:#16120a;stroke:#16120a;stroke-miterlimit:10" />
+      <rect
+         x="156"
+         y="3"
+         width="140"
+         height="20"
+         id="rect48"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(166.5,3.5)"
+         id="g54">
+        <switch
+           id="switch52">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="114"
+             height="12"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 115px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">Time (in clock cycles)</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="57"
+             y="12"
+             font-size="12px"
+             id="text50"
+             style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#16120a">Time (in clock cycles)</text>
+        </switch>
+      </g>
+      <path
+         d="M 5,50 V 231.33861"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path56"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-width:0.9677403;stroke-miterlimit:10" />
+      <path
+         d="m 5,236.88 -3.5,-7 3.5,1.75 3.5,-1.75 z"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path58"
+         inkscape:connector-curvature="0"
+         style="fill:#16120a;stroke:#16120a;stroke-miterlimit:10" />
+      <rect
+         x="2"
+         y="0"
+         width="100"
+         height="45"
+         transform="translate(2,3)"
+         id="rect60"
+         stroke="none"
+         fill="none"
+         opacity="0.25" />
+      <g
+         transform="translate(5.5,-5.5)"
+         id="g66">
+        <switch
+           id="switch64">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="98"
+             height="40"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 98px; white-space: normal; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">Program execution<xhtml:div>(in instructions)</xhtml:div>
+</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="49"
+             y="26"
+             font-size="12px"
+             id="text62"
+             style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#16120a">Program execution</text>
+        </switch>
+      </g>
+      <rect
+         x="32"
+         y="68"
+         width="20"
+         height="20"
+         id="rect68"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(49.329428,66.5)"
+         id="g74">
+        <switch
+           id="switch72">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="14"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 15px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">lw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="-19.782553"
+             y="17"
+             font-size="16px"
+             id="text70"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1401">lw</tspan>
+          </text>
+        </switch>
+        <switch
+           transform="translate(21.221354,0.1772537)"
+           id="switch72-3">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="14"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 15px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">lw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="28.585938"
+             y="17"
+             font-size="16px"
+             id="text70-7"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1401-1">r1, r10, 1</tspan>
+          </text>
+        </switch>
+      </g>
+      <rect
+         x="32"
+         y="118"
+         width="20"
+         height="20"
+         id="rect76"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(70.915366,116.5)"
+         id="g82">
+        <switch
+           id="switch80">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="14"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 15px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">lw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="-41.368492"
+             y="17"
+             font-size="16px"
+             id="text78"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#16120a">
+            <tspan
+               sodipodi:role="line"
+               id="tspan1411"
+               x="-41.368492"
+               y="17">lw</tspan>
+          </text>
+        </switch>
+      </g>
+      <rect
+         x="32"
+         y="168"
+         width="20"
+         height="20"
+         id="rect84"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(18.043621,166.5)"
+         id="g90">
+        <switch
+           id="switch88"
+           transform="translate(24.484375)">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="23"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 24px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">add</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="-8.3763027"
+             y="17"
+             font-size="16px"
+             id="text86"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1397">add</tspan>
+          </text>
+        </switch>
+      </g>
+      <path
+         d="m 45,185 v 0"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path92"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10" />
+      <path
+         d="M 45,185 Z"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path94"
+         inkscape:connector-curvature="0"
+         style="fill:#16120a;stroke:#16120a;stroke-miterlimit:10" />
+      <rect
+         x="241"
+         y="113"
+         width="30"
+         height="30"
+         id="rect96"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="239"
+         y="110"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect98"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="296"
+         y="113"
+         width="30"
+         height="30"
+         id="rect106"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="294"
+         y="110"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect108"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="351"
+         y="113"
+         width="30"
+         height="30"
+         id="rect116"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="349"
+         y="110"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect118"
+         style="fill:#e1d5e7;stroke:#000000" />
+      <rect
+         x="406"
+         y="113"
+         width="30"
+         height="30"
+         id="rect126"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="404"
+         y="110"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect128"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="296"
+         y="163"
+         width="30"
+         height="30"
+         id="rect136"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="294"
+         y="160"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect138"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="351"
+         y="163"
+         width="30"
+         height="30"
+         id="rect146"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="349"
+         y="160"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect148"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="406"
+         y="163"
+         width="30"
+         height="30"
+         id="rect156"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="404"
+         y="160"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect158"
+         style="fill:#e1d5e7;stroke:#000000" />
+      <rect
+         x="461"
+         y="163"
+         width="30"
+         height="30"
+         id="rect166"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="459"
+         y="160"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect168"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="32"
+         y="218"
+         width="20"
+         height="20"
+         id="rect176"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(39.541017,216.5)"
+         id="g182">
+        <switch
+           id="switch180">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="17"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 18px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">sw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="-9.9153662"
+             y="17"
+             font-size="16px"
+             id="text178"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1407">sw</tspan>
+          </text>
+        </switch>
+      </g>
+      <rect
+         x="62"
+         y="218"
+         width="20"
+         height="20"
+         id="rect184"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="62"
+         y="168"
+         width="20"
+         height="20"
+         id="rect192"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="62"
+         y="68"
+         width="20"
+         height="20"
+         id="rect200"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="62"
+         y="118"
+         width="20"
+         height="20"
+         id="rect208"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="84"
+         y="218"
+         width="28"
+         height="20"
+         id="rect216"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="84"
+         y="168"
+         width="28"
+         height="20"
+         id="rect224"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="84"
+         y="68"
+         width="28"
+         height="20"
+         id="rect232"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="84"
+         y="118"
+         width="28"
+         height="20"
+         id="rect240"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="116"
+         y="168"
+         width="20"
+         height="20"
+         id="rect248"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="116"
+         y="68"
+         width="20"
+         height="20"
+         id="rect256"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="116"
+         y="118"
+         width="20"
+         height="20"
+         id="rect264"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="116"
+         y="218"
+         width="20"
+         height="20"
+         id="rect272"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <rect
+         x="351"
+         y="213"
+         width="30"
+         height="30"
+         id="rect280"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="349"
+         y="210"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect282"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="406"
+         y="213"
+         width="30"
+         height="30"
+         id="rect290"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="404"
+         y="210"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect292"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="461"
+         y="213"
+         width="30"
+         height="30"
+         id="rect300"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="459"
+         y="210"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect302"
+         style="fill:#e1d5e7;stroke:#000000" />
+      <rect
+         x="516"
+         y="213"
+         width="30"
+         height="30"
+         id="rect310"
+         style="opacity:0.25;fill:#000000;stroke:#000000" />
+      <rect
+         x="514"
+         y="210"
+         width="30"
+         height="30"
+         pointer-events="none"
+         id="rect312"
+         style="fill:#ffffff;stroke:#000000" />
+      <rect
+         x="186"
+         y="26"
+         width="30"
+         height="20"
+         id="rect320"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(188.5,24.5)"
+         id="g326">
+        <switch
+           id="switch324">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc1</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text322"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc1</text>
+        </switch>
+      </g>
+      <rect
+         x="241"
+         y="26"
+         width="30"
+         height="20"
+         id="rect328"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(243.5,24.5)"
+         id="g334">
+        <switch
+           id="switch332">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc2</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text330"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc2</text>
+        </switch>
+      </g>
+      <rect
+         x="296"
+         y="26"
+         width="30"
+         height="20"
+         id="rect336"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(298.5,24.5)"
+         id="g342">
+        <switch
+           id="switch340">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc3</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text338"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc3</text>
+        </switch>
+      </g>
+      <rect
+         x="351"
+         y="26"
+         width="30"
+         height="20"
+         id="rect344"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(353.5,24.5)"
+         id="g350">
+        <switch
+           id="switch348">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc4</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text346"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc4</text>
+        </switch>
+      </g>
+      <rect
+         x="406"
+         y="26"
+         width="30"
+         height="20"
+         id="rect352"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(408.5,24.5)"
+         id="g358">
+        <switch
+           id="switch356">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc5</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text354"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc5</text>
+        </switch>
+      </g>
+      <rect
+         x="461"
+         y="26"
+         width="30"
+         height="20"
+         id="rect360"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(463.5,24.5)"
+         id="g366">
+        <switch
+           id="switch364">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc6</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text362"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc6</text>
+        </switch>
+      </g>
+      <rect
+         x="516"
+         y="26"
+         width="30"
+         height="20"
+         id="rect368"
+         style="opacity:0.25;fill:none;stroke:none" />
+      <g
+         transform="translate(518.5,24.5)"
+         id="g374">
+        <switch
+           id="switch372">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="21"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 22px; white-space: nowrap; word-wrap: normal; text-align: center;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">cc7</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="11"
+             y="17"
+             font-size="16px"
+             id="text370"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">cc7</text>
+        </switch>
+      </g>
+      <path
+         d="M 227,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path376"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <path
+         d="M 282,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path378"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <path
+         d="M 337,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path380"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <path
+         d="M 392,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path382"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <path
+         d="M 447,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path384"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <path
+         d="M 502,30 V 250"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path386"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#16120a;stroke-miterlimit:10;stroke-dasharray:3, 3" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="6.6667814"
+         y="36.942791"
+         id="text1405"><tspan
+           sodipodi:role="line"
+           id="tspan1403"
+           x="6.6667814"
+           y="36.942791"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">(in instructions)</tspan></text>
+      <g
+         transform="translate(108.90019,116.50025)"
+         id="g82-5">
+        <switch
+           id="switch80-3">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="14"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 15px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">lw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="-9.7634706"
+             y="17"
+             font-size="16px"
+             id="text78-0"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#16120a">
+            <tspan
+               y="17"
+               x="-9.7634668"
+               sodipodi:role="line"
+               id="tspan1411-9">r2, r10, 2</tspan>
+          </text>
+        </switch>
+      </g>
+      <g
+         transform="translate(64.305385,166.50025)"
+         id="g90-3">
+        <switch
+           id="switch88-8"
+           transform="translate(24.484375)">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="23"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 24px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">add</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="10.34696"
+             y="17"
+             font-size="16px"
+             id="text86-0"
+             style="font-size:16px;font-family:Garamond;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1397-0">r1, r1, r2</tspan>
+          </text>
+        </switch>
+      </g>
+      <g
+         transform="translate(83.087402,216.50025)"
+         id="g182-0">
+        <switch
+           id="switch180-3">
+          <foreignObject
+             style="overflow:visible;"
+             pointer-events="all"
+             width="17"
+             height="17"
+             requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <xhtml:div
+               style="display: inline-block; font-size: 16px; font-family: Garamond; color: rgb(22, 18, 10); line-height: 1.2; vertical-align: top; width: 18px; white-space: nowrap; word-wrap: normal;">
+              <xhtml:div
+                 style="display:inline-block;text-align:inherit;text-decoration:inherit;">sw</xhtml:div>
+            </xhtml:div>
+          </foreignObject>
+          <text
+             x="16.049318"
+             y="17"
+             font-size="16px"
+             id="text178-6"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#16120a">
+            <tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.66666698px;font-family:monospace;-inkscape-font-specification:'monospace, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+               id="tspan1407-1">r1, r10, 0</tspan>
+          </text>
+        </switch>
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="189.45036"
+         y="82.070816"
+         id="text1553"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551"
+           x="189.45036"
+           y="82.070816"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">IF</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="243.73276"
+         y="132.2252"
+         id="text1553-3"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-6"
+           x="243.73276"
+           y="132.2252"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">IF</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="298.01514"
+         y="183.39281"
+         id="text1553-6"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-7"
+           x="298.01514"
+           y="183.39281"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">IF</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="352.29755"
+         y="234.0538"
+         id="text1553-1"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-1"
+           x="352.29755"
+           y="234.0538"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">IF</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="242.00558"
+         y="82.070808"
+         id="text1553-69"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-0"
+           x="242.00558"
+           y="82.070808"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">ID</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="294.29163"
+         y="82.070808"
+         id="text1553-65"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-3"
+           x="294.29163"
+           y="82.070808"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">EX</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06508076"
+         x="346.63315"
+         y="82.070808"
+         id="text1553-31"
+         transform="scale(1.0132199,0.98695258)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-05"
+           x="346.63315"
+           y="82.070808"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.53833866px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06508076">WB</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="297.6738"
+         y="131.69597"
+         id="text1553-69-2"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-0-5"
+           x="297.6738"
+           y="131.69597"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">ID</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="349.71884"
+         y="131.69597"
+         id="text1553-65-8"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-3-1"
+           x="349.71884"
+           y="131.69597"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">EX</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="401.81909"
+         y="131.69597"
+         id="text1553-31-3"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-05-0"
+           x="401.81909"
+           y="131.69597"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">WB</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="352.20755"
+         y="182.5475"
+         id="text1553-69-2-9"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-0-5-1"
+           x="352.20755"
+           y="182.5475"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">ID</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="404.25259"
+         y="182.5475"
+         id="text1553-65-8-7"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-3-1-9"
+           x="404.25259"
+           y="182.5475"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">EX</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="456.35284"
+         y="182.5475"
+         id="text1553-31-3-5"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-05-0-1"
+           x="456.35284"
+           y="182.5475"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">WB</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="406.7413"
+         y="232.97498"
+         id="text1553-69-2-5"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-0-5-6"
+           x="406.7413"
+           y="232.97498"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">ID</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="458.78635"
+         y="232.97498"
+         id="text1553-65-8-2"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-3-1-8"
+           x="458.78635"
+           y="232.97498"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">EX</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06017148"
+         x="510.8866"
+         y="232.97498"
+         id="text1553-31-3-9"
+         transform="scale(1.0085497,0.99152277)"><tspan
+           sodipodi:role="line"
+           id="tspan1551-05-0-7"
+           x="510.8866"
+           y="232.97498"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.46671867px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.06017148">WB</tspan></text>
+      <path
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:1.703;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 364.45133,140.3869 v 16.21888"
+         id="path974"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 364.45133,159.27302 -2.92137,-3.55632 2.92137,0.88908 2.92137,-0.88908 z"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path58-2"
+         inkscape:connector-curvature="0"
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:0.6511941;stroke-miterlimit:10" />
+      <path
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:1.703;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+         d="M 419.45133,190.36242 V 206.5813"
+         id="path974-7"
+         inkscape:connector-curvature="0" />
+      <path
+         d="m 419.45133,209.24854 -2.92137,-3.55632 2.92137,0.88908 2.92137,-0.88908 z"
+         stroke-miterlimit="10"
+         pointer-events="none"
+         id="path58-2-4"
+         inkscape:connector-curvature="0"
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:0.6511941;stroke-miterlimit:10" />
+    </g>
+  </g>
+</svg>

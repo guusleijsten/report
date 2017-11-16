@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="73px"
+   height="174px"
+   version="1.1"
+   id="svg86"
+   sodipodi:docname="control_flow_graph.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:export-filename="/Users/guusleijsten/Documents/thesis/figures/control_flow_graph.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="702"
+     id="namedview88"
+     showgrid="false"
+     inkscape:zoom="4.063832"
+     inkscape:cx="39.499569"
+     inkscape:cy="122.41053"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g84" />
+  <defs
+     id="defs2" />
+  <g
+     transform="translate(0.5,0.5)"
+     id="g84">
+    <ellipse
+       cx="10"
+       cy="10"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse4" />
+    <circle
+       cx="10"
+       cy="10"
+       pointer-events="none"
+       id="ellipse6"
+       stroke="#000000"
+       fill="#ffffff"
+       ry="10"
+       rx="10" />
+    <ellipse
+       cx="60"
+       cy="10"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse14" />
+    <circle
+       cx="60"
+       cy="10"
+       pointer-events="none"
+       id="ellipse16"
+       stroke="#000000"
+       fill="#ffffff"
+       ry="10"
+       rx="10" />
+    <ellipse
+       cx="35"
+       cy="50"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse24" />
+    <circle
+       cx="35"
+       cy="50"
+       pointer-events="none"
+       id="ellipse26"
+       stroke="#000000"
+       fill="#ffffff"
+       ry="10"
+       rx="10" />
+    <path
+       d="M 14.79 18.78 L 24.95 37.41"
+       fill="none"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path34" />
+    <path
+       d="M 27.46 42.02 L 21.04 37.55 L 24.95 37.41 L 27.19 34.2 Z"
+       fill="#16120a"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path36" />
+    <path
+       d="M 55.21 18.78 L 45.05 37.41"
+       fill="none"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path38" />
+    <path
+       d="M 42.54 42.02 L 42.81 34.2 L 45.05 37.41 L 48.96 37.55 Z"
+       fill="#16120a"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path40" />
+    <ellipse
+       cx="35"
+       cy="110"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse42" />
+    <circle
+       cx="35"
+       cy="110"
+       pointer-events="none"
+       id="ellipse44"
+       stroke="#000000"
+       fill="#ffffff"
+       ry="10"
+       rx="10" />
+    <path
+       d="M 35 60 L 35 93.63"
+       fill="none"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path52" />
+    <path
+       d="M 35 98.88 L 31.5 91.88 L 35 93.63 L 38.5 91.88 Z"
+       fill="#16120a"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path54" />
+    <ellipse
+       cx="10"
+       cy="70"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse56" />
+    <circle
+       cx="10"
+       cy="70"
+       pointer-events="none"
+       id="ellipse58"
+       stroke="#000000"
+       fill="#ffffff"
+       ry="10"
+       rx="10" />
+    <path
+       d="M 14.79 78.78 L 24.95 97.41"
+       fill="none"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path66" />
+    <path
+       d="M 27.46 102.02 L 21.04 97.55 L 24.95 97.41 L 27.19 94.2 Z"
+       fill="#16120a"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path68" />
+    <ellipse
+       cx="35"
+       cy="160"
+       rx="10"
+       ry="10"
+       fill="#000000"
+       stroke="#000000"
+       transform="translate(2,3)"
+       opacity="0.25"
+       id="ellipse70" />
+    <circle
+       cx="35"
+       cy="-160"
+       pointer-events="none"
+       id="ellipse72"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <path
+       d="M 35 120 L 35 143.63"
+       fill="none"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path80" />
+    <path
+       d="M 35 148.88 L 31.5 141.88 L 35 143.63 L 38.5 141.88 Z"
+       fill="#16120a"
+       stroke="#16120a"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path82" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="31.715067"
+       y="166.12714"
+       id="text120"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan118"
+         x="31.715067"
+         y="166.12714">f</tspan></text>
+    <circle
+       cx="35.395267"
+       cy="-109.52098"
+       pointer-events="none"
+       id="ellipse72-9"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="30.443886"
+       y="113.90379"
+       id="text112"><tspan
+         sodipodi:role="line"
+         id="tspan110"
+         x="30.443886"
+         y="113.90379">e</tspan></text>
+    <circle
+       cx="9.9449997"
+       cy="-69.903198"
+       pointer-events="none"
+       id="ellipse72-9-7"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="4.7483325"
+       y="74.813103"
+       id="text108"><tspan
+         sodipodi:role="line"
+         id="tspan106"
+         x="4.7483325"
+         y="74.813103">d</tspan></text>
+    <circle
+       cx="35.627865"
+       cy="-50.652283"
+       pointer-events="none"
+       id="ellipse72-9-0"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="30.753159"
+       y="55.228512"
+       id="text104"><tspan
+         sodipodi:role="line"
+         id="tspan102"
+         x="30.753159"
+         y="55.228512">c</tspan></text>
+    <circle
+       cx="61.08112"
+       cy="-10.138836"
+       pointer-events="none"
+       id="ellipse72-9-0-8"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <circle
+       cx="10.552315"
+       cy="-9.7775917"
+       pointer-events="none"
+       id="ellipse72-9-0-8-6"
+       r="10"
+       transform="scale(1,-1)"
+       style="fill:#ffffff;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="5.3626375"
+       y="13.743029"
+       id="text94"><tspan
+         sodipodi:role="line"
+         id="tspan92"
+         x="5.3626375"
+         y="13.743029">a</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="56.225281"
+       y="15.326233"
+       id="text100"><tspan
+         sodipodi:role="line"
+         id="tspan98"
+         x="56.225281"
+         y="15.326233">b</tspan></text>
+  </g>
+</svg>
