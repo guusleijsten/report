@@ -37,7 +37,9 @@ With implicit bypassing (also called transparent bypassing), bypassing opportuni
 If you push the responsibility of identifying and exploiting forwarding to the hardware, it needs $2\cdot d\cdot n$ comparators (where $d$ is the number of stages between ID en WB and $n$ the number of issue slots) to compare operands of an instruction to registers defined by previous instructions that are already in the pipeline. Altogether, this results in a more complex gate design and increased area.
 \end{itemize}
 
-It has been observed that values in a register file are often transient, meaning that they last only for a short time.  
+It has been observed that values in a register file are often transient, meaning that they last only for a short time.  Reads of transient values to the register file can be avoided by forwarding that we showed in the previous paragraphs.
+
+We now show that we can avoid writes of transient values with explicit data paths. The reason why this is only the case for explicit data paths, and not with implicit bypassing, is that the hardware can only look at instructions that have already been executed, while the compiler can look at all instructions of a program.  
 
 
 
