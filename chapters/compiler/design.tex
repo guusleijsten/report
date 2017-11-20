@@ -1,3 +1,5 @@
+
+
 %\section{Design Method}\label{sec:design_method}
 This chapter shows focusses on each of the code generation phases and what our contributions are to this compiler. We describe how we have taken a compiler without support for explicit bypass registers, which is described in Section \ref{sec:basic_compiler_design} and improved, maintained and extended it. 
 
@@ -26,20 +28,20 @@ Firstly, we work on creating a schedule which is depicted in the top row of Figu
 
 %A list of all components that follow in the following section.
 \begin{itemize}
-	\item \textbf{Instruction Selection:} Uses a DAG, called \texttt{SelectionDAGs}, an abstraction for code representation suitable for phases ranging from Instruction Selection, Legalization to Lowering. Instruction selection is implemented in  \texttt{SimdISelDAGToDAG}, which is derived from \texttt{SelectionDAGISel} and consists of a bunch of transformations to transform specific instructions into instruction that are supported by our architecture. For example, transforming operations on immediate values with a value higher than one byte is partially implemented here. Lowering nodes of the directed acyclic graph (DAG) is done in \texttt{SimdISelLowering}, which is derived from \texttt{TargetLowering}. There the SIMD intrinsics and ISD instructions are lowered to Machine Instructions (MI) and sequences of MIs.
+	\item \textbf{Instruction Selection:} Uses a DAG, called \texttt{SelectionDAGs}, an abstraction for code representation suitable for phases ranging from Instruction Selection, Legalization to Lowering. Instruction selection is implemented in  \texttt{SimdISelDAGToDAG}, which is derived from \texttt{SelectionDAGISel} and consists of a bunch of transformations to transform specific instructions into instruction that are supported by our architecture. For example, transforming operations on immediate values with a value higher than one byte is partially implemented here. Lowering nodes of the \emph{directed acyclic graph} (DAG) is done in \texttt{SimdISelLowering}, which is derived from \texttt{TargetLowering}. There the SIMD intrinsics and ISD instructions are lowered to \emph{Machine Instructions} (MI) and sequences of MIs.
 %\item \textbf{Scheduling:} Transforms a directed acyclic graph into an ordered list of instructions.
 %\item \textbf{Register allocation:} Assigns physical registers to virtual registers of a list of instructions in SSA form.
 	\item \textbf{Instruction Scheduler:} MIScheduler supplied by LLVM\\
-MIScheduler is an instruction scheduler which supports VLIW scheduling. Considering there are two issue slots in this architecture, a VLIW scheduler would meet our requirements very well. One and two schedulers are defined for four stage pipeline and five stage pipeline respectively. The four stage pipeline scheduler is the default one while the five stage pipeline has the default one and additionally a post register allocation scheduler.
+MIScheduler is an instruction scheduler which supports VLIW scheduling. Considering there are two issue slots in this architecture, a VLIW scheduler would meet our requirements very well. One and two schedulers are defined for four-stage pipeline and five-stage pipeline respectively. The four-stage pipeline scheduler is the default one while the five-stage pipeline has the default one and additionally a post register allocation scheduler.
 	\item \textbf{Register Allocation:} Greedy Allocator supplied by LLVM\\
 	The Greedy allocator is a default allocator in LLVM. Since there is no special requirement to register allocation for now, the default allocator is enough to work. Apart from the default register allocator, there are more register allocators to choose from and it is possible to implement a custom register allocator.
-	\item \textbf{Post Register Allocation Scheduler:} A second scheduling pass which we only need if we generate code for five stage pipeline configuration, otherwise, we disable it. The post RA scheduler uses a schedule hazard recognizer, which decides whether to prefer certain instruction over other instructions. For example, RaW hazards are detected and avoided by this algorithm.
-	\item \textbf{Hazard Recognizer:} When the five stage pipeline is configured, consecutive instructions may have hazards. That is, when an instruction tries to read a register of which the result is not there yet because the operation took two cycles. This pass implements LLVM's \texttt{ScoreboardHazardRecognizer}, which we adapted to detect and resolve these hazards.
+	\item \textbf{Post Register Allocation Scheduler:} A second scheduling pass which we only need if we generate code for five-stage pipeline configuration, otherwise, we disable it. The post RA scheduler uses a schedule hazard recognizer, which decides whether to prefer certain instruction over other instructions. For example, RaW hazards are detected and avoided by this algorithm.
+	\item \textbf{Hazard Recognizer:} When the five-stage pipeline is configured, consecutive instructions may have hazards. That is, when an instruction tries to read a register of which the result is not there yet because the operation took two cycles. This pass implements LLVM's \texttt{ScoreboardHazardRecognizer}, which we adapted to detect and resolve these hazards.
 	%TODO: check implements / extends / derived
 	\item \textbf{Delay Slot Filler:} For this architecture, jumps and branch instructions modify the program counter (PC) during the instruction decode stage. At that point, the instruction that follows the jump has already been fetched. The slot that follows a jump or branch instruction is called a delay slot. This pass aims to utilize delay slots by filling them with useful instructions.% that come after a jump or conditional branch instruction, i.e. instructions that modify the program counter.%VERIFY: `or e.g.?
 	\item \textbf{Immediate Extension:} In principle, a one byte immediate value can be specified with an instruction. However, sometimes you may want to use a larger immediate. This pass allows us to use large immediates using \texttt{zimm} and \texttt{simm} instruction. These instructions have a 18 bit operand, that may be used for larger immediates.% will be a prefix of the original 8 bits  or using a shift to put a value in a register (up to 32 bits).
 	\item \textbf{Packetizer:} Bundles scalar instructions with vector instructions. For each instruction it consults whether an issue slots is available on which the instruction can execute. This pass implements VLIW packetizer supplied by the LLVM framework.
-	\item \textbf{Bypass Registers Allocation:} This pass exploits explicit data paths by allocating explicit registers to the generated code. This post-processing step can be replaced by one of the other approaches, which are discussed in Section \ref{sec:approaches}.
+	\item \textbf{Bypass Registers Allocation:} This pass exploits explicit datapaths by allocating explicit registers in the generated code. This is currently implemented as a post-processing step but can be replaced by any of the approaches discussed in Section \ref{sec:approaches}.
 	\item \textbf{Instruction Printer:} MC is a sub-project of LLVM, which uses \texttt{MCInst} as a representation of an instruction, which is different from the code generator's existing notion of an instruction (\texttt{MachineInstr}). It is used during the last code generation stage when printing the instructions to a given output format. We further divide printing for different output formats, including binary format and SIMD assembly language in XAS-format. 
 %TODO: move
 
@@ -57,17 +59,17 @@ This section describes the custom passes mentioned in the previous section. Depe
 \begin{tabular}{@{}l l l@{}}
 \toprule
 \textbf{Feature} & \textbf{Code Gen. Pass} \\ \hline
-Hardware Pipeline 	& Delay Slot Filler 	& The delay slot, which is a product of the\\
-				&				& pipeline is being filled with this pass.\\
-			 	& Hazard Recognizer & Instructions do not always have single cycle\\
-				&				 & latencies. This pass is necessary for a five\\
-				&				& stage pipeline configuration. \\
-Bit-width 			& Immediate Extension & With different data width, constants may be\\
-				&				    & lowered in a different way. \\
-ISA extension		& Instruction Selection & New instructions need to be described in\\
-				&					& the back-end. \\
-Operand bypassing 	& Bypass Register Allocation & This optional pass is developed to implement\\
-				&					& explicit operand bypassing. It can be enabled\\
+Hardware Pipeline 	& Delay Slot Filler 		& The delay slot, which is a product lockstep\\
+				&					& pipelining is utilized by this pass.\\
+			 	& Hazard Recognizer 	& This pass is necessary for a five-stage \\
+				&					& pipeline configuration where not all\\
+				&					& instructions have a single cycle latency.\\
+Bit-width 			& Immediate Extension 	& With a different bit-width, constants may\\
+				&				    	& be lowered in a different way. \\
+ISA extension		& Instruction Selection 	& New instructions need to be described in\\
+				& \& instruction lowering	& the back-end. \\
+Explicit datapaths 	& Bypass Register Allocation & This optional pass is developed to exploit\\
+				&					& explicit datapaths. It can be enabled\\
 				&					& using compiler flag \texttt{-explicit}. \\
 \bottomrule
 \end{tabular}
@@ -76,23 +78,25 @@ Operand bypassing 	& Bypass Register Allocation & This optional pass is develope
 \end{table}%
 
 \subsection{Hazard Recognizer}\label{sec:hazard_recogn}
-When generating code for a four stage pipeline configuration, all instructions have a latency of one cycle. In that case, hazard recognition is not necessary.
-In order to support code generation for a five stage pipeline configuration we have implemented a hazard recognizer. The hazard recognizer is used by the scheduler to determine if two consecutive instructions can be scheduled after each other. 
+When generating code for a four-stage pipeline configuration, all instructions have a latency of one cycle. In that case, hazard recognition is not necessary.
+In order to support code generation for a five-stage pipeline configuration we have implemented a hazard recognizer. The hazard recognizer is used by the post-RA scheduler to determine if two consecutive instructions can be scheduled after each other. 
 
 \lstset{style=customasm}
 \begin{lstlisting}
 addi r13, r0, 14
 addi r12, r0, 10
-mul r2, r5, r13  #latency=2
-mul <@\textcolor{red!70!black}{r3}@>, r6, r12  #latency=2
-add r2, r2, <@\textcolor{red!70!black}{r3}@>
+mul  r2,  r5, r13  # latency=2
+mul  <@\hspace{1px}\textcolor{red!70!black}{r3}\hspace{1px}@>,  r6, r12  # latency=2
+add  r2,  r2, <@\hspace{1px}\textcolor{red!70!black}{r3}\hspace{1px}@>   # RaW dependency
 \end{lstlisting}
 
-We detect hazards by considering whether an operation has a RaW dependency with instruction that came prior to it. We have a true hazard when the instruction that came prior to it has a latency of more than one. The post register allocation (Post-RA) scheduler does a linear scan through the list of operation and queries the hazard recognizer whether an instruction can be scheduled. When it detects a hazard, it will consider other instructions that are ready to be scheduled and if there are none available without hazards, it will insert a no-op.
+We detect hazards by considering whether an operation has a RaW dependency with instruction that came prior to it. We have a true hazard when the instruction that came prior to it has a latency of more than one. The \emph{post register allocation} (Post-RA) scheduler does a linear scan through the list of operation and queries the hazard recognizer whether an instruction can be scheduled. When it detects a hazard, it will consider other instructions that are ready to be scheduled and if there are none available without hazards, it will insert a no-op.
 
 %It recognizes hazards by looking at whether the current instruction to be scheduled uses a register that is defined by the instruction issued in the previous cycle, which also has a latency of more than one cycle. If this is the case, we have a hazard and the instruction under consideration can not be scheduled in the current cycle. At this point we will consider other instructions that are ready to be scheduled and if there are none available without hazards, we will insert a no-op.
 \subsection{Delay Slot Filler}
-During the execution of a conditional branch or jump instruction the program counter (PC) is modified in the instruction decode (ID) stage. The proposed architecture has for any pipeline configuration, at least an instruction fetch (IF) and instruction decode (ID) stage, as we have discussed in Section \ref{sec:simd}. Therefore, during execution of the ID stage, the next instruction, with PC is PC+4 has already been fetched by the IF stage before the jump is executed. This slot will be executed before the instruction that the PC points at after modifying the PC and is called delay slot. %TODO: this paragraph can be shorter 
+During the execution of a conditional branch or jump instruction the \emph{program counter} (PC) is modified while the instruction is in the \emph{instruction decode} (ID) stage. A side product of lockstep pipelining which we introduced in Chapter \ref{sec:datapaths}, is that when a jump instruction is being decoded in the ID stage, the next instruction with $PC = PC+4$ has already been fetched from IMEM before the jump is executed. Therefore, the instruction that is followed by the jump instruction is executed presumptuously, which we refer to as a delay slot.
+
+%This slot will be executed before the instruction that the PC points at after modifying the PC and is called delay slot. %TODO: this paragraph can be shorter 
 
 In order assure correct behaviour we intentionally 
 %or initially (stood there in the first place)
@@ -124,7 +128,7 @@ place a no-op after each jump or branch instruction. However, sometimes we can d
 %Possibly scrap this case distinction 
 %Add picture from scratch paper showing these cases
 
-\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for the first case.}\label{lst:delayslot1}
+\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for case one.}\label{lst:delayslot1}
 \begin{center}
 \hspace{2px}\begin{minipage}{.475\textwidth}
 \begin{lstlisting}[frame=tlrb]
@@ -148,17 +152,20 @@ BB0_1:
 \end{center}
 
 \begin{enumerate}
-\item The ideal case is when the previous two instructions are both vector instructions. In that case, the vector instruction prior to the jump instruction can be moved to after it. Now the vector instruction that remains before the jump ($prev_1$) gets bundled with the jump instruction. If there was originally an instruction after to the jump instruction which is not a vector instruction, it would get bundled with the vector instruction that we moved by the packetizer pass. Therefore, we then need to insert a no-op to ensure the delay slot. %the instruction that came after is a scalar instruction, it would be merged with the filled instruction, therefore, in that case we need to add a nop, such that it bundles with the filled vector instruction.
+\item The ideal case is when the previous two instructions are both vector instructions. In that case, the vector instruction prior to the jump instruction can be moved to after it. Now the vector instruction that remains before the jump ($prev_1$) gets bundled with the jump instruction. If there was originally an instruction after to the jump instruction which is not a vector instruction, it would get bundled with the vector instruction that we moved later on. Therefore, we then need to insert a no-op to ensure the delay slot. %the instruction that came after is a scalar instruction, it would be merged with the filled instruction, therefore, in that case we need to add a nop, such that it bundles with the filled vector instruction.
+\item When the instruction before the jump ($prev_1$) is a scalar instruction with no dependencies to the jump itself, we can move it to the delay slot. We are now done if we moved a bundled instruction. Otherwise, when there are two vector operations prior to the jump instruction, we can again move one of them to to after the jump, and fully utilize the delay slot.
+
+%\item[3] We also consider the case where $prev_1$ is a vector instruction, and $prev_2$ is not a relational or jump instruction. Since the first case considers both $prev_1$ and $prev_2$ vector instructions, we consider cases where $prev_1$ is a vector and $prev_2$ is scalar operation by this case. %todo: little more in depth explanation of this pass
 \end{enumerate}
 
-\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for the second case.}\label{lst:delayslot2}
+\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for case two.}\label{lst:delayslot2}
 \begin{center}
 \hspace{2px}\begin{minipage}{.475\textwidth}
 \begin{lstlisting}[frame=tlrb]
 BB0_1:
     v.add r3, r6, r14
     v.add r4, r5, r12
-    add r3, r3, r1
+    add   r3, r3, r1
     j BB0_1
     nop
 \end{lstlisting}
@@ -168,7 +175,7 @@ BB0_1:
 BB0_1:
     v.add r3, r6, r14
     j BB0_1
-    add r3, r3, r1
+    add   r3, r3, r1
     v.add r4, r5, r12
    <@ @>
 \end{lstlisting}
@@ -176,36 +183,30 @@ BB0_1:
 \end{minipage}
 \end{center}
 
-\begin{enumerate}
-\item[2] When the instruction before the jump ($prev_1$) is a scalar instruction with no dependencies to the jump itself, we can move it to the delay slot. We are now done if we moved a bundled instruction. Otherwise, when there are two vector operations prior to the jump instruction, we can again move one of them to to after the jump, and fully utilize the delay slot.
-
-\item[3] We also consider the case where $prev_1$ is a vector instruction, and $prev_2$ is not a relational or jump instruction. Since the first case considers both $prev_1$ and $prev_2$ vector instructions, we consider cases where $prev_1$ is a vector and $prev_2$ is scalar operation by this case. %todo: little more in depth explanation of this pass
-\end{enumerate}
-
-\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for the third case.}\label{lst:delayslot3}
-\begin{center}
-\hspace{2px}\begin{minipage}{.475\textwidth}
-\begin{lstlisting}[frame=tlrb]
-BB0_1:
-    add r3, r3, r1
-    v.add r4, r5, r12
-    j BB0_1
-    nop
-\end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}{.475\textwidth}
-\begin{lstlisting}[frame=tlrb]
-BB0_1:
-    j BB0_1
-    add r3, r3, r1
-    v.add r4, r5, r12
-   <@ @>
-\end{lstlisting}
+%\captionof{lstlisting}{Fragment of assembly code to illustrate behaviour of the delay slot filler for the third case.}\label{lst:delayslot3}
+%\begin{center}
+%\hspace{2px}\begin{minipage}{.475\textwidth}
+%\begin{lstlisting}[frame=tlrb]
+%BB0_1:
+%    add r3, r3, r1
+%    v.add r4, r5, r12
+%    j BB0_1
+%    nop
+%\end{lstlisting}
+%\end{minipage}\hfill
+%\begin{minipage}{.475\textwidth}
+%\begin{lstlisting}[frame=tlrb]
+%BB0_1:
+%    j BB0_1
+%    add r3, r3, r1
+%    v.add r4, r5, r12
+%   <@ @>
+%\end{lstlisting}
 %\vspace{1.9em}
-\end{minipage}
-\end{center}
+%\end{minipage}
+%\end{center}
 %todo: give case(s) that is not covered, followed by this line
-The first two cases were already present, but required some modifications during upgrading to LLVM 4.0. We have added the third case because many delay slots were not being utilized.
+These two cases are illustrated in Listing \ref{lst:delayslot1} and \ref{lst:delayslot2} and were already present but required some modifications during upgrading to LLVM 4.0. We have tried to add a third case because many delay slots were not being utilized, but it had some issues and was removed. Future work may also include to optimize this pass such that more delay slots are utilized.
 
 %TODO: make case distinction here.
 %\begin{enumerate}
@@ -227,54 +228,52 @@ addi r3, r5, 12 # 768 + 12
 \item If the immediate requires more than 26 bits, we add a couple of instructions to put the immediate value in a register. Firstly, the upper 6 bits go to a register and are shifted all the way to the left. Subsequently, the lower 26 bits are added to it, using previous cases.
 %TODO: illustrate how the lowering is done.
 \begin{lstlisting}
-add r3, r0, 2     # upper 6 bits of the immediate
+add  r3, r0, 2    # upper 6 bits of the immediate
 slli r3, r3, 26   # 2 << 26
 zimm 3            # 3 << 8, upper 18 bits
 addi r3, r3, 12   # lower 8 bit
 \end{lstlisting}
 \end{enumerate}
 
-\texttt{ImmExtension} is a class that is derived from \texttt{MachineFunctionPass} which adds a \texttt{zimm} or \texttt{simm} when necessary. Pseudo code for this algorithm can be found in another thesis \cite[Appendix B]{liu_zhenyuan}. 
+\texttt{ImmExtension} is a class that is derived from \texttt{MachineFunctionPass} and adds a \texttt{zimm} or \texttt{simm} when necessary. Pseudo code for this algorithm can be found in another thesis \cite[Appendix B]{liu_zhenyuan}. 
 
-Our contribution to this is that we extended the range of immediate values from 26 to 32 bits. Furthermore, resolved a bug that we found in the part that inserts \texttt{simm} instructions with immediate. We can support even operations with more bits, since carry-using operations can be selected. These operations have three operands: The first two are the normal LHS and RHS, and the third is the input carry flag. The operations can then be chained together for adding and subtracting arbitrarily large values.
+Our contribution to this is that we extended the range of immediate values from 26 to 32 bits. Furthermore, we resolved a bug that was found in the part that inserts \texttt{simm} instructions for an immediate. We can support even operations with more bits, since carry-using operations can be selected. These operations have three operands: The first two are the normal LHS and RHS, and the third is the input carry flag. The operations can then be chained together for adding and subtracting arbitrarily large values.
 
 \subsection{Packetizer}
-Using a packetizer transforms a sequential list of mixed scalar and vector operations into VLIW instructions that contain one scalar and one vector instruction. It does this by using \emph{VLIWPacketizerList} of the LLVM framework. %How do I say this? (of or from or ..) is this the correct way to do it or do you know any better or neater way to do so.
+Using a packetizer transforms a sequential list of mixed scalar and vector operations into VLIW instructions that contain one scalar and one vector instruction. It does this by using \emph{VLIWPacketizerList} of the LLVM framework. %How do I say this? (of or from or ..) is this the correct way to do it or do you know any better or neater way to do so. 
 It searches for packets by going in a top-down approach through the list of operations until the end of the machine function is reached. It aims at filling all operation slots of an instruction, in our case a scalar and a vector operation. If an operation is encountered of a slot which is already full, it ends the packetized instruction and it proceeds to the next packet. 
+We show the result of this transformation in Listing \ref{lst:packetizer}. 
 
-%TODO: reference to listings. + change into a and b
-
-\lstset{style=customasm}
-\captionof{lstlisting}{Illustration of how a list of mixed scalar and vector operations are transformed into VLIW instructions.}
+\captionof{lstlisting}{Illustration of how a list of mixed scalar and vector operations are transformed into 2-issue instructions.}\label{lst:packetizer}
 \begin{center}
-\hspace{2px}\begin{minipage}{.475\textwidth}
+\hspace{2px}\begin{minipage}{.45\textwidth}
 \begin{lstlisting}[frame=tlrb]
-v.addi r2, r0, a
-add r11, r10, r0
-v.addi r3, r0, b
-v.lw r2, r2, 0
-v.lw r3, r3, 0
+v.addi r2,  r0,  a
+add    r11, r10, r0
+v.addi r3,  r0,  b
+v.lw   r2,  r2,  0
+v.lw   r3,  r3,  0
 v.addi r11, r11, 4
-v.mul r2, r3, r2
-v.addi r3, r0, c
-v.sw r3, r2, 0
-lw r10, r11, 0
+v.mul  r2,  r3,  r2
+v.addi r3,  r0,  c
+v.sw   r3,  r2,  0
+lw     r10, r11, 0
 jr r9
-addi r11, r11, 4
+addi   r11, r11, 4
 \end{lstlisting}
 \end{minipage}\hfill
-\begin{minipage}{.475\textwidth}
+\begin{minipage}{.5\textwidth}
 \begin{lstlisting}[frame=tlrb]
-add r11, r10, r0 || v.addi r2, r0, a
-                 || v.addi r3, r0, b
-                 || v.lw r2, r2, 0
-                 || v.lw r3, r3, 0
-                 || v.addi r11, r11, 4
-                 || v.mul r2, r3, r2
-                 || v.addi r3, r0, c
-lw r10, r11, 0   || v.sw r3, r2, 0
-jr r9            || v.nop
-addi r11, r11, 4 || v.nop
+add  r11, r10, r0 || v.addi r2,  r0,  a
+                  || v.addi r3,  r0,  b
+                  || v.lw   r2,  r2,  0
+                  || v.lw   r3,  r3,  0
+                  || v.addi r11, r11, 4
+                  || v.mul  r2,  r3,  r2
+                  || v.addi r3,  r0,  c
+lw   r10, r11, 0  || v.sw   r3,  r2,  0
+jr r9             || v.nop
+addi r11, r11, 4  || v.nop
 
 <@\ @>
 \end{lstlisting}
@@ -282,15 +281,42 @@ addi r11, r11, 4 || v.nop
 \end{minipage}
 \end{center}
 
+%TODO: explain 3.3.
+
 The hazard recognizer described in Section \ref{sec:hazard_recogn} implements a function called \emph{ShouldPreferAnother} which we have implemented to recover from hazards more efficiently. If we have a hazard on the vector slot, you would prefer a vector instruction, because then you immediately resolve that hazard and similarly for the scalar slot. However, this function can also be used to do the opposite, namely, prefer a vector instruction if the previous issued instruction was a scalar instruction and vice versa. Alternating instructions may improve the result of the packetizer. 
 
 \subsection{Bypass Registers Allocation}
-This pass exploits explicit registers by allocating them in the generated code. It does this as a post-processing step by modelling the behaviour of the bypass registers that are in a pipeline. % and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
-While the instruction are traversed, we model at compile time, what the values are that the pipeline would hold at runtime.
+This pass exploits explicit registers by allocating them to the generated code. It currently does this as a post-processing step, but it can be moved to anywhere in the compilation chain. We chose to do this as a post-processing step for its simplicity. We need to know at a point in time, which results can be forwarded. Therefore, we model the behaviour of the bypass network at compile-time and use this model to decide whether we can bypass certain operands. We then use liveliness information of variables that we bypass to decide whether we still need to store the result in a register. Effectively, if the variable that we bypassed is dead after a use (denoted by a register \emph{kill}), we do not need to store it anymore because it will not be used later on. 
+ % and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
+%While the instruction of a basic block are traversed, we use the model of the bypass network to decide whether we can bypass certain operands.
 
-%TODO: add 
+\captionof{lstlisting}{Fragment of assembly code to illustrate operand forwarding and dead result elimination.}\label{lst:explicit_reg_alloc}
+\begin{center}
+\hspace{2px}\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+lw  r1, r10, 1
+lw  r2, r10, 2
+mul r1, r1,  r2
+sw  r1, r10, 0
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+lw  r1,  r10, 1
+lw  --,  r10, 2
+mul --,  r1,  LSU
+sw  MUL, r10, 0
+\end{lstlisting}
+%\vspace{1.9em}
+\end{minipage}
+\end{center}
 
-%Implementation of explicit data paths using bypass registers.
+In the code fragment above we first load two values from memory. Then we multiply them with each other and finally store the result back to memory. The second load produces a result that is immediately used. Therefore, we forward it with operand forwarding as explained in Chapter \ref{sec:datapaths}. We encode this with LSU, because loads are executed by the \emph{load store unit} (LSU). Similarly, the result of the multiplication is immediately used and forwarded using MUL, again, this is the functional unit on which multiplications are executed.
+
+This is a standalone fragment which means that there are no other uses of the variables that we forward. Therefore, the variables are dead after their use and because that use comes from the bypass network and not from a register. According to dead result elimination (introduced in Chapter \ref{sec:datapaths}) we can remove these obsolete stores, which we encode using `$--$'. When an instruction has this as destination operand, the processor will be idle when that instruction is in the writeback stage. 
+
+
+%Implementation of explicit datapaths using bypass registers.
 
 %TODO: decide: comment or uncomment following section expl bp pass
 %\subsection{Explicit Bypass Registers}

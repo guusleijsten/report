@@ -1,26 +1,26 @@
 
-% Other exposed or explicit data path architectures and their corresponding compilers.
+% Other exposed or explicit datapath architectures and their corresponding compilers.
 
 % Other pure SIMD architectures, GPU and its difference if i know this and can tell it.
 
 % Liu's work on compiler design, and what it lacks, proper support for 5-stage configuration, explicit bypass conf. 
 
 %Old rel. work
-There is related work for compilers that target SIMD architectures, in particular, a compiler has been developed, referred to as legacy compiler. Furthermore, there is related work in building an LLVM backend, and compiling with explicit data paths has been an active research topic for other architectures.
+There is related work for compilers that target SIMD architectures, in particular, a compiler has been developed, referred to as legacy compiler. Furthermore, there is related work in building an LLVM backend, and compiling with explicit datapaths has been an active research topic for other architectures.
 % scrap
 %The related work is introduced in this part, including the legacy compiler, building the LLVM back-end for SIMD architecture, explicit datapaths in other architecture and some scheduling and register allocation algorithms applied in other compilers.
 
 %\section{Building an LLVM back-end}
 %Our backend is derived from tricore tutorial on creating a new backend for the LLVM compiler framework \cite{tricore}. Furthermore, based on that work, an LLVM backend for SIMD architecture without explicit bypassing has been developed \cite{liu_zhenyuan}. However, the current compiler generates code with implicit bypassing. We, therefore, need to extend this to efficiently generate code for explicit bypassing as well. Therefore, our work will be an extension to previously noted work.
 
-\subsection{Other Exposed/Explicit Data Path Architectures}\label{sec:other_explicit_datapaths}
-Compiling with explicit data paths have been an active topic of research. We have investigated several architectures that face similar challenges. 
+\subsection{Other Exposed/Explicit Datapath Architectures}\label{sec:other_explicit_datapaths}
+Compiling with explicit datapaths have been an active topic of research. We have investigated several architectures that face similar challenges. 
 
 %Johan janssen & ... TTA work
 %Other exposed datapaths
 
 \subsubsection{Transport Triggered Architectures}\label{sec:tta}
-One of the main works that we investigated is the  \emph{Transport Triggered Architecture} (TTA) which has been developed in the MOVE project \cite{tta_codegen}. For TTA architectures, instructions consist of transports that specify the data path. The difference between TTAs and traditional operation triggered architectures is that TTA are transport driven, hence its name. 
+One of the main works that we investigated is the  \emph{Transport Triggered Architecture} (TTA) which has been developed in the MOVE project \cite{tta_codegen}. For TTA architectures, instructions consist of transports that specify the datapath. The difference between TTAs and traditional operation triggered architectures is that TTA are transport driven, hence its name. 
 
 Figure \ref{fig:tta} illustrates how function units and register files are connected to an interconnect network which are programmed by instructions. Programming a TTA consists of moving operands to the input registers of a FU.
 
@@ -95,7 +95,7 @@ However, their implementation can not be used because (i) they are using a gcc b
 
 
 %\subsubsection{ReMove}
-%Another architecture that exploits explicit data path architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit data paths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
+%Another architecture that exploits explicit datapath architectures is the ReMove architecture \cite{remove}. That work focusses on scheduling for partially connected architectures with explicit datapaths. The ReMove architecture is similar to a VLIW, having multiple FUs, however here they have an interconnect network that connects the FUs to the RF. The scheduling algorithm used in this work can not be used in our work, because similar to the legacy compiler for SIMD, this project has a custom backend, which can not be reused for LLVM. However, the basic principles of the scheduling algorithms proposed in this work are still valid and may be reused for our work.
 
 %\section{Scheduling and Register Allocation}
 %First of all, from the existing scheduling algorithms, Swing Modulo Scheduling (SMS) seems to be a suitable scheduling approach. It is a heuristic approach that is able to deal efficiently with software pipelining. Furthermore, it is known for its outstanding performance and low computational cost. The generated schedules are near optimal in terms of initiation interval and register requirements \cite{swingmodulo_paper, swingmodulo_thesis}. We consider this a candidate scheduler to use.
@@ -110,16 +110,16 @@ S. Dongrui et al. proposed this processor architecture while attaining his PhD \
 With C code applications as input language, the compiler can only compile to non-vectorized (CP only) instructions. To generate vectorized code an effort had been made to take OpenCL code as input language \cite{dongrio2}. However, only a subset of OpenCL is supported. Moreover, compilation does often generate incorrect code, or none at all. \\
 
 
-In his work he shows that the register file is one of the most frequently used, and most power-hungry components in a processor. Therefore, he introduced an explicit data path to further improve energy efficiency on this extremely energy efficient processor architecture. Moreover, efficient code generation for such architecture is key to achieve high energy efficiency for the whole processor. Therefore, we want to improve the efficiency of the generated code by standardizing the compiler to a frequently used framework. Namely, by standardizing to LLVM. This way we will benefit from developments in the field of compilers and from improvements made to the LLVM framework.
+In his work he shows that the register file is one of the most frequently used, and most power-hungry components in a processor. Therefore, he introduced an explicit datapath to further improve energy efficiency on this extremely energy efficient processor architecture. Moreover, efficient code generation for such architecture is key to achieve high energy efficiency for the whole processor. Therefore, we want to improve the efficiency of the generated code by standardizing the compiler to a frequently used framework. Namely, by standardizing to LLVM. This way we will benefit from developments in the field of compilers and from improvements made to the LLVM framework.
 %A compiler had already been developed during the design phase of the target wide SIMD architecture \cite{dongrui}. That compiler has an assembler that can translate from assembly to object code and the compiler can translate C code to scalar only- and OpenCL to vectorized assembly code or object code. That compiler consists of a LLVM front-end and the back-end is developed in C++, but not within the LLVM framework.
 
-%The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that time . The legacy compiler has a custom backend for the SIMD architecture that can generate code for explicit data paths \cite{dongrio1}, but it can only compile C code to non-vectorized instructions or a small subset of hand-touched OpenCL code that also requires manual insertion of custom pragmas to compile for vectorized code \cite{dongrio2}. Our goal is to overcome certain limitations and improve the compilers maintainability.
+%The legacy compiler was developed by the ES group in 2003. We will use the SIMD architecture as it was designed during that time . The legacy compiler has a custom backend for the SIMD architecture that can generate code for explicit datapaths \cite{dongrio1}, but it can only compile C code to non-vectorized instructions or a small subset of hand-touched OpenCL code that also requires manual insertion of custom pragmas to compile for vectorized code \cite{dongrio2}. Our goal is to overcome certain limitations and improve the compilers maintainability.
  
 
 %Dongrio's simd work 
 
 \subsection{Basic Compiler Design}\label{sec:basic_compiler_design}
-We now show a simd back-end design in LLVM by L. Zhenyuan \cite{liu_zhenyuan}. He started to build a back-end in LLVM for the same purpose, but with a different goal, namely to efficiently generate vectorized code within LLVM. We will discuss his work briefly in this section, and elaborate on some aspects. In order to support vector instructions, LLVM's auto-vectorizer has been used and intermediate code optimization passes have been implemented to generate SIMD specific intrinsics, that are, in turn, transformed to vector instructions and shuffle operations. 
+We now show a SIMD back-end design in LLVM by L. Zhenyuan \cite{liu_zhenyuan}. He started to build a back-end in LLVM for the same purpose, but with a different goal, namely to efficiently generate vectorized code within LLVM. We will discuss his work briefly in this section, and elaborate on some aspects. In order to support vector instructions, LLVM's auto-vectorizer has been used and intermediate code optimization passes have been implemented to generate SIMD specific intrinsics, that are, in turn, transformed to vector instructions and shuffle operations. 
 
 His work gives a basic design of this back-end. We took this as a starting point, maintained his work and made some improvements which are discussed in later sections. When building a back-end in LLVM, first the instructions and registers have to be defined. Then illegal operations and types can be converted to legal ones. Then during instruction selection, LLVM knows how to match DAG nodes to known instructions. The supported instructions and registers for this architecture are defined first. To support some special features of this architecture, custom passes are added to this back-end, which will be described in detail, see Chapter \ref{sec:code_generation}, where we discuss our contributions to this work. Furthermore, an assembler and a linker have been implemented as separate projects, which will briefly be discussed here as well.
 

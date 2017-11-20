@@ -7,16 +7,16 @@ Data goes through a particular path through the pipeline of a processor and typi
 \label{fig:pipelining}
 \end{figure}
 
-When bypassing is completely absent the result of an instruction can be obtained only after it is written back. On the other hand, with bypassing, a bypass network of wires and busses connects the execution and writeback stages back to the ID stage. We may forward a value using these wires or busses to the operands of an instruction. This way, we can obtain the result of an instruction before it has been written back to the register file. We illustrate this behaviour in Figure \ref{fig:bypass_problem}.
-
-\begin{figure}[b!]
+\begin{figure}[b]
 \centering
 \includegraphics[width=.8\textwidth]{figures/bypassing_example}
-\caption{Instructions being executed using the single-cycle data path, assuming pipelined execution.}
+\caption{Instructions being executed using the single-cycle datapath, assuming pipelined execution.}
 \label{fig:bypass_problem}
 \end{figure}
 
-Four consecutive instructions are executed of which the last two instructions have a RaW dependency with the instruction prior to it. As you can see in Figure \ref{fig:bypass_problem} the instructions prior to said instructions are in the execution stage when their result is required, namely, when said instruction are in the ID stage. We either need to stall for a cycle, such that the previous instruction is in the WB stage, or we need to forward the result from the execution stage to the ID stage. Since insertion of stall cycles results in less efficient code, we choose to forward the result using the bypass network (indicated with a vertical arrow from EX to ID).\\
+\textbf{Operand forwarding:} When bypassing is completely absent the result of an instruction can only be obtained after it is written back. On the other hand, with bypassing, a bypass network of wires and busses connects the execution and writeback stages back to the ID stage. We may forward a value using these wires or busses to operands of another instruction. This way, we can obtain the result of an instruction before it has been written back to the register file. We illustrate this behaviour in Figure \ref{fig:bypass_problem}.
+
+Four consecutive instructions are executed of which the last two instructions have a RaW dependency with the instruction prior to it. As you can see in Figure \ref{fig:bypass_problem} the instructions prior to said instructions are in the execution stage when their result is required, namely, when said instructions are in the ID stage. We either need to stall for a cycle, such that the previous instruction is in the WB stage, or we need to forward the result from the execution stage to the ID stage. Since insertion of stall cycles results in less efficient code, we choose to forward the result using the bypass network (indicated with a vertical arrow from EX to ID).
 
 %TODO: update picture, make nicer and have on top stages, and below remain almost the same
 %\begin{figure}[H]
@@ -28,24 +28,28 @@ Four consecutive instructions are executed of which the last two instructions ha
 %\label{fig:bypass_problem}
 %\end{figure}
 %TODO: replace with picture from presentation (03_nov)
-
+\subsubsection{Implicit Datapaths}
 With implicit bypassing (also called transparent bypassing), bypassing opportunities are detected and controlled by dedicated hardware on chip. However, doing this at run-time has some advantages and some disadvantages.
 \begin{itemize}
-\item \textbf{Advantage:} The compiler does not need to take data paths and the values that are in the pipeline into consideration, because bypassing is transparent to the compiler. This results in a less complex compiler.
-%TODO: move up!!!!!
-\item \textbf{Disadvantage:} 
-If you push the responsibility of identifying and exploiting forwarding to the hardware, it needs $2\cdot d\cdot n$ comparators (where $d$ is the number of stages between ID en WB and $n$ the number of issue slots) to compare operands of an instruction to registers defined by previous instructions that are already in the pipeline. Altogether, this results in a more complex gate design and increased area.
+  \item\textbf{Advantage:} 
+    With bypassing, operand forwarding is possible which reduces the number of reads from the register file. This will reduce register file usage and may improve energy efficiency of the processor.
+  \item\textbf{Disadvantage:} 
+    If you push the responsibility of identifying and exploiting forwarding to the hardware, it needs $2\cdot d\cdot n$ comparators (where $d$ is the number of stages between ID en WB and $n$ the number of issue slots) to compare operands of an instruction to registers defined by previous instructions that are already in the pipeline. Altogether, this results in a more complex gate design and increased area.
 \end{itemize}
 
-It has been observed that values in a register file are often transient, meaning that they last only for a short time.  Reads of transient values to the register file can be avoided by forwarding that we showed in the previous paragraphs.
+It has been observed that variables in the register file are often transient, meaning that they last only for a short time.  Reads from the register file of said variables can be avoided by forwarding which we showed in the previous paragraphs.\\
 
-We now show that we can avoid writes of transient values with explicit data paths. The reason why this is only the case for explicit data paths, and not with implicit bypassing, is that the hardware can only look at instructions that have already been executed, while the compiler can look at all instructions of a program.  
+We now show that we can avoid writes of transient values to register with explicit datapaths. The reason why this is only the case for explicit datapaths, and not with implicit bypassing, is that the hardware can only look at instructions that have already been executed, while the compiler can look at all instructions of a program.\\
 
+\textbf{Dead result elimination:} 
+If all consumers of a variable obtain it using forwarding, then it will never be read from the register file. Therefore, we do not need to store it anymore in a register file and we can avoid these obsolete stores.  
 
-
-
-
-
-
-
+\subsubsection{Explicit Datapaths}
+With explicit datapaths (sometimes referred to as exposed datapaths), bypass opportunities are detected and controlled by the compiler. Doing this at compile time rather than run-time has some advantages and some disadvantages.
+\begin{itemize}
+  \item\textbf{Advantage:}
+    With explicit bypassing, dead result eliminations is possible which reduces the number of writes to the register file. This will further reduce register file usage and may further improve energy efficiency of the processor.
+  \item\textbf{Disadvantage:}
+    The compiler needs to take datapaths and variables that are in the pipeline into consideration, because bypassing is explicit in the compiler. This results in a more complex compiler.
+\end{itemize}
 
