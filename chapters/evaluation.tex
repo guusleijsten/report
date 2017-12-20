@@ -4,3 +4,43 @@
 %Add discussion on results
 
 This chapter shows the verification and results.  
+
+
+Matrix mul benchmark, desired code. Give actual and then desired code! (that is the code below).
+\begin{lstlisting}
+A:
+   addi r11, r11, -4 || v.addi r11, r11, -4
+   sw   r10, r11,  0
+   add  r10, r11, r0
+B:
+   lw   r1,  r10,  0
+C:
+   addi r3,  r0,   0 || v.addi r2,  r0,  16
+   lw   r4,  r3,   0 || v.lw   r5,  r2,   0
+   lw   r5,  r3,   1 || v.lw   r4,  r2,   1
+   lw   r6,  r3,   2 || v.lw   r3,  r2,   2
+   lw   r7,  r3,   3 || v.lw   r2,  r2,   3
+D:
+   addi r4,  r4,   0 || v.add  r6,  CP,  r0
+   addi r5,  r5,   0 || v.add  r7,  CP,  r0
+   nop               || v.mul  r6,  r5,  r6
+   nop               || v.mul  r7,  r4,  r7
+   nop               || v.add  r6,  r7,  r6
+   addi r6,  r6,   0 || v.add  r7,  CP,  r0
+   nop               || v.mul  r7,  r3,  r7
+   addi r7,  r7,   0 || v.add  r8,  CP,  r0
+   nop               || v.add  r6,  r7,  r6
+   nop               || v.mul  r7,  r2,  r8
+   nop               || v.add  r6,  r7,  r6
+   addi r1,  r1,  -1 || v.addi r7,  r0,  32
+   sfeq r1,  0       || v.sw   r6,  r7,   0
+   bf   E
+   nop
+   j    C  
+   nop
+E:
+   lw   r10, r11,  0
+   addi r11, r11,  4 || v.addi r11, r11,  4
+   jr r9
+   nop
+\end{lstlisting}

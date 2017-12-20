@@ -131,8 +131,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.2734476"
-     inkscape:cx="331.56016"
-     inkscape:cy="860.83201"
+     inkscape:cx="294.65248"
+     inkscape:cy="829.42122"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -149,7 +149,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -209,11 +209,11 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;line-height:2;font-family:monospace;-inkscape-font-specification:monospace" /></flowRegion><flowPara
          id="flowPara7045">%start:</flowPara><flowPara
          id="flowPara7047">  add  r2, r1, r2 || v.sw  r2, r3, 0</flowPara><flowPara
-         id="flowPara7600">  lw  r10, r11, 6</flowPara><flowPara
+         id="flowPara7600">  lw  r1, r11, 6</flowPara><flowPara
          id="flowPara7604">  addi r1, r1,  1 || v.lw  r3, r3, 0</flowPara><flowPara
-         id="flowPara7627">  bf   %nextBlock || v.add r3, r2, 6</flowPara><flowPara
-         id="flowPara8279">  sw   r1, r11, 3 || v.sw  r3, r5, 9</flowPara><flowPara
+         id="flowPara7627">  bf   %nextBlock || v.add r3, r3, 6</flowPara><flowPara
+         id="flowPara8279">  sw   r1, r11, 6 || v.sw  r3, r5, 9</flowPara><flowPara
          id="flowPara8413">  j    %nextNextBlock</flowPara><flowPara
          id="flowPara8415">  nop             || v.nop</flowPara><flowPara
-         id="flowPara7629">  </flowPara></flowRoot>  </g>
+         id="flowPara7629" /></flowRoot>  </g>
 </svg>
