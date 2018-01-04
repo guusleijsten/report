@@ -152,9 +152,11 @@ The post-allocation pass can improve the schedule by taking physical registers a
 %Introduce at least 
 
 %TODO: 19 sept morning, Add examples of IR, CFG, Dominator tree ettc.
+\section{Representation of Code}
+To analyze a code fragment, different representations can be explored. For instance, three-address IR code that is used by LLVM is conducive for further processing like optimizations and translations. Even further down the compilation line, there is assembly code which is basically object code, but in human readable form. However, to analyze a fragment of code, one does not always need this much detail. Moreover, having this much detail, sometimes makes analysis more difficult. 
+
 \subsection{Control Flow}\label{sec:control_flow_graph}
-%\subsection{Representation of Code}
-To analyze a code fragment, different representations can be explored. For instance, three-address IR code that is used by LLVM is conducive for further processing like optimizations and translations. Even further down the compilation line, there is assembly code which is basically object code, but in human readable form. However, to analyze a fragment of code, one does not always need this much detail. Moreover, having this much detail, sometimes makes analysis more difficult. Control flow analysis is a code technique to analyze the control flow of a program. The control flow is expressed as a \emph{Control Flow Graph} (CFG), which is a more abstract representation of code that uses a graph notation to show all paths that can be traversed through a program during its execution.  
+Control flow analysis is a code technique to analyze the control flow of a program. The control flow is expressed as a \emph{Control Flow Graph} (CFG), which is a more abstract representation of code that uses a graph notation to show all paths that can be traversed through a program during its execution.  
 %TODO: Add cfg example with code left, cfg right
 
 \begin{figure}[H]
@@ -191,9 +193,9 @@ sw  r3, r0, 2   # store result at location 0x2
 
 Before scheduling and register allocation, the sequence of instructions contain an unlimited number of virtual registers and the instructions are in a DAG that preserves all control flow and data dependencies. Data dependencies are ordering constraints that influence the order of execution. Typically, there are three kinds of data dependencies \cite{data_dependece}:
 \begin{enumerate}
-\item There is a Read-after-Write (RaW) dependency, also called a \emph{flow dependency} from operation $a$ to operation $b$ if $a$ defines a register that may be used by $b$.
-\item  There is a Write-after-Read (WaR) dependency, also called an \emph{anti-dependency} if for operations $a$ and $b$ when $a$ uses a register that is redefined by $b$. 
-\item There is a Write-after-Write (WaW) dependency, or \emph{output dependency} from operation $a$ to operation $b$, if $a$ defines a register that is redefined by $b$.
+\item There is a \emph{Read-after-Write} (RaW) dependency, also called a \emph{flow dependency} from operation $a$ to operation $b$ if $a$ defines a register that may be used by $b$.
+\item  There is a \emph{Write-after-Read} (WaR) dependency, also called an \emph{anti-dependency} if for operations $a$ and $b$ when $a$ uses a register that is redefined by $b$. 
+\item There is a \emph{Write-after-Write} (WaW) dependency, or \emph{output dependency} from operation $a$ to operation $b$, if $a$ defines a register that is redefined by $b$.
 \end{enumerate} 
 
 Flow dependencies are also known as \emph{true dependencies} and anti and output dependencies as \emph{false dependencies}, introduced by scheduling or register allocation. While in SSA form, each variable is defined exactly once, therefore, there are only true dependencies in that form. After scheduling and register allocation, where a physical register is assigned to each virtual register, multiple virtual registers may be assigned to one physical register. This is illustrated in Listing \ref{lst:ra_example}. This process introduces false dependencies and can often be resolved with renaming techniques \cite{tta_codegen,renaming}.
@@ -269,7 +271,7 @@ Figure \ref{fig:ddg_graph} shows a data dependence graph corresponding to the co
   \subfloat[Assembly fragment]{%
 %    \usebox{\ddgfragmentlst}\label{fig:ddg_fragment}
    \includegraphics[width=.225\textwidth]{figures/ddg_fragment}\label{fig:ddg_fragment}
-  } \quad\quad%\hfill%\hspace{35px}
+  } \quad\quad\quad\quad\quad\quad\quad\quad%\hfill%\hspace{35px}
   \subfloat[DDG]{%
    \includegraphics[width=.1\textwidth]{figures/ddg}\label{fig:ddg_graph}
   }

@@ -9,22 +9,24 @@ This chapter focusses on each of the code generation phases and what our contrib
 
 \section{Back-end Code Generation}\label{sec:code_generation}
 This section briefly discusses each of the code generation stages, which includes custom passes and standard passes supplied by the LLVM framework. Before generating code, it uses LLVM's front-end to translate a high-level language to an intermediate representation, called LLVM-IR which can be further optimized and used as input for our back-end. The code generation passes in the back-end specific compiler can be categorized in three major categories.
-
-\begin{figure}[H]
-\centering
-\hspace*{-.12in}
-\includegraphics[scale=0.53]{figures/code_generation}
-%TODO: change orange to yellow and yellow to orange in picture. 
-\caption{Overview of the phases that the back-end is comprised of.}
-\label{fig:simd_backend}
-\end{figure}
 %include an image with the pipeline having all these components.
 
 %TODO: refere to problem where instr have no common operand, so it seems unrelated. 
 
 %TODO: add text that explains the color, instruction selection is copied mostly from another architectures, and was already updated according to our architecture. / Hazard recognizer has partially been copied from other architectures, but was not suitable and has, therefore, been modified and tested. / Delay slot is a custom pass that was already implemented, but we have modified it to be more efficient. / Packetizer pass is as delivered, with a minor modification with hardly any efford.  / Bypass Regs is a custom pass that we developed during the duration of our work.
 
-Firstly, the top row in Figure \ref{fig:simd_backend} shows passes that work on creating a schedule. The second row illustrates a sequence of compilation passes that do back-end specific transformations. Here special features that our architecture has are taken care of. At last, with an LLVM internal representation of back-end specific code for our architecture, it emits assembly or ELF object code (depicted in the rightmost part of the image) that our processor can understand.
+Firstly, the top row in Figure \ref{fig:simd_backend} shows passes that work on creating a schedule. The second row illustrates a sequence of compilation passes that do back-end specific transformations. Here special features that our architecture has are taken care of. At last, with an LLVM internal representation of back-end specific code for the target architecture, it emits assembly or ELF object code (depicted in the rightmost part of the image) that the processor can understand.
+
+\begin{figure}[H]
+\centering
+\hspace*{-.12in}
+\includegraphics[width=\textwidth]{figures/code_generation}
+%TODO: change orange to yellow and yellow to orange in picture. 
+\caption{Overview of the phases that the back-end is comprised of.}
+\label{fig:simd_backend}
+\end{figure}
+
+Note that the passes are marked from light to dark, where a black background means that the pass was created during this project and are the main contributions of this work. Dark grey indicates that a pass is extended or improved, light grey indicates the pass has hardly changed and a white background means that the pass is supplied by LLVM.
 
 %A list of all components that follow in the following section.
 \begin{itemize}
@@ -37,28 +39,21 @@ MIScheduler is an instruction scheduler which supports VLIW scheduling. Consider
 	The Greedy allocator is a default allocator in LLVM. Since there is no specific requirement to register allocation, for now, the default allocator is suitable. Apart from the default register allocator, there are more register allocators to choose from and, it is possible to implement a custom register allocator.
 	\item \textbf{Post-Register Allocation Scheduler:} A second scheduling pass which is only needed when generating code for a five-stage pipeline configuration, and is disabled otherwise. The post-RA scheduler uses a hazard recognizer which decides whether to prefer certain instruction over other instructions to detect and resolve RaW hazards.
 	\item \textbf{Hazard Recognizer:} Consecutive instructions may have hazards with the five-stage pipeline configured. That is when an instruction uses an operand defined in the previous cycle but has a latency of two cycles. For this thesis, we have implemented LLVM's \texttt{ScoreboardHazardRecognizer} to detect and resolve these hazards.
+	\item \textbf{Branch Optimizer:} An inefficiency in the generated code was observed where two jump operations control the work flow, but one jump is not necessary when it jumps to the successor that follows immediately. 
 	%TODO: check implements / extends / derived
 	\item \textbf{Delay Slot Filler:} For this architecture, jump and branch instructions modify the program counter (PC) during the instruction decode stage. At that point, the instruction that follows the jump has already been fetched. The slot that follows a jump or branch instruction is called a delay slot. This pass aims to utilize delay slots by filling them with useful instructions.% that come after a jump or conditional branch instruction, i.e. instructions that modify the program counter.%VERIFY: `or e.g.?
 	\item \textbf{Immediate Extension:} In principle, immediate operations have a one-byte immediate operand. However, sometimes you may want to use a larger immediate. This pass allows us to use a larger immediate operand using \texttt{zimm} and \texttt{simm} instruction. These instructions have an 18-bit operand that allows for larger constants to be used.% will be a prefix of the original 8 bits  or using a shift to put a value in a register (up to 32 bits).
 	\item \textbf{Packetizer:} This pass creates VLIW bundles that consist of a scalar and a vector instruction, by consulting whether an issue slot is available on which the operation can execute. This pass implements VLIW packetizer supplied by the LLVM framework.
-	\item \textbf{Bypass Registers Allocation:} This pass allocates explicit registers to the generated code, thereby, using explicit datapaths. This is developed as a post-processing pass, but it can be replaced by any of the approaches discussed in Chapter \ref{sec:expl_bp_impl}.
-	\item \textbf{Instruction Printer:} MC is a sub-project of LLVM, which uses \texttt{MCInst} to represent an instruction, which is different from the code generators notion of a \texttt{MachineInstr}. MC is used during the last code generation stage when printing the instructions to a given output format. Printing for different output formats is further divided in binary format and SIMD assembly language in XAS-format. 
-%TODO: move
-
-
+	\item \textbf{Explicit Bypassing:} This pass exploits explicit datapaths in the generated code by using the bypass network. This is developed as a post-processing pass, but can be replaced by any of the approaches discussed in Chapter \ref{sec:expl_bp_impl}.
+	\item \textbf{Instruction Printer:} MC is a sub-project of LLVM, which uses \texttt{MCInst} to represent an instruction which is different from the code generators notion of a \texttt{MachineInstr}. MC is used during the last code generation stage when printing the instructions to a given output format. Printing for different output formats is further divided in binary format and SIMD assembly language in XAS-format. 
 \end{itemize}
-The following sections give a more elaborate discussion on each custom pass and describe their relation to each other.
-
-%TODO: validate and update
-\section{Custom Passes}
-This section describes the custom passes in more detail. Dependencies and relations to other passes are described. Furthermore, it will discuss the entire toolchain, which includes an assembler, a linker, and a simulator. 
 
 \begin{table}[t!]
 \caption{Relations between architecture design features and code generation phases.}
 \begin{center}
 \begin{tabular}{@{}l l l@{}}
 \toprule
-\textbf{Feature} & \textbf{Code Gen. Pass} \\ \hline
+\textbf{Feature} & \textbf{Code Gen. Pass} & \textbf{Explanation}\\ \hline
 Hardware Pipeline 	& Delay Slot Filler 		& This pass utilizes the delay slots (which is\\
 				&					& a product lockstep pipelining).\\
 			 	& Hazard Recognizer 	& This pass is necessary for a five-stage \\
@@ -68,7 +63,7 @@ Bit-width 			& Immediate Extension 	& Lowering immediate operands is done\\
 				&				    	& differently for different data bit-width. \\
 ISA extension		& Instruction Selection 	& New instructions need to be described in\\
 				& \& Instruction Lowering	& the back-end. \\
-Explicit datapaths 	& Bypass Register Allocation & This optional pass is developed to exploit\\
+Explicit datapaths 	& Explicit Bypassing		& This optional pass is developed to exploit\\
 				&					& explicit datapaths. It can be enabled\\
 				&					& using compiler flag \texttt{-explicit}. \\
 \bottomrule
@@ -76,6 +71,12 @@ Explicit datapaths 	& Bypass Register Allocation & This optional pass is develop
 \end{center}
 \label{table:rel_feature_pass}
 \end{table}%
+
+The following sections give a more elaborate discussion on each custom pass and describe their relation to each other. However, before that have a look at Table \ref{table:rel_feature_pass} which gives an overview of the passes responsible for each of the features from Chapter \ref{sec:problem_statement}. 
+
+%TODO: validate and update
+\section{Custom Passes}
+This section describes the custom passes in more detail. Dependencies and relations to other passes are described. Furthermore, it will discuss the entire toolchain, which includes an assembler, a linker, and a simulator. 
 
 \subsection{Hazard Recognizer}\label{sec:hazard_recogn}
 When generating code for a four-stage pipeline configuration, all instructions have a latency of one cycle. In that case, hazard recognition is not necessary.
@@ -93,6 +94,70 @@ add  r2,  r2, <@\hspace{1px}\textcolor{red!70!black}{r3}\hspace{1px}@>   # RaW d
 It detects hazards by considering whether an operation has a RaW dependency with instruction that came prior to it. A true hazard is when the instruction that came prior to it has a RaW dependency and a latency of more than one cycle. The \emph{post-register allocation} (Post-RA) scheduler does a linear scan through the list of operation and queries the hazard recognizer whether an instruction can be scheduled. When it detects a hazard, it will consider other instructions that are ready to be scheduled, and if there are none available without a hazard, it will insert a no-op and the processor will be stalled for a cycle.
 
 %It recognizes hazards by looking at whether the current instruction to be scheduled uses a register that is defined by the instruction issued in the previous cycle, which also has a latency of more than one cycle. If this is the case, we have a hazard and the instruction under consideration can not be scheduled in the current cycle. At this point we will consider other instructions that are ready to be scheduled and if there are none available without hazards, we will insert a no-op.
+
+\subsection{Branch Optimizer}
+%WORKING RIGHT HERE. ADD EXAMPLE CASES FROM BRANCH OPT.
+There were many double branch instructions in loop structures. Preliminary benchmarks already showed that a double branch instruction does not always help. For example, consider the assembly code fragments in Listing \ref{lst:br_opt_1} and Listing \ref{lst:br_opt_2}. Note that at this point, the delay slots that always follow after a jump or branch instruction are still absent because the delay slot filler pass has not run yet.
+
+\captionof{lstlisting}{Fragment of assembly code to illustrate the first and second cases that are considered by the branch optimization pass.}\label{lst:br_opt_1}
+\begin{center}
+\hspace{2px}\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+$BB1:
+    addi   r1, r1, 1
+    sfltsi r1, 64
+    <@\hspace{1px}\textcolor{red!70!black}{bf}\hspace{1px}@>     <@\hspace{1px}\textcolor{red!70!black}{\$BB1}\hspace{1px}@>
+    <@\hspace{1px}\textcolor{red!70!black}{j}\hspace{1px}@>      <@\hspace{1px}\textcolor{red!70!black}{\$BB2}\hspace{1px}@>
+$BB2:      <@ $\hdots$@>
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+$BB1:
+    addi   r1, r1, 1
+    sfltsi r1, 64
+    <@\hspace{1px}\textcolor{red!70!black}{bf}\hspace{1px}@>     <@\hspace{1px}\textcolor{red!70!black}{\$BB1}\hspace{1px}@>
+$BB2:      <@ $\hdots$@>
+           <@ $\hdots$@>
+\end{lstlisting}
+%\vspace{1.9em}
+\end{minipage}
+\end{center}
+
+\begin{enumerate}
+  \item The first case is where a block ends with a jump instruction to the block that immediately follows. The example shows a loop in which a counter is incremented until it reaches sixty-four. As long as the counter is less than that, the flag will be true and the branch is executed. When the counter increases, at some point the condition breaks and the flag becomes false. The program counter then points to the first instruction after the branch instruction, which is a jump instruction. However, the jump goes to the successor that immediately follows. When the jump is removed, the first instruction after the branch instruction is still the successor block that immediately follows. Hence the behaviour without that jump is identical and the superfluous jump can be removed.
+  \item The second case has a branch instruction to the block that immediately follows and a jump to somewhere else. The first step then is to reverse the branch condition. This can be achieved by changing a \texttt{bf} (branch flag) instruction into a \texttt{bnf} (branch not flag) and vice versa. After the branch is reversed, the situation becomes a jump instruction to the block that immediately follows and a branch instruction to somewhere else. 
+\end{enumerate}
+
+\captionof{lstlisting}{Fragment of assembly code to illustrate the third case that is covered by the branch optimization pass.}\label{lst:br_opt_2}
+\begin{center}
+\hspace{2px}\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+$BB2: <@$\hdots$@>
+    sf condition  # set-flag
+    <@\hspace{1px}\textcolor{red!70!black}{bf}\hspace{1px}@> <@\hspace{1px}\textcolor{red!70!black}{\$BB3}\hspace{1px}@>
+    <@\hspace{1px}\textcolor{red!70!black}{j}\hspace{1px}@>  <@\hspace{1px}\textcolor{red!70!black}{\$BB2}\hspace{1px}@>
+$BB3: <@$\hdots$@>
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{.475\textwidth}
+\begin{lstlisting}[frame=tlrb]
+$BB2: <@$\hdots$@>
+    sf  condition  # set-flag
+    <@\hspace{1px}\textcolor{red!70!black}{bnf}\hspace{1px}@> <@\hspace{1px}\textcolor{red!70!black}{\$BB2}\hspace{1px}@>
+$BB3: <@$\hdots$@>
+     <@ $\hdots$@>
+\end{lstlisting}
+%\vspace{1.9em}
+\end{minipage}
+\end{center}
+
+When a (double) jump intruction(s) jumps to a successor that immediately follows, the branch optimizer can always remove one jump with these cases.
+
+
+
+%END BRANCH OPT DESCRIPTION
+
 \subsection{Delay Slot Filler}
 During the execution of a conditional branch or jump instruction the \emph{program counter} (PC) is modified while the instruction is in the \emph{instruction decode} (ID) stage. A side product of lockstep pipelining which is introduced in Chapter \ref{sec:datapaths}, is that when a jump instruction is being decoded in the ID stage, the next instruction with $PC = PC+4$ has already been fetched from IMEM before the jump is executed. Therefore, the instruction that is followed by the jump instruction is executed presumptuously, which is referred to as a delay slot.
 
@@ -152,7 +217,7 @@ $BB1:
 \end{center}
 
 \begin{enumerate}
-\item The ideal case is when the previous two instructions are both vector instructions. In that case, the vector instruction prior to the jump instruction can be moved to after it. Now the vector instruction that remains before the jump ($prev_1$) gets bundled with the jump instruction. If there was originally a scalar instruction after the jump instruction, it could get bundled with the vector instruction that is moved by this pass, later on by the packetizer. Therefore, it inserts a no-op to ensure the delay slot. %the instruction that came after is a scalar instruction, it would be merged with the filled instruction, therefore, in that case we need to add a nop, such that it bundles with the filled vector instruction.
+\item The first case is when the previous two instructions are both vector instructions. In that case, the vector instruction prior to the jump instruction can be moved to after it. Now the vector instruction that remains before the jump ($prev_1$) gets bundled with the jump instruction. If there was originally a scalar instruction after the jump instruction, it could get bundled with the vector instruction that is moved by this pass, later on by the packetizer. Therefore, it inserts a no-op to ensure the delay slot. %the instruction that came after is a scalar instruction, it would be merged with the filled instruction, therefore, in that case we need to add a nop, such that it bundles with the filled vector instruction.
 \item When the instruction before the jump ($prev_1$) is a scalar instruction with no dependencies to the jump itself, it can moved to the delay slot. If a bundled instruction was moved, then it is done. Otherwise, if there are two vector operations prior to the jump instruction, it can move one of them to after the jump, thereby, fully utilizing the delay slot.
 
 %\item[3] We also consider the case where $prev_1$ is a vector instruction, and $prev_2$ is not a relational or jump instruction. Since the first case considers both $prev_1$ and $prev_2$ vector instructions, we consider cases where $prev_1$ is a vector and $prev_2$ is scalar operation by this case. %todo: little more in depth explanation of this pass
@@ -235,9 +300,9 @@ addi r3, r3, 12   # lower 8 bit
 \end{lstlisting}
 \end{enumerate}
 
-\texttt{ImmExtension} is a class that is derived from \texttt{MachineFunctionPass} and adds a \texttt{zimm} or \texttt{simm} when necessary. Pseudo code for this algorithm can be found in another thesis \cite[Appendix B]{liu_zhenyuan}. 
+\texttt{ImmExtension} is a class that is derived from \texttt{MachineFunctionPass} and adds a \texttt{zimm} or \texttt{simm} when necessary. Pseudo code for this algorithm can be found in L. Zhenyuan his thesis \cite[Appendix B]{liu_zhenyuan}. \\
 
-Our contribution to this is that we extended \texttt{SimdISelDAGToDAG} (instruction selection) to extend the range of immediate values from 26 to 32 bits. Furthermore, a bug that was found and resolved in the part that inserts \texttt{simm} operations. One may use even operations with more than 32 bits since carry-using operations can be selected. These operations have three operands: The first two are the normal LHS and RHS, and the third is the input carry flag. The operations can then be chained together for adding and subtracting arbitrarily large values.
+The contribution of this work is that \texttt{SimdISelDAGToDAG} (instruction selection) is extended such that a larger range of immediate values is supported. Namely, from 26 to 32 bits. Furthermore, a bug that was found and resolved in the part that inserts \texttt{simm} operations. One may use even operations with more than 32 bits since carry-using operations can be selected. These operations have three operands: The first two are the normal LHS and RHS, and the third is the input carry flag. The operations can then be chained together for adding and subtracting arbitrarily large values.
 
 \subsection{Packetizer}
 Using a packetizer transforms a sequential list of mixed scalar and vector operations into VLIW instructions that contain one scalar and one vector instruction. It does this by using \emph{VLIWPacketizerList} from the LLVM framework. 
@@ -282,11 +347,13 @@ addi r11, r11, 4  || v.nop
 
 Listing \ref{lst:packetizer} illustrates the transformation performed by the packetizer. The first two operations get put together in a packet by filling both the scalar and the vector slot. Then the vector operations are put in their own packet because the vector slot is already full. The load word operation is put with the last vector operation, thereby, fully utilizing the packet and the last two scalar operations get their own packet as well. %How do I say this? (of or from or ..) is this the correct way to do it or do you know any better or neater way to do so. 
 
+No contributions have been made to this pass, however, the packetizer is actually used to resolve an issue with the assembler. Without these modifications, each packet may have either one or two operations. However, this is modified to always fill a packet with a no-ops or vector no-ops when it is not full. The assembler translates the operations to binary code and when the VLIW instructions are not full, it will insert only a sub-instruction, which makes it difficult to determine where the next instruction starts. 
+
 
 %TODO: explain 3.3.
 
-\subsection{Bypass Registers Allocation}
-This pass exploits explicit registers by allocating them to the generated code. It currently does this as a post-processing step, but it can be moved to anywhere in the compilation chain. In general, the information of which operations reside in the pipeline at a point in time is needed to decide which results can be forwarded. Therefore, the behaviour of the bypass network is modelled at compile-time and this model is used to decide whether certain operands of an instruction can be bypassed. Then the liveliness information of registers that are bypassed is used to decide whether a certain store to the register file is still needed. Effectively, if the variable that was bypassed is dead after a use (denoted by a register \emph{kill}) it does not need to be stored anymore, since it will not be used later on. 
+\subsection{Explicit Bypassing}
+This pass exploits the bypass network in an explicit manner. Result forwarding and dead result elimination are performed on a generated code. Currently, it does this as a post-processing step, but it may be moved to somewhere else in the compilation chain. In general, the information of which operations reside in the pipeline at a point in time is needed to decide which results can be forwarded. Therefore, the behaviour of the bypass network is modelled at compile-time. The model is then used to decide whether a certain operand of an instruction may be bypassed. When an operand is bypassed, the liveliness information of the register that is bypassed is used to decide whether a certain write access to the RF is still needed. Effectively, if the variable that was bypassed is dead after a use (denoted by a register \emph{kill}) it does not need to be stored anymore, since it will not be used later on. 
  % and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
 %While the instruction of a basic block are traversed, we use the model of the bypass network to decide whether we can bypass certain operands.
 
@@ -311,11 +378,9 @@ sw  MUL, r10, 0
 \end{minipage}
 \end{center}
 
-The code fragment above first loads two values from memory. Then it multiplies them and stores the result back to memory. The second load produces a result that is immediately used. Therefore, it can be forwarded using operand forwarding (which is discussed in Chapter \ref{sec:datapaths}). This is encoded with LSU, because loads are executed by the \emph{load store unit} (LSU). Similarly, the result of the multiplication is immediately used and forwarded. In this case it is encoded with MUL, denoting the functional unit that executes multiplications.
+The assembly code in the above example starts with loading two values from memory. Subsequently, the values are multiplied and the result is stored back to memory. The second load produces a result that is immediately used. Therefore, it can be forwarded using operand forwarding (which is discussed in Chapter \ref{sec:datapaths}). This is encoded with \texttt{LSU}, because loads are executed by the \emph{load store unit} (LSU). Similarly, the result of the multiplication is immediately used and forwarded. In this case it is encoded with \texttt{MUL}, denoting the functional unit that executes multiplications.
 
-This is a standalone assembly code fragment, so each variable has exactly one use and is dead after that use. Therefore, the variables that are bypassed will never be read from the register file because they come from the bypass network instead. According to dead result elimination (introduced in Chapter \ref{sec:datapaths}) these obsolete stores can be removed, which is encoded using `$--$'. When an instruction has this as destination operand, the write enable is put to low when that instruction is in the writeback stage, and is not written back. 
-
-%TODO: add branch optimization
+The example in Listing \ref{lst:explicit_reg_alloc} is a self-contained assembly code fragment, so the result of these instructions are not used outside of what you can see. Hence, each result has exactly one use, and is dead after that use. Therefore, the variables that are bypassed will not be read from the RF, because they are forwarded  from the bypass network instead. According to dead result elimination (introduced in Chapter \ref{sec:datapaths}) these obsolete stores can be removed, which is encoded using `\texttt{--}'. When an instruction has this as destination, the write enable is put to low when that instruction is in the writeback stage, and the result of that instruction is not written back to the RF. Reducing communication with the RF leads to an energy efficienty improvement, however, the variable is only available for as long as it resides in the pipeline. 
 
 \section{Source-level Linker}
 Figure \ref{fig:linker_A} shows a process to do compilation and simulate the output of the compiler. The resulting assembly code is simulated in order to verify the correctness of a benchmark (C file). The simulation generates a directory with the memory dumps after running the program. It also produces statistics that indicates how often a certain line is executed, and we can deduce from the statistics file how many memory reads and writes, how many register read/writes, and how many bypassed reads and writes there are.
@@ -326,14 +391,15 @@ Figure \ref{fig:linker_A} shows a process to do compilation and simulate the out
 \caption{Workflow of simulation.}
 \label{fig:linker_A}
 \end{figure}
-\begin{figure}[b]
+
+Doing the compilation and preprocessing steps from the compiler results in unlinked assembly code. Here symbols are not resolved yet, and it does not automatically generate a \emph{\_start} function. The source-level linker resolves the symbols and inserts a \emph{\_start} function in which the stack is initialized. However, the source-level linker works only for a single input file, therefore, all benchmarks are implemented in a single C file. The assembler and the simulator from the legacy toolchain are used and the source-level linker is necessary for the assembler to work. 
+
+\begin{figure}[t]
 \centering
 \includegraphics[width=.9\textwidth]{figures/linker_illustration2}
 \caption{Standard linking process.}
 \label{fig:linker_B}
 \end{figure}
-
-Doing the compilation and preprocessing steps from the compiler results in unlinked assembly code. Here symbols are not resolved yet, and it does not automatically generate a \emph{\_start} function. The source-level linker resolves the symbols and inserts a \emph{\_start} function in which the stack is initialized. However, the source-level linker works only for a single input file, therefore, all benchmarks are implemented in a single C file. The assembler and the simulator from the legacy toolchain are used and the source-level linker is necessary for the assembler to work. \\
 
 Figure \ref{fig:linker_B} illustrates the standard linking process when using the LLVM tools to do everything up to simulation. Other students have implemented an assembler and a linker within the LLVM framework. The assembler mainly consists of a parser that parses assembly code, and it uses LLVM-MC to form instructions to print them and the LLVM linker is developed within LLD. However, the new linker and assembler can not be used yet because it is still a work in progress.
 

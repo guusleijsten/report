@@ -1,4 +1,25 @@
-This is just a placeholder.
+When there is non-deterministic behaviour in an operand that is bypassed a simple correction may be sufficient to make it deterministic. Non-deterministic behaviour may occur when bypassing a basic block that has multiple predecessor blocks, also called a join point. The bypasses that are allocated when assuming the pipeline state of the most frequently executed predecessor is taken as reference, and when a different bypass would be allocated when assuming the pipeline state of another predecessor block, the other predecessor block is modified such that it matches the bypass allocation given by the reference block. Four cases are considered:
+
+\begin{enumerate}
+  \item If the reference forwards a value using \texttt{ALU}, but is not in \texttt{ALU} when another predecessor is executed. Then an operation is inserted to the end of these other predecessors which adds zero to the value that is bypassed.
+  \item If the reference forwards a value using \texttt{MUL}, but is not in \texttt{MUL} when another predecessor is executed. Then an operation is inserted to the end of these other predecessors which multiplies the forwarded value with one.
+  \item If the reference forwards a value using \texttt{LSU}, but comes from another bypass source by other predecessors. Then the load is copied, and inserted at the end of these other predecessors.
+  \item When it is not possible to bypass the value from the reference block, but the other block or blocks do require a value to be bypassed. Then a nop is added to the end of the other predecessors such that the value will be written back before their use.
+\end{enumerate}  
+
+For a five-stage pipeline configuration an additional no-op is added when a multiplication or a load was inserted at the end of a block, so that the result is ready when it is used in the first operation of a basic block. This concludes all cases, however, the has not been considered. When the reference block forwards a value from the \texttt{WB} over a join point, it requires to insert an instruction at a non-trivial position in the basic block, depending on where the uses occur. 
+
+
+%TODO: add example where both a fix is needed, and a wb.
+
+For this reason, the current implementation does not allow forwarding over a join point using the \texttt{WB} source. It achieves this by performing a check when the WB source is considered. It checks if 
+
+%TODO: explain that we take the most-frequently executed predecessor block as reference, and fix all other preds to 'overeenkomen' met die block.
+
+%OTOD: show with contradicting example that this approach doesnt work if also WB is considered. Therefore, it is not possible in the current implementation to bypass from the WB over a joint-point. 
 
 %TODO: add scheduler/before RA/combined scheduling&RA/group instructions together to increase number of bypasses/ etc.
  
+ 
+ 
+ %TODO: explain the difference between mandatory and non-mendatory bypasses (IN CHAPTER .3.4)

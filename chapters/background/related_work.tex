@@ -33,9 +33,9 @@ Figure \ref{fig:tta} illustrates how function units and register files are conne
 
 %\lstset{style=customasm}
 \begin{lstlisting}
-add r1, r2, r3  # r1 = r2 + r3
-sub r4, r2, 6   # load from memory at location 0x5
-sw  r4, r1, 0   # store r4 at address r1
+add r1, r2, r3  # define r1 with r1 = r2 + r3
+sub r4, r2, 6   # define r4 with r4 = r2 - 6
+sw  r4, r1, 0   # store result at address r1
 \end{lstlisting}
 
 First step is to translate each $n$-operand $m$-result operation into $n+m$ moves (so called $n$ \emph{operand moves} and $m$ \emph{result moves}). \texttt{O1} and \texttt{O2} are input ports of the FU and \texttt{R} indicates the output (result) of a FU.
@@ -161,7 +161,7 @@ N/A & \texttt{v1} & Constant PE index \\
 %TODO: add text that goes by this, and optionally change lists in tables.
 
 Table \ref{table:register_conf} shows the register configurations of both CP and PE-Array.
-Both \texttt{r0} and \texttt{v0} are connected to ground and contain constant value zero. \texttt{v1} is a special register, which contains the index of local PE. Note that, there are two stack pointers, \texttt{r11} and \texttt{v11}. As mentioned before, considering there are two separated data memory, a double frame stack is needed for the CP and PE-Array to access their memories directly and reduce the expensive data communication. Therefore, two stack pointers are defined to point to the top of scalar and vector frame stacks respectively. The details of separate frame stacks is not described here, but can be found in another thesis \cite[Chapter~4]{liu_zhenyuan}.
+Both \texttt{r0} and \texttt{v0} are connected to ground and contain constant value zero. \texttt{v1} is a special register, which contains the index of local PE. Note that, there are two stack pointers, \texttt{r11} and \texttt{v11}. As mentioned before, considering there are two separated data memory, a double frame stack is needed for the CP and PE-Array to access their memories directly and reduce the expensive data communication. Therefore, two stack pointers are defined to point to the top of scalar and vector frame stacks respectively. The details of separate frame stacks is not described here, but can be found in L. Zhenyuans thesis \cite[Chapter~4]{liu_zhenyuan}.
 
 \subsubsection{Vectorizer}
  Support for LLVM's Auto-Vectorizer has been developed by L. Zhenyuan. He added support for this to our back-end during his time \cite[Chapter~5]{liu_zhenyuan}. He defined a couple of patterns to match and IR level transformations that transform loops to vector instructions and shuffle operations. Furthermore, he added a cost function to decide whether to vectorize a given loop automatically. However, sometimes the auto-vectorizer fails to vectorize a simple loop. In those cases, pragmas are manually inserted directly before a loop in the C code. Clang uses these pragmas for making decisions on whether or not to vectorize a given loop. In the end, this may give better results, as will be shown in Chapter \ref{chapter:evaluation}.
