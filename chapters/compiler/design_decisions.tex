@@ -27,23 +27,44 @@ The approach in which the register index space is used to encode that an operand
 
 The other approach would be beneficial since it does not reduce the register file index space such that limitations to high register pressure can be avoided.
 
-
-\begin{figure}[b]
+\begin{figure}[b!]
 \centering
-\includegraphics[width=.9\textwidth]{figures/phase_ordering}
-\caption{Phase ordering problem.}
-\label{fig:phase_ordering}
+\subfloat[Explicit bypassing before RA.]{\includegraphics[width=.645\textwidth]{figures/explicit_bypass_allocationA}%
+\label{fig:expl_bp_A}}
+\vspace{10px}
+\subfloat[Explicit bypassing after RA.]{\includegraphics[width=.9\textwidth]{figures/explicit_bypass_allocationB}%
+\label{fig:expl_bp_B}}
+\caption{When to apply explicit bypasses.}
+\label{fig:expl_bp}
 \end{figure}
 
 \subsubsection{When and how to allocate explicit bypasses}
-Let us start with when to allocate explicit bypass registers. First of all, ideally that would be done before register allocation where there are still virtual registers. The number of virtual registers reduces with each store that is avoided. Thereby, reducing register pressure and relaxing the job for the register allocator.
+When to actually do this can be categorized in three approaches. Trivially, it is not possible to do explicit bypass allocation before scheduling, because one needs a schedule to allocate explicit bypasses. %the order of instructions is not known at that time. 
+(i) Ideally it would be done before register allocation (Figure \ref{fig:expl_bp_A}) where there are still virtual registers. The number of virtual registers reduces with each store that is avoided. Thereby, reducing register pressure and relaxing the job for the register allocator.
 
 However, when the register allocator runs out of registers and inserts spill code between two instructions that were already bypassed, this bypass may not be valid anymore and may even require an additional register to undo that bypass.
 
-Trivially, it is not possible to allocate explicit bypasses before scheduling, because one needs a schedule to do explicit bypass allocation. %the order of instructions is not known at that time. 
-So, alternatively it can be done after register allocation. However, the physical registers that are freed by dead result elimination are not exploited when doing this after RA. Because, if spill code was necessary it has already been inserted during register allocation. Therefore, after the explicit bypasses have been allocated, the resulting assembly code may have redundant spill code and does not gain from reduced register pressure.\\
+(ii) Alternatively it can be done after register allocation. However, the physical registers that are freed by dead result elimination are not exploited when doing this after RA. Because, if spill code was necessary it has already been inserted during register allocation. Therefore, after the explicit bypasses have been allocated, the resulting assembly code may have redundant spill code and does not gain from reduced register pressure. With this approach it does not matter whether to do scheduling or RA first, which is illustrated in Figure \ref{fig:expl_bp_B}.
 
-To summarize, ideally the explicit datapaths are exploited before register allocation to gain from reduced register pressure. But alternatively, it can be done after register allocation which may potentially have redundant spill code. For the later approach, an effort to clean up redundant spill code may be desired for more efficient code.\\
+(iii) Finally, it is also possible to do scheduling and register allocation in one go with constraint programming. However, this problem is NP-complete and may take an unbounded amount of time. \\
+
+
+
+%\begin{figure}[t]
+%\centering
+%\includegraphics[width=.8\textwidth]{figures/explicit_bypass_allocation_A}
+%\caption{Phase ordering problem.}
+%\label{fig:expl_bp_A}
+%\end{figure}
+
+%\begin{figure}[b]
+%\centering
+%\includegraphics[width=.9\textwidth]{figures/explicit_bypass_allocation_B}
+%\caption{Phase ordering problem.}
+%\label{fig:expl_bp_B}
+%\end{figure}
+
+To summarize, ideally the explicit datapaths are exploited before register allocation to gain from reduced register pressure, but it is extremely difficult to insert spill code. So alternatively, it can be done after register allocation which may potentially have redundant spill code. For the later approach, an effort to clean up redundant spill code may be desired for more efficient code.\\
 
 How to exploit explicit register allocation is a very broad question, in fact this is the main goal of this assignment. Let us split up in two categories of approaches:
 \begin{enumerate}[i.]
@@ -51,9 +72,18 @@ How to exploit explicit register allocation is a very broad question, in fact th
   \item Another way to exploit explicit datapaths is by going through a basic block (a code sequence with no branches in except to the entry and no branches out except at the exit) and allocate explicit bypasses as a post-processing step, in the sense that this is done when the schedule does not change anymore.
 \end{enumerate}
 
-The approach in the first category where instructions are grouped together has a problem. When a bypass is done early on, it needs to be verified if it is still valid after a change to the schedule has been made. In the compilation chain (Figure \ref{fig:phase_ordering}) the order in which instructions are executed is first decided by the general scheduler. The register allocator may insert spill code at any place in the schedule. After that, the order may change again by the post-RA scheduler or by a custom pass..
+\begin{figure}[t]
+\centering
+\includegraphics[width=.9\textwidth]{figures/phase_ordering}
+\caption{Phase ordering problem.}
+\label{fig:phase_ordering}
+\end{figure}
 
-%TODO: add example listing C code left, assembly right that end up in different states, and bypass is not valid!
+The approach in the first category where instructions are grouped together has a problem. When a bypass is done early on, it needs to be verified if it is still valid after a change to the schedule has been made. In the compilation chain (Figure \ref{fig:phase_ordering}) the order in which instructions are executed is first decided by the general scheduler. The register allocator may insert spill code at any place in the schedule. After that, the order may change again by the post-RA scheduler or by a custom pass.\\
+
+Now let us discuss the second approach that works on a basic block. The assumption in this approach is that the order in which instructions are executed is set and does not change anymore. Therefore, each bypass that is applied stays valid. 
+%We can allocate explicit bypass register on an instruction if we have a RaW dependency between that instruction and an instruction in the pipeline state model.
+The problem that remains is when there are multiple branches to the basic block. With multiple branches in, the state of the pipeline and which bypasses may be allocated can be different depending on which branch is taken. This problem is referred to as the join problem which is illustrated by example in Listing \ref{lst:join_problem}. Depending on which branch is taken the value of register \texttt{r7} may be forwarded from \texttt{ALU} when coming from \texttt{\%if}, or from \texttt{MUL} when coming from \texttt{\%else} which leads to an ambiguous pipeline state. Thus, the use of \texttt{r7} in \texttt{\%end} is forwarded from the bypass network, but is ambiguous and this together with being bypassed is not allowed for explicit datapaths. Therefore, such ambiguous behaviour should either be avoided or fixed, such that it is absent in the generated code.
 
 \captionof{lstlisting}{Fragment of C code with corresponding assembly, to illustrate the join problem.}\label{lst:join_problem}
 \begin{center}
@@ -94,14 +124,9 @@ $end:
 \end{minipage}
 \end{center}
 
+Bypassing with a limited scope of only a basic block requires multiple no-ops to be inserted on the end of each block, such that the pipeline state is flushed and no ambiguous behaviour occurs. Going from intra- to an inter basic block scope the ambiguous behaviour may be fixed using a technique which is discussed in the next section. With a function-level scope the pipeline state needs to be flushed only on a function call, because many instructions will be executed before returning. No-ops are not required because the prologue and epilogue insertions guarantee unambiguous behaviour between function calls. Going to a module-level scope would even allow bypasses from one function to another. However, because of time limitations, and because this only increases the bypasses with just a little bit, a module-level scope has not been implemented.\\
 
-%TODO: now show that grouping instructions is not enough, because this will eventually not cover all mandatory bypasses.
-
-Now let us discuss the second approach that works on a basic block. The assumption in this approach is that the order in which instructions are executed is set and does not change anymore. Therefore, each bypass that is applied stays valid. 
-%We can allocate explicit bypass register on an instruction if we have a RaW dependency between that instruction and an instruction in the pipeline state model.
-The problem that remains is when there are multiple branches to the basic block. With multiple branches in, the state of the pipeline and which bypasses may be allocated can be different depending on which branch is taken. This problem is referred to as the join problem which is illustrated by example in Listing \ref{lst:join_problem}. Depending on which branch is taken the value of register \texttt{r7} may be forwarded from \texttt{ALU} when coming from \texttt{\%if}, or from \texttt{MUL} when coming from \texttt{\%else}. Thus, the use of \texttt{r7} in \texttt{\%end} is forwarded from the bypass network, but is non-deterministic and this together with being bypassed is not allowed with explicit datapaths. Therefore, such non-deterministic behaviour should either be avoided or fixed, such that it is absent in the generated code.\\
-
-To conclude, the first approach discussed above may improve utilization of the bypass network, but can not be used as a stand-alone approach, since it does not solve the join problem. While the second approach works on a single basic block, it can easily be extended to a larger scope (for example, a function-level scope or a module-level scope). The following sections will show how the join problem can be    tackled when a larger scope is considered. 
+To conclude, the first approach discussed above may improve utilization of the bypass network, but can not be used as a stand-alone approach, since it does not solve the join problem. While the second approach works on a single basic block, it can easily be extended to a larger scope (for example, a function-level scope or a module-level scope). The following sections will show how the join problem can be tackled when a larger scope is considered. 
 
 %When we bypass a value that is defined in another basic block, we require all blocks with a branch to that basic block to have that value in the same bypass source.
 
