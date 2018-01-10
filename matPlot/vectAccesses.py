@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from itertools import groupby
 
 def test_table():
-    data_table = pd.DataFrame({'Bench':['Add']*2 + ['Binarization']*2 + ['Histogram']*2 + ['Matrix multiplication']*2 + ['Matrix transpose']*2 + ['YUV2RGB']*2,
+    data_table = pd.DataFrame({'Bench':['Add']*2 + ['Binarization']*2 + ['Histogram']*2 + ['Matrix mul']*2 + ['Matrix transpose']*2 + ['YUV2RGB']*2,
                                'Pipeline':(['4-stage'] + ['5-stage'])*6,
                                'Avoided writes':[0.5182186235,0.5182186235,0.441014333,0.4980842912,0.08880785459,0.5038971716,0.4334621756,0.6598821639,0.05267489712,0.0845410628,0.2990750257,0.2786228983],
                                'Remaining writes':[0.4817813765,0.4817813765,0.558985667,0.5019157088,0.9132574444,0.4961028284,0.5670900055,0.3401178361,0.9473251029,0.9154589372,0.7009249743,0.7213771017],

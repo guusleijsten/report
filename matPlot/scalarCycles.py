@@ -22,9 +22,10 @@ plt.axvline(x=100, color='black', dashes=[10, 5, 10, 5])
 
 plt.xlabel('Normalized runtime of Scalar version w.r.t. Legacy compiler (%)')
 plt.title('Scalar Performance Compared to Legacy compiler')
-plt.xticks(np.arange(0, 160, 10))
+plt.xticks(np.arange(0, 210, 10))
 plt.yticks(ind, ('YUV2RGB', 'Matrix transpose', 'Matrix mul', 'Histogram', 'DES', 'Convolution', 'Binarization', 'Addition'))
 #plt.xticks(rotation=45)
+plt.grid()
 plt.legend((p1[0], p2[0], p3[0], p4[0]), ('4-stage - Implicit', '4-stage - Explicit', '5-stage - Implicit', '5-stage - Explicit'))
 
 plt.show()

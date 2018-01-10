@@ -8,7 +8,7 @@ from itertools import groupby
 
 
 def test_table():
-    data_table = pd.DataFrame({'Bench':['Add']*2 + ['Binarization']*2 + ['Convolution']*2 + ['DES']*2 + ['Histogram']*2 + ['Matrix multiplication']*2 + ['Matrix transpose']*2 + ['YUV2RGB']*2,
+    data_table = pd.DataFrame({'Bench':['Add']*2 + ['Binarization']*2 + ['Convolution']*2 + ['DES']*2 + ['Histogram']*2 + ['Matrix mul']*2 + ['Matrix transpose']*2 + ['YUV2RGB']*2,
                                'Pipeline':(['4-stage'] + ['5-stage'])*8,
                                #'Accesses':(['writes'] + ['reads'])*16,
                                'Avoided writes':[0.579787234,

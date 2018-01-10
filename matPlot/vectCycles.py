@@ -25,6 +25,7 @@ plt.title('Vector Performance Compared to Scalar version')
 plt.xticks(np.arange(0, 160, 10))
 plt.yticks(ind, ('YUV2RGB', 'Matrix transpose', 'Matrix mul', 'Histogram', 'Binarization', 'Addition'))
 #plt.xticks(rotation=45)
+plt.grid()
 plt.legend((p1[0], p2[0], p3[0], p4[0]), ('4-stage - Implicit', '4-stage - Explicit', '5-stage - Implicit', '5-stage - Explicit'))
 
 plt.text(150.5, 6 + 0.45, str(543.1), color='#3669c9', fontweight='bold')

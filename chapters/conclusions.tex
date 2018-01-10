@@ -1,11 +1,38 @@
-The implementation of a SIMD compiler based on LLVM infrastructure has been described in the previous chapters. This chapters summarizes the results, shows the limitations of the compiler, and presents future work.
+The previous chapters have described a compiler based on the LLVM infrastructure that is used to compile code for the target SIMD architecture. This chapters summarizes the results and lists limitations of the compiler before presenting future work.
 
-\section{Summary}
+\section{Summary}\label{sec:summary}
 \input{chapters/conclusion/summary}
 
-\section{Future Work}\label{sec:future_work}
-\input{chapters/conclusion/future_work}
+\section{Limitations}\label{sec:limitations}
+This sections aims at compiling a list of limitations currently in the compiler or architecture.
+\begin{itemize}
+    \item \textbf{Floating-point operations} are not supported, because of the lack of a \emph{Floating Point Unit} (FPU), just like most low-end embedded systems do not have a FPU. The functionality of a FPU can be emulated with a soft-floating point library, however a LLD linker is required to link a soft-floating point library together with compiler-rt\footnote{compiler-rt.llvm.org} for software floating-point emulation.
+    \item \textbf{Divisions} and \textbf{modulo operations} are not supported. Similarly to the previous point, this functionality can be emulated with library calls. However, the actual linking of such libraries requires LLD to properly work.
+    \item \textbf{No built-in functions} are supported because there is no C-runtime library nor a finished linker. Because of this, includes to stdlib (standard library) that allow functions like malloc and stdio (input/output library) for file operations are not possible and result in many errors.
+    \item \textbf{No inline assembly} support. Some compilers allow low-level code (assembly) to be written embedded within a program. LLVM does have support for this, but this is not supported/implemented in the SIMD compiler.
+    \item \textbf{Interrupts} are not supported in the current SIMD architecture design. 
+    \item There is \textbf{no status register} that contains information about the state of the processor. Common status register flags include a \emph{zero flag} that indicates that the result of the previous operation was zero, a \emph{sign flag} indicates that the result of an operation was negative. There are flag registers that do the same, but require an additional instruction to set. Moreover, status register flags also include an \emph{overflow flag} indicating that a result does not fit in the register or an \emph{interrupt flag} to enable/disable interrupts. The later two flags do have an impact. Namely, the programmer is responsible for avoiding overflows, since they are not detected by the hardware. 
+\end{itemize}
 
+\section{Future Work}\label{sec:future_work}
+Future work can be split up in a couple of categories. First of all, there is future work consisting of bug fixes and other improvements to the compiler. Furthermore, there is also future work that consists of adding functionality to the compiler.
+%\input{chapters/conclusion/future_work}
+\begin{itemize}
+    \item There is future work from L. Zhenyuan, which includes:
+    \begin{itemize}
+        \item The scalar and vector processors share the same frame index. Whenever something is pushed to the stack, the shared frame pointer is updated. This results in gaps in the stacks which can be solved with two frame indices, one for the scalar processor and one for the vector array.
+        \item Shuffle pattern recognition during instruction lowering. Shuffle pattern recognition and replacement is currently done before DAG lowering. Because of this, the opportunity is lost to generate new vector shuffle operations in the instruction combination during the instruction lowering stage.
+    \end{itemize}
+    \item Solving all open issues described in Section \ref{sec:issues}.
+    \item The LLD linker (standard LLVM linker) has to be tested and any issues have to be resolved.
+\end{itemize}
+
+\section{Open Issues}\label{sec:issues}
+This section describes the issues in the backend, which are also described in the issue tracker on GitLab\footnote{git.ics.ele.tue.nl/SIMD/LLVM/issues}.
+
+\begin{itemize}
+\item[]
+\end{itemize}
 %In general a short summarizing paragraph will do, and under no circumstances should the paragraph simply repeat material from the Abstract or Introduction. In some cases it's possible to now make the original claims more concrete, e.g., by referring to quantitative performance results.
 
 %Old text
