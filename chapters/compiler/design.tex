@@ -357,7 +357,7 @@ This pass exploits the bypass network in an explicit manner. Result forwarding a
  % and going through a list of instructions. %We may then use the model to keep the processor pipeline accurate and use it to allocate 
 %While the instruction of a basic block are traversed, we use the model of the bypass network to decide whether we can bypass certain operands.
 
-\captionof{lstlisting}{Fragment of assembly code to illustrate operand forwarding and dead result elimination.}\label{lst:explicit_reg_alloc}
+\captionof{lstlisting}{Fragment of assembly code to illustrate operand forwarding and dead result elimination. Appendix \ref{appendix:pseudo_code} shows pseudo code for this pass.}\label{lst:explicit_reg_alloc}
 \begin{center}
 \hspace{2px}\begin{minipage}{.475\textwidth}
 \begin{lstlisting}[frame=tlrb]

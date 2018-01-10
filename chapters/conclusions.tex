@@ -1,7 +1,22 @@
 The previous chapters have described a compiler based on the LLVM infrastructure that is used to compile code for the target SIMD architecture. This chapters summarizes the results and lists limitations of the compiler before presenting future work.
 
-\section{Summary}\label{sec:summary}
-\input{chapters/conclusion/summary}
+\begin{table}[H]
+\caption{Summary of RF access avoided with the techniques implemented in this work.}
+\begin{center}
+\begin{tabular}{@{}l l l l@{}}
+\toprule
+\textbf{RF Accesses}	& \textbf{Scalar version}	& \textbf{Vector version}\\\hline
+\textbf{Writes}		& 42\%				& 30\%		\\
+\textbf{Reads}		& 36\%				& 40\%		\\
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:evaluation_results}
+\end{table}%
+
+%\section{Summary}\label{sec:summary}
+%\input{chapters/conclusion/summary}
+With register file optimizations that are developed for the new compiler, around 40\% of the accesses can be avoided. Since the RF consumers around 35\% of the total energy consumption and around 40\% of the communication with the RF can be avoided, an estimated improvement of around 15\% follows. Table \ref{table:evaluation_results} summarized the percentages of RF communication that can be avoided with explicit bypassing.
 
 \section{Limitations}\label{sec:limitations}
 This sections aims at compiling a list of limitations currently in the compiler or architecture.
@@ -9,7 +24,7 @@ This sections aims at compiling a list of limitations currently in the compiler 
     \item \textbf{Floating-point operations} are not supported, because of the lack of a \emph{Floating Point Unit} (FPU), just like most low-end embedded systems do not have a FPU. The functionality of a FPU can be emulated with a soft-floating point library, however a LLD linker is required to link a soft-floating point library together with compiler-rt\footnote{compiler-rt.llvm.org} for software floating-point emulation.
     \item \textbf{Divisions} and \textbf{modulo operations} are not supported. Similarly to the previous point, this functionality can be emulated with library calls. However, the actual linking of such libraries requires LLD to properly work.
     \item \textbf{No built-in functions} are supported because there is no C-runtime library nor a finished linker. Because of this, includes to stdlib (standard library) that allow functions like malloc and stdio (input/output library) for file operations are not possible and result in many errors.
-    \item \textbf{No inline assembly} support. Some compilers allow low-level code (assembly) to be written embedded within a program. LLVM does have support for this, but this is not supported/implemented in the SIMD compiler.
+    \item \textbf{No inline assembly} support. Some compilers allow low-level code (assembly) to be written embedded within a program. LLVM does have support for this, but this is not supported/implemented for the SIMD backend.
     \item \textbf{Interrupts} are not supported in the current SIMD architecture design. 
     \item There is \textbf{no status register} that contains information about the state of the processor. Common status register flags include a \emph{zero flag} that indicates that the result of the previous operation was zero, a \emph{sign flag} indicates that the result of an operation was negative. There are flag registers that do the same, but require an additional instruction to set. Moreover, status register flags also include an \emph{overflow flag} indicating that a result does not fit in the register or an \emph{interrupt flag} to enable/disable interrupts. The later two flags do have an impact. Namely, the programmer is responsible for avoiding overflows, since they are not detected by the hardware. 
 \end{itemize}
@@ -23,17 +38,33 @@ Future work can be split up in a couple of categories. First of all, there is fu
         \item The scalar and vector processors share the same frame index. Whenever something is pushed to the stack, the shared frame pointer is updated. This results in gaps in the stacks which can be solved with two frame indices, one for the scalar processor and one for the vector array.
         \item Shuffle pattern recognition during instruction lowering. Shuffle pattern recognition and replacement is currently done before DAG lowering. Because of this, the opportunity is lost to generate new vector shuffle operations in the instruction combination during the instruction lowering stage.
     \end{itemize}
+    \item A cleanup pass to remove obsolete spill-code in the generated code after explicit bypass allocation has not been developed yet. Since there is a benchmark where this would be beneficial (convolution) it is added to future work.
     \item Solving all open issues described in Section \ref{sec:issues}.
     \item The LLD linker (standard LLVM linker) has to be tested and any issues have to be resolved.
+    \item Implement a disassembler to translate binary code back to assembly code. This would also make debugging the linker a lot easier, therefore, a skeleton implementation is already provided in the source directory. However, it has not been implemented yet because it falls outside the scope of this assignment.
 \end{itemize}
 
 \section{Open Issues}\label{sec:issues}
-This section describes the issues in the backend, which are also described in the issue tracker on GitLab\footnote{git.ics.ele.tue.nl/SIMD/LLVM/issues}.
+This section describes the issues in the backend that are also described on the issue tracker in GitLab\footnote{git.ics.ele.tue.nl/SIMD/LLVM/issues}.
 
 \begin{itemize}
-\item[]
+    \item As discussed at the end of Chapter \ref{sec:design_decisions}, a module-level scope has not been implemented. Instead, a function-level scope is implemented, and the pipeline state model is reset on a function call, such that it does not have false bypasses over a function call. The epilogue and prologue insertion ensures correct behaviour between function calls, namely the first and last few instructions of a function update the stack pointers. Therefore, no no-ops are required, however, currently the pipeline state is reset on a function call, while it should effectively be reset on the delayslot after a function call.
+    \item Other open issues about explicit bypassing can be found under issue \#13, which include a multipass checkConflict approach (where checkConflict is called again upon fixing a conflict), and support for conflicts on the PE array.
+    \item During an internship where another student investigated in how to generate code for \emph{Convolutional Neural Networks} (CNN) and during vectorization of the \emph{convolution} benchmark, a problem was found in which intermediate results calculated by the PE array are not communicated back to the CP. A minimal code example in which this problem occurs can be found on GitLab (issue \#11), which helps with debugging.
+    \item Conditional moves operations have a set-flag operations in front of it. The compiler sees these this as two separate operations, and for some reason starts with a couple of set-flag operations. However, the conditional move instruction uses only a single flag register (\texttt{P0}) to determine which value it should move. Therefore, it is not possible to start with a couple of set-flag operations. See the example below, where this problem is illustrated:
+\lstset{style=customasm}
+\begin{lstlisting}
+%flagA = v.sflts %vreg19, %vreg20
+%flagB = v.sfgts %vreg19, %vreg13
+%resultA = v.cmov %flagA, %vreg16, %vreg19, %vreg20
+%resultB = v.cmov %flagB, %vreg16, %vreg16, %vreg13
+\end{lstlisting}
+The assembly code above is a fragment of code that is produced by the compiler. During register allocation, this gives an error, because it can not find two flag registers, namely, it can only choose flag register \texttt{P0}. This bug occurs with the vectorized versions of \emph{binarization} and \emph{YUV2RGB}. For \emph{binarization} the problem is avoided by not unrolling, so that it performs only one conditional move operation per loop iteration. For \emph{YUV2RGB}, manual corrections to the generated code were required to ensure correct simulation behaviour. This issue is also described on GitLab (issue \#10).
 \end{itemize}
+
 %In general a short summarizing paragraph will do, and under no circumstances should the paragraph simply repeat material from the Abstract or Introduction. In some cases it's possible to now make the original claims more concrete, e.g., by referring to quantitative performance results.
+
+To conclude, this work has intrigued me in energy efficient embedded systems. The search for low energy systems will definitely continue and the next project may reveal other ways to reduce energy consumption for general purpose processors. 
 
 %Old text
 %We have implemented last-minute bypass allocation and tested it on some benchmarks. However, we do not yet have all the benchmarks that we intend to use. Therefore we do not yet have reliable results that could indicate how efficient our first approach is. Furthermore, we have implemented last-minute bypassing for code generation, where we use only the CP processor. We want to extend this to allocate bypasses in a basic block for code generation, where we use both CP and PEs.

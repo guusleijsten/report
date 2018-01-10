@@ -2,22 +2,83 @@
 
 %TODO: mention that I left out CMakeFiles and LLVMBuildInfo for simplicity of the directory tree.
 %\section{File Structure}
-This appendix provides pseudo code of the pass that exploits explicit datapaths which is discussed in Chapter \ref{sec:expl_bp_impl}.
+This appendix provides pseudo code of the pass that exploits explicit datapaths from Chapter \ref{sec:expl_bp_impl}. First of all, the children of each node in the dominator tree are sorted on reverse post-order tree traversel. Then each node and the functions \texttt{EnterScope} and \texttt{ProcessBlock} are called.\\
 
 %TODO: add more introducing text, and explain pseudo code with text.
 \begin{algorithm}[H]
- \KwData{allocateBypasses}
- \KwResult{Lele}
- bool hasBBs = false\;
- \While{hasBBs}{
- ready = hasReadyBBs()\;
-  read current\;
-  \eIf{understand}{
-   go to next section\;
-   current section becomes this one\;
+ \KwData{PerformEBA}
+ \KwResult{Explicit bypass allocation is performed}
+ Sort dominator tree on reverse post order traversal\;
+ 
+ Node = depthFirst(DominatorTree.root())\;
+ \While{node}{
+  block = Node.block()\;
+  EnterScope(block)\;
+  ProcessBlock(block)\;
+  Node = next(Node)\;
+ }
+ \caption{Outer function called by \texttt{RunOnMachineFunction}.}
+\end{algorithm}
+
+\texttt{EnterScope} sets up the pipeline state by taking the bypass state from the most-frequently executed predecessor block. Subsequently, it modifies other predecessor blocks to match their resulting pipeline state when it is required by a bypass.\\
+
+\begin{algorithm}[H]
+ \KwData{EnterScope}
+ \KwResult{Pipeline state is setup and conflicts on predecessors has been resolved}
+ \eIf{isLoop}{
+  \For{block in loop}{
+   AnalyzeBlock(state, block)\;
+  }
+  setState(state)\;
+ }{
+  \eIf{preds.size() $>$ 1}{
+   setState(MostFrequentlyExecutedPred.getState())\;
+   checkConflicts(preds)\;
+  }{
+   \eIf{preds.size $==$ 1}{
+    setState(pred.getState())\;
    }{
-   go back to the beginning of current section\;
+       initState()\;
+   }
   }
  }
- \caption{How to write algorithms}
+ \caption{First function called by \texttt{PerformEBA}.}
+\end{algorithm}
+
+
+
+\newpage
+
+
+
+Where \texttt{AnalyzeBlock} goes through a basic block, and updates the pipeline state model accordingly. The procedure calls to \texttt{setState} and \texttt{getState} set the pipeline state model to a given state, or queries the pipeline state model of a basic block. The following pseudo code shows functionality of \texttt{ProcessBlock}, which is similar to \texttt{AnalyzeBlock}, but also allocates explicit bypasses that it finds.
+
+\begin{algorithm}[H]
+ \KwData{ProcessBlock}
+ \KwResult{Explicit bypass allocation is performed on a basic block}
+ bool hasBBs = false\;
+ \For{instruction in block}{
+  allocateBypasses(instruction)\;
+  
+  register instruction in pipeline state model\;
+  \If{end cycle}{
+   propagate pipeline state\;
+  }
+ }
+ \caption{Second function called by \texttt{PerformEBA}.}
+\end{algorithm}
+
+\begin{algorithm}[H]
+ \KwData{allocateBypasses}
+ \KwResult{Explicit bypass allocation is performed on an instruction}
+ \For{operand in instruction}{
+  match = matchOperandInPipeline()\;
+  \If{match}{
+   bypass operand\;
+  }
+  \If{match $\And$ isKill}{
+   avoid store\;
+  }
+ }
+ \caption{Inner function called by \texttt{ProcessBlock}.}
 \end{algorithm}
