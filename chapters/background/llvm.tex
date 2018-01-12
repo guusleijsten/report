@@ -134,7 +134,7 @@ Then the DAG consists only of target specific machine instructions, in SSA form.
 Now the instructions are represented in a list rather than a DAG, but still in SSA form. The \emph{Register Allocator} (RA) then assigns physical registers to each of the virtual registers, now the list is not in SSA form. 
 %We will discuss RA in more detail in Chapter \ref{sec:register_allocation}. 
 
-The post-allocation pass can improve the schedule by taking physical registers and register pressure, that is known at this point, into account. After that, some epilogue and prologue code may be inserted, for example, saving/restoring the caller/callee registers and reserving/destroying of the function's stack frame. Peephole optimizations are target specific improvements to the generated code. These optimizations deal with very specific optimizations that can only be done at the end of the process. Finally, the assembly printer prints the generated code to a file.
+The post-allocation pass can improve the schedule by taking physical registers and \emph{Register Pressure} (RP), that is known at this point, into account. After that, some epilogue and prologue code may be inserted, for example, saving/restoring the caller/callee registers and reserving/destroying of the function's stack frame. Peephole optimizations are target specific improvements to the generated code. These optimizations deal with very specific optimizations that can only be done at the end of the process. Finally, the assembly printer prints the generated code to a file.
 %backend talk -> huuge
 
 

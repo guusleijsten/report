@@ -56,10 +56,10 @@ Where \texttt{AnalyzeBlock} goes through a basic block, and updates the pipeline
 \begin{algorithm}[H]
  \KwData{ProcessBlock}
  \KwResult{Explicit bypass allocation is performed on a basic block}
- bool hasBBs = false\;
  \For{instruction in block}{
   allocateBypasses(instruction)\;
   
+  insertIntoPipeline(instruction)\;
   register instruction in pipeline state model\;
   \If{end cycle}{
    propagate pipeline state\;

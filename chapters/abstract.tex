@@ -2,12 +2,15 @@
 %In this report, we will research in ways to reduce energy consumption. We will achieve this by reducing the total amount of accesses to the register file by means of exploiting explicit datapaths. We describe six different approaches and evaluate which is most suitable based on tradeoffs, i.e. implementation complexity, compile time, quality of resulting code, etc. We have already implemented one approach. However, to improve it, and to handle vector instructions, we need to extend this work significantly. The real work begins only now. 
 
 %New abstract
-\blindtext\blindtext
-
-\blindtext
 
 %TODO: extend abstract; its way too short
 % abstract should not exceed 800 words.
+
+This thesis contributes in a compiler for a low energy configurable programmable platform implementing an ultra-wide \emph{Single Instruction Multiple Data} (SIMD) architecture. The distinguishing characteristics of this architecture is a wide array of \emph{Processing Elements} (PEs) that exploit parallelism by processing many operations concurrently. Therefore, a high throughput can be achieved at a low clock frequency and thus low voltage, thereby with a high energy efficiency.
+
+The current compiler is implemented completely within LLVM with auto-vectorization that does support a configurable array size, however, lacks support for a configurable datapath. LLVM is a collection of modular and reusable compiler and toolchain technologies that is popular amongst many companies for its multistage compilation strategy, outstanding extendability and maintainability. 
+ 
+This work has a focus on extending the compiler with explicit bypassing capabilities. 
 
 \vspace{10mm}
 \noindent {\bf Keywords:} \keywords

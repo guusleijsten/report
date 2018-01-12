@@ -108,21 +108,21 @@ Figure \ref{fig:scalar_improvements} shows a bar chart with how many register fi
 \centering
 \hspace*{-.12in}
 \includegraphics[width=.875\textwidth]{figures/stats/scalar_accesses}
-%TODO: change orange to yellow and yellow to orange in picture. 
 \caption{Scalar version register accesses (RF accesses are normalized to implicit bypassing), with an average improvement of over 42\% on write and 36\% on read accesses.}
 \label{fig:scalar_improvements}
 \end{figure}
 
+%TODO add tekst for zero optimization flag with picture below, and make table for few benchies wqith cycle counts and abs accesses both O0 and O3 and maybe legacy.
+
 %==========================
 %BEGIN O ZERO - LOWEST OPT
-%\begin{figure}[b!]
-%\centering
-%\hspace*{-.12in}
-%\includegraphics[width=.875\textwidth]{figures/stats/scalar_accesses_O0}
-%%TODO: change orange to yellow and yellow to orange in picture. 
-%\caption{Scalar version register accesses with opt-level \texttt{-O0} (RF accesses are normalized to implicit bypassing), with an average improvement of over 77\% on writes and 54\% on reads.}
-%\label{fig:scalar_improvements_O0}
-%\end{figure}
+\begin{figure}[b!]
+\centering
+\hspace*{-.12in}
+\includegraphics[width=.875\textwidth]{figures/stats/scalar_accesses_O0}
+\caption{Scalar version register accesses with opt-level \texttt{-O0} (RF accesses are normalized to implicit bypassing) with an average improvement of 66\% on write- and 45\% on read accesses, and even up to 99.9\% of the write accesses can be avoided.}
+\label{fig:scalar_improvements_O0}
+\end{figure}
 
 %With the lowest optimization level, the savings on the register file can go up to 77\% writes and 54\% on reads on average. With such low optimization level, the total number of cycles increases rapidly with an increase in cycles of up to 6-7 times (convolution). However, for some benchmarks, e.g. histogram, it still performs quite well with only a 50\% increase in cycles, while the increase in utilization of the bypass network is significant. Figure \ref{fig:scalar_improvements_O0} shows RF accesses with explicit bypassing, the lowest optimization level and scalar-only code. A large performance lost due to such low optimization level was found for all benchmarks, except for \emph{histogram} and \emph{binarization}. For these two benchmarks which execute in around 50\% more cycles, do have a significant result by avoiding up to almost all write accesses.
 
@@ -163,7 +163,7 @@ Finally, Figure \ref{fig:vec_accesses} shows the RF accesses with explicit bypas
 \end{figure}
 
 
-\begin{figure}[H]
+\begin{figure}[b!]
 \centering
 \hspace*{-.12in}
 \includegraphics[width=.875\textwidth]{figures/stats/vec_accesses}

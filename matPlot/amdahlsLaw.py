@@ -4,20 +4,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def f1(t):
-    return (1.0*N)/(0.05*N+(1-0.05))
+    return (1.0*N)/(0.05*N+(1.0-0.05))
 
 def f2(t):
-    return (1.0*N)/(0.1*N+(1-0.1))
+    return (1.0*N)/(0.1*N+(1.0-0.1))
 
 def f3(t):
-    return (1.0*N)/(0.25*N+(1-0.25))
+    return (1.0*N)/(0.25*N+(1.0-0.25))
 
 def f4(t):
-    return (1.0*N)/(0.5*N+(1-0.5))
+    return (1.0*N)/(0.5*N+(1.0-0.5))
 
 #N = np.arange(1, 2, 4, 8, 16, 32)
 #B = np.arange(0.05, 0.1, 0.25, 0.5)
-N = np.arange(1.0, 8192.0, 0.1)
+N = np.arange(1.0, 32.0, 0.1)
 
 #N = 32
 
