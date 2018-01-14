@@ -128,7 +128,7 @@ With the lowest optimization level (\texttt{-O0}), the improvement on RF accesse
 
 
 \begin{table}[t!]
-\caption{Absolute cycles and accesses for \emph{binarization} and \emph{histogram} with an explicit datapath and five-stage pipeline.}
+\caption{Absolute cycles and RF accesses for \emph{binarization} and \emph{histogram} with an explicit datapath and five-stage pipeline.}
 \begin{center}
 \begin{tabular}{@{}l l l l | l l l | l l l@{}}
 \toprule
@@ -185,6 +185,23 @@ Finally, Figure \ref{fig:vec_accesses} shows the RF accesses with explicit bypas
 \caption{RF accesses for the vector version, accesses are normalized to standard bypassing.}
 \label{fig:vec_accesses}
 \end{figure}
+
+
+\begin{table}[b!]
+\caption{Absolute cycles and RF accesses for vectorized versions of \emph{binarization}, \emph{convolution} and \emph{YUV2RGB} with an explicit datapath and four-stage pipeline. Note that \emph{convolution} has not been vectorized because of an open issue, and the coefficients could not be modified to 5x5 weights and is,  therefore, not shown in this table.}
+\begin{center}
+\begin{tabular}{@{}l l l l | l l l@{}}
+\toprule
+\textbf{Benchmark} 	& \multicolumn{3}{@{}c@{}}{\textbf{Vector verson}}	& \multicolumn{3}{@{}c@{}}{\textbf{Reference}}	\\
+				& Cycles		& Reads		& Writes			& Cycles 		& Reads		& Writes 		\\ \hline
+Binarization		& 2019		& 8820		& 4056			& 811		& 2003		& 211		\\
+%Convolution		& -			& -			& -				& ?			& ?			& ?			\\
+YUV2RGB		& 1405		& 10892		& 5456			& 2480		& 8214		& 1919		\\
+\bottomrule
+\end{tabular}
+\end{center}
+\label{table:absolute_O0}
+\end{table}%
 
 
 
