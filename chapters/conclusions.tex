@@ -6,9 +6,10 @@ The previous chapters have described a compiler based on the LLVM infrastructure
 \begin{tabular}{@{}l l l l@{}}
 \toprule
 \textbf{RF Accesses}	& \textbf{Scalar version}	& \textbf{Vector version}\\\hline
-\textbf{Writes}		& 42\%				& 30\%		\\
-\textbf{Reads}		& 36\%				& 40\%		\\
+\textbf{Writes}		& 43.5\%				& 28.4\%		\\
+\textbf{Reads}		& 33.5\%				& 41.5\%		\\
 \bottomrule
+\textbf{Speedup (latency)}	& 1.2x			& 2.6x		\\
 \end{tabular}
 \end{center}
 \label{table:evaluation_results}
@@ -16,7 +17,11 @@ The previous chapters have described a compiler based on the LLVM infrastructure
 
 %\section{Summary}\label{sec:summary}
 %\input{chapters/conclusion/summary}
-With register file optimizations that are developed for the new compiler, around 40\% of the accesses can be avoided. Since the RF consumers around 35\% of the total energy consumption and around 40\% of the communication with the RF can be avoided, an estimated improvement of around 15\% follows. Table \ref{table:evaluation_results} summarized the percentages of RF communication that can be avoided with explicit bypassing.
+With register file optimizations that are developed for the new compiler, around 40\% of the accesses can be avoided. Since the RF consumers around 35\% of the total energy consumption and around 40\% of the communication with the RF can be avoided, an estimated improvement of around 15\% follows. Table \ref{table:evaluation_results} summarized the percentages of RF communication that can be avoided with explicit bypassing.\\
+
+Furthermore, a speedup in execution time is obtained which leads to a higher energy efficiency. Namely, reduced execution time leads to a lower energy consumption, which is the product of power and execution time.
+
+
 
 \section{Limitations}\label{sec:limitations}
 This sections aims at compiling a list of limitations currently in the compiler or architecture.
@@ -27,21 +32,6 @@ This sections aims at compiling a list of limitations currently in the compiler 
     \item \textbf{No inline assembly} support. Some compilers allow low-level code (assembly) to be written embedded within a program. LLVM does have support for this, but this is not supported/implemented for the SIMD backend.
     \item \textbf{Interrupts} are not supported in the current SIMD architecture design. 
     \item There is \textbf{no status register} that contains information about the state of the processor. Common status register flags include a \emph{zero flag} that indicates that the result of the previous operation was zero, a \emph{sign flag} indicates that the result of an operation was negative. There are flag registers that do the same, but require an additional instruction to set. Moreover, status register flags also include an \emph{overflow flag} indicating that a result does not fit in the register or an \emph{interrupt flag} to enable/disable interrupts. The later two flags do have an impact. Namely, the programmer is responsible for avoiding overflows, since they are not detected by the hardware. 
-\end{itemize}
-
-\section{Future Work}\label{sec:future_work}
-Future work can be split up in a couple of categories. First of all, there is future work consisting of bug fixes and other improvements to the compiler. Furthermore, there is also future work that consists of adding functionality to the compiler.
-%\input{chapters/conclusion/future_work}
-\begin{itemize}
-    \item There is future work from L. Zhenyuan, which includes:
-    \begin{itemize}
-        \item The scalar and vector processors share the same frame index. Whenever something is pushed to the stack, the shared frame pointer is updated. This results in gaps in the stacks which can be solved with two frame indices, one for the scalar processor and one for the vector array.
-        \item Shuffle pattern recognition during instruction lowering. Shuffle pattern recognition and replacement is currently done before DAG lowering. Because of this, the opportunity is lost to generate new vector shuffle operations in the instruction combination during the instruction lowering stage.
-    \end{itemize}
-    \item A cleanup pass to remove obsolete spill-code in the generated code after explicit bypass allocation has not been developed yet. Since there is a benchmark where this would be beneficial (convolution) it is added to future work.
-    \item Solving all open issues described in Section \ref{sec:issues}.
-    \item The LLD linker (standard LLVM linker) has to be tested and any issues have to be resolved.
-    \item Implement a disassembler to translate binary code back to assembly code. This would also make debugging the linker a lot easier, therefore, a skeleton implementation is already provided in the source directory. However, it has not been implemented yet because it falls outside the scope of this assignment.
 \end{itemize}
 
 \section{Open Issues}\label{sec:issues}
@@ -60,6 +50,21 @@ This section describes the issues in the backend that are also described on the 
 %resultB = v.cmov %flagB, %vreg16, %vreg16, %vreg13
 \end{lstlisting}
 The assembly code above is a fragment of code that is produced by the compiler. During register allocation, this gives an error, because it can not find two flag registers, namely, it can only choose flag register \texttt{P0}. This bug occurs with the vectorized versions of \emph{binarization} and \emph{YUV2RGB}. For \emph{binarization} the problem is avoided by not unrolling, so that it performs only one conditional move operation per loop iteration. For \emph{YUV2RGB}, manual corrections to the generated code were required to ensure correct simulation behaviour. This issue is also described on GitLab (issue \#10).
+\end{itemize}
+
+\section{Future Work}\label{sec:future_work}
+Future work can be split up in a couple of categories. First of all, there is future work consisting of bug fixes and other improvements to the compiler. Furthermore, there is also future work that consists of adding functionality to the compiler.
+%\input{chapters/conclusion/future_work}
+\begin{itemize}
+    \item There is future work from L. Zhenyuan, which includes:
+    \begin{itemize}
+        \item The scalar and vector processors share the same frame index. Whenever something is pushed to the stack, the shared frame pointer is updated. This results in gaps in the stacks which can be solved with two frame indices, one for the scalar processor and one for the vector array.
+        \item Shuffle pattern recognition during instruction lowering. Shuffle pattern recognition and replacement is currently done before DAG lowering. Because of this, the opportunity is lost to generate new vector shuffle operations in the instruction combination during the instruction lowering stage.
+    \end{itemize}
+    \item A cleanup pass to remove obsolete spill-code in the generated code after explicit bypass allocation has not been developed yet. Since there is a benchmark where this would be beneficial (convolution) it is added to future work.
+    \item Solving all open issues described in Section \ref{sec:issues}.
+    \item The LLD linker (standard LLVM linker) has to be tested and any issues have to be resolved.
+    \item Implement a disassembler to translate binary code back to assembly code. This would also make debugging the linker a lot easier, therefore, a skeleton implementation is already provided in the source directory. However, it has not been implemented yet because it falls outside the scope of this assignment.
 \end{itemize}
 
 %In general a short summarizing paragraph will do, and under no circumstances should the paragraph simply repeat material from the Abstract or Introduction. In some cases it's possible to now make the original claims more concrete, e.g., by referring to quantitative performance results.

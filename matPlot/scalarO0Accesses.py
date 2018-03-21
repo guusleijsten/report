@@ -104,9 +104,15 @@ def label_group_bar_table(ax, df):
 
 #continue found code
 df = test_table().groupby(['Bench','Pipeline']).sum()
-fig = plt.figure()
+fig = plt.figure(figsize=(16.35, 10.35), dpi=80)
 ax = fig.add_subplot(111)
-df.plot(kind='bar',stacked=True,color=['#3669c9', '#1d9524', '#d62728', '#fd9827'],ax=fig.gca())
+plot = df.plot(kind='bar',stacked=True,color=['#3669c9', '#1d9524', '#d62728', '#fd9827'],ax=fig.gca())
+
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(reversed(handles), reversed(labels), loc='upper right')  # reverse both handles and labels
+#following two lines give custom vertical gridlines
+for level in range(7):
+  ax.axvline(2*level+1.5, linestyle='--', color='k')
 #Below 3 lines remove default labels
 labels = ['' for item in ax.get_xticklabels()]
 ax.set_xticklabels(labels)
@@ -119,3 +125,6 @@ ax.set_yticklabels(ticks)
 plt.ylabel('Accesses to the RF normalized to standard bypassing')
 plt.title('Register File Accesses with Explicit Bypassing (Scalar version - O0)')
 plt.show()
+
+figural = plot.get_figure()
+figural.savefig("scalarO0_accesses.png", bbox_inches='tight', dpi=800)
