@@ -106,7 +106,7 @@ This section compares the legacy compiler to the current compiler. It does this 
 \end{figure}
 
 \begin{table}[t!]
-\caption{Speedup of the scalar-version compared to the legacy compiler where it shows the geometric mean over implicit, explicit, four-stage and five-stage datapath. Note that a speedup of less than one indicates a degrade in performance and higher is better. An average speedup of 1.22 times faster is obtained.}
+\caption{Speedup of the scalar-version compared to the legacy compiler where it shows the geometric mean over implicit, explicit, four-stage and five-stage datapath. Note that a speedup of less than one indicates a degrade in performance and higher is better. On average a speedup of 1.22 is obtained.}
 \begin{center}
 \begin{tabular}{@{}l | l l l l l l l l @{}}
 \toprule
@@ -126,7 +126,7 @@ This section compares the legacy compiler to the current compiler. It does this 
 
 Note that the code generated for a five-stage pipeline is always worse than the code generated for a four-stage pipeline because it is effectively the same code with possibly additional stall cycles inserted when a hazard was encountered by hazard recognizer described in Chapter \ref{sec:hazard_recogn}.
 
-To conclude, the new compiler is overall faster with a reduced execution time of 20.1\% on average (geometric mean) or an average speedup of 1.22 times faster. Since power consumption is directly related to energy and execution time, this already gives a significant improvement. \\
+To conclude, the new compiler is overall faster with a reduced execution time of 20.1\% on average (geometric mean) or an average speedup of 1.22. Since power consumption is directly related to energy and execution time, this already gives a significant improvement. \\
 
 Figure \ref{fig:scalar_improvements} shows a bar chart with how many register file accesses can be avoided with explicit bypassing in the new compiler (accesses are normalized to automatic bypassing). The optimizations for these measurements include optimization level \texttt{-O3} and a scheduler optimization flag, \texttt{-misched-nolimit=1} to limit the scheduling scope. The machine instruction scheduler does not look further than one instruction ahead which gives more bypass oppertunities as instructions are scheduled closer to their use. There is no difference in execution time compared to \texttt{-O3} with no other optimization flags, except for YUV2RGB. There the execution time increases from 10k to 16k cycles. This flag is enabled for all benchmark except \emph{YUV2RGB}, where we unroll the main loop by three instead to get more efficient code. To summarize the resuls, there are at least 20\% of the accesses that may be avoided by using the bypass network and up to 83\% of the writes may be avoided (\emph{convolution}). On average 42\% of the write- and 36\% of the read accesses may be avoided. Note that convolution exceeds one in Figure \ref{fig:scalar_improvements} which is because that benchmark contains a lot of redundant spill code as we have already mentioned in Chapter \ref{sec:benchies}. The redundant spill code causes more instructions to be executed with explicit bypassing, therefore, there are more RF accesses than with standard (implicit) bypassing. This can also be seen in Table \ref{table:benchmarks_summary} where it notes that for \emph{convolution} an additional 4000 and 15432 cycles are executed with explicit datapath version of the four-stage and five-stage pipelines respectively.\\
 
@@ -195,7 +195,7 @@ To conclude, the vectorized version is faster with a reduction in execution time
 \end{figure}
 
 \begin{table}[t!]
-\caption{Speedup of the vectorized version compared to the scalar-only version. Vectorization gives on average a speedup of 2.61 times faster.}
+\caption{Speedup of the vectorized version compared to the scalar-only version. Vectorization gives on average a speedup of 2.61.}
 \begin{center}
 \begin{tabular}{@{}l | l l l l l l @{}}
 \toprule
